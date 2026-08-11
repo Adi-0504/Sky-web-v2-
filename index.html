@@ -1,0 +1,2766 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d3037">
+<meta name="description" content="空の曆｜Kuuno Koyomi — Official World Archive">
+
+<title>空の曆 — Official World</title>
+
+<!--
+  SkyWeb
+  One HTML / Zero Image Files
+  GSAP + Lucide Icons
+-->
+
+<script src="https://cdn.jsdelivr.net/npm/[email protected]/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/[email protected]/dist/umd/lucide.min.js"></script>
+
+<style>
+:root{
+  --ink:#17343a;
+  --ink-soft:#46666c;
+  --deep:#0d3037;
+  --deep-2:#123f48;
+  --sky:#b9dce0;
+  --sky-2:#d9eeee;
+  --paper:#f3f0e5;
+  --paper-2:#ebe6d8;
+  --line:rgba(23,52,58,.16);
+  --line-light:rgba(255,255,255,.15);
+  --accent:#c9a84a;
+  --accent-soft:#e2cf83;
+  --white:#fbfaf4;
+
+  --radius-sm:8px;
+  --radius-md:14px;
+  --radius-lg:22px;
+
+  --shadow:0 20px 70px rgba(5,25,30,.14);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "PingFang TC",
+    "Noto Sans TC",
+    sans-serif;
+  overflow-x:hidden;
+}
+
+button,
+a{
+  -webkit-tap-highlight-color:transparent;
+}
+
+button{
+  font:inherit;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+::selection{
+  background:var(--accent);
+  color:var(--deep);
+}
+
+/* -----------------------------
+   BACKGROUND SYSTEM
+------------------------------ */
+
+.sky-bg{
+  position:fixed;
+  inset:0;
+  z-index:-10;
+  overflow:hidden;
+  background:
+    radial-gradient(
+      circle at 75% 15%,
+      rgba(201,168,74,.18),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(103,166,172,.18),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      #e7eeee 0%,
+      #d9e9e9 40%,
+      #c7dfe0 100%
+    );
+}
+
+.sky-bg::before{
+  content:"";
+  position:absolute;
+  inset:-20%;
+  background:
+    repeating-linear-gradient(
+      115deg,
+      transparent 0 120px,
+      rgba(255,255,255,.09) 121px 122px
+    );
+  transform:rotate(-7deg);
+}
+
+.sky-glow{
+  position:absolute;
+  width:42vw;
+  height:42vw;
+  min-width:320px;
+  min-height:320px;
+  border-radius:50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,247,211,.52) 0%,
+      rgba(255,247,211,.14) 35%,
+      transparent 70%
+    );
+  top:-12vw;
+  right:-7vw;
+  filter:blur(8px);
+}
+
+.grid{
+  position:absolute;
+  inset:0;
+  opacity:.18;
+  background-image:
+    linear-gradient(rgba(23,52,58,.15) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(23,52,58,.15) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:linear-gradient(to bottom,black,transparent 75%);
+}
+
+/* -----------------------------
+   APP
+------------------------------ */
+
+.app{
+  min-height:100vh;
+}
+
+.topbar{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:76px;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 34px;
+  background:rgba(243,240,229,.72);
+  border-bottom:1px solid rgba(23,52,58,.08);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  cursor:pointer;
+}
+
+.brand-mark{
+  width:36px;
+  height:36px;
+  border:1px solid var(--ink);
+  display:grid;
+  place-items:center;
+  transform:rotate(45deg);
+  position:relative;
+}
+
+.brand-mark::after{
+  content:"";
+  width:10px;
+  height:10px;
+  background:var(--accent);
+}
+
+.brand-name{
+  display:flex;
+  flex-direction:column;
+  line-height:1;
+}
+
+.brand-name strong{
+  font-size:16px;
+  letter-spacing:.18em;
+  font-weight:650;
+}
+
+.brand-name span{
+  margin-top:5px;
+  font-size:8px;
+  letter-spacing:.22em;
+  color:var(--ink-soft);
+  text-transform:uppercase;
+}
+
+.nav{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.nav button{
+  position:relative;
+  border:0;
+  background:transparent;
+  color:var(--ink-soft);
+  padding:12px 14px;
+  cursor:pointer;
+  font-size:12px;
+  letter-spacing:.08em;
+}
+
+.nav button::after{
+  content:"";
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:5px;
+  height:1px;
+  background:var(--ink);
+  transform:scaleX(0);
+  transform-origin:right;
+  transition:transform .25s ease;
+}
+
+.nav button:hover::after,
+.nav button.active::after{
+  transform:scaleX(1);
+  transform-origin:left;
+}
+
+.nav button.active{
+  color:var(--ink);
+}
+
+.system-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.icon-button{
+  width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.32);
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    transform .2s ease;
+}
+
+.icon-button:hover{
+  background:rgba(255,255,255,.72);
+  border-color:rgba(23,52,58,.35);
+}
+
+/* -----------------------------
+   PAGES
+------------------------------ */
+
+.page{
+  display:none;
+  min-height:100vh;
+  padding-top:76px;
+}
+
+.page.active{
+  display:block;
+}
+
+.page-inner{
+  width:min(1240px,calc(100% - 48px));
+  margin:0 auto;
+}
+
+.section{
+  padding:110px 0;
+}
+
+.section-header{
+  display:grid;
+  grid-template-columns:1fr 2fr;
+  gap:60px;
+  margin-bottom:60px;
+}
+
+.eyebrow{
+  font-size:10px;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+}
+
+.section-title{
+  margin:10px 0 0;
+  font-size:clamp(36px,6vw,82px);
+  font-weight:520;
+  letter-spacing:-.045em;
+  line-height:.92;
+}
+
+.section-copy{
+  max-width:620px;
+  font-size:16px;
+  line-height:1.9;
+  color:var(--ink-soft);
+}
+
+/* -----------------------------
+   HOME
+------------------------------ */
+
+.hero{
+  min-height:calc(100vh - 76px);
+  display:grid;
+  place-items:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-content{
+  width:min(1240px,calc(100% - 48px));
+  margin:auto;
+  position:relative;
+  z-index:2;
+}
+
+.hero-kicker{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  font-size:10px;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+}
+
+.hero-kicker::before{
+  content:"";
+  width:44px;
+  height:1px;
+  background:var(--accent);
+}
+
+.hero-title{
+  margin:30px 0 26px;
+  font-size:clamp(76px,14vw,190px);
+  line-height:.76;
+  letter-spacing:-.075em;
+  font-weight:500;
+}
+
+.hero-title small{
+  display:block;
+  margin-top:20px;
+  font-size:clamp(18px,2vw,28px);
+  letter-spacing:.34em;
+  color:var(--ink-soft);
+}
+
+.hero-sub{
+  max-width:570px;
+  font-size:15px;
+  line-height:1.9;
+  color:var(--ink-soft);
+}
+
+.hero-actions{
+  display:flex;
+  gap:12px;
+  margin-top:34px;
+  flex-wrap:wrap;
+}
+
+.primary-button,
+.secondary-button{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  min-height:46px;
+  padding:0 18px;
+  border:1px solid var(--ink);
+  cursor:pointer;
+  letter-spacing:.08em;
+  font-size:11px;
+  transition:.25s ease;
+}
+
+.primary-button{
+  background:var(--deep);
+  color:var(--white);
+}
+
+.secondary-button{
+  background:rgba(255,255,255,.24);
+  color:var(--ink);
+  border-color:var(--line);
+}
+
+.primary-button:hover{
+  background:var(--deep-2);
+  transform:translateY(-2px);
+}
+
+.secondary-button:hover{
+  background:rgba(255,255,255,.6);
+  transform:translateY(-2px);
+}
+
+.hero-orbit{
+  position:absolute;
+  width:min(70vw,780px);
+  aspect-ratio:1;
+  right:-8vw;
+  top:50%;
+  transform:translateY(-50%);
+  opacity:.45;
+}
+
+.orbit{
+  position:absolute;
+  inset:0;
+  border:1px solid rgba(23,52,58,.18);
+  border-radius:50%;
+}
+
+.orbit:nth-child(2){
+  inset:12%;
+}
+
+.orbit:nth-child(3){
+  inset:26%;
+}
+
+.orbit-line{
+  position:absolute;
+  width:100%;
+  height:1px;
+  background:rgba(23,52,58,.15);
+  top:50%;
+}
+
+.orbit-line.vertical{
+  transform:rotate(90deg);
+}
+
+.orbit-node{
+  position:absolute;
+  width:8px;
+  height:8px;
+  border:1px solid var(--ink);
+  background:var(--accent);
+  border-radius:50%;
+}
+
+.node-a{top:17%;left:50%}
+.node-b{top:50%;right:4%}
+.node-c{bottom:12%;left:22%}
+.node-d{top:33%;left:14%}
+
+.hero-data{
+  position:absolute;
+  right:40px;
+  bottom:34px;
+  text-align:right;
+}
+
+.hero-data .big{
+  font-size:44px;
+  letter-spacing:-.04em;
+}
+
+.hero-data .label{
+  margin-top:3px;
+  font-size:9px;
+  letter-spacing:.2em;
+  color:var(--ink-soft);
+}
+
+/* -----------------------------
+   DATA STRIP
+------------------------------ */
+
+.data-strip{
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+
+.data-cell{
+  min-height:150px;
+  padding:30px;
+  border-right:1px solid var(--line);
+  position:relative;
+}
+
+.data-cell:last-child{
+  border-right:0;
+}
+
+.data-number{
+  font-size:42px;
+  letter-spacing:-.05em;
+}
+
+.data-label{
+  margin-top:8px;
+  font-size:9px;
+  letter-spacing:.18em;
+  color:var(--ink-soft);
+}
+
+/* -----------------------------
+   WORLD
+------------------------------ */
+
+.world-map{
+  min-height:580px;
+  position:relative;
+  border:1px solid var(--line);
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(255,255,255,.45),transparent 50%),
+    linear-gradient(135deg,#dbe9e7,#c4dfe0);
+}
+
+.world-map::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(23,52,58,.1) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(23,52,58,.1) 1px,transparent 1px);
+  background-size:50px 50px;
+}
+
+.map-center{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:160px;
+  height:160px;
+  transform:translate(-50%,-50%);
+  border:1px solid rgba(23,52,58,.35);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+}
+
+.map-center::before{
+  content:"";
+  width:66px;
+  height:66px;
+  border:1px solid var(--accent);
+  transform:rotate(45deg);
+}
+
+.map-center span{
+  position:absolute;
+  font-size:10px;
+  letter-spacing:.2em;
+}
+
+.route{
+  position:absolute;
+  height:1px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(23,52,58,.5),
+    transparent
+  );
+  transform-origin:left center;
+}
+
+.route.one{
+  width:360px;
+  left:50%;
+  top:50%;
+  transform:rotate(-28deg);
+}
+
+.route.two{
+  width:330px;
+  left:50%;
+  top:50%;
+  transform:rotate(28deg);
+}
+
+.route.three{
+  width:300px;
+  left:50%;
+  top:50%;
+  transform:rotate(155deg);
+}
+
+.route.four{
+  width:310px;
+  left:50%;
+  top:50%;
+  transform:rotate(205deg);
+}
+
+.island-node{
+  position:absolute;
+  width:128px;
+  padding:16px;
+  border-left:2px solid var(--accent);
+  background:rgba(243,240,229,.78);
+  backdrop-filter:blur(10px);
+}
+
+.island-node strong{
+  display:block;
+  font-size:14px;
+  font-weight:600;
+}
+
+.island-node small{
+  display:block;
+  margin-top:6px;
+  color:var(--ink-soft);
+  font-size:9px;
+  letter-spacing:.08em;
+}
+
+.island-1{top:20%;right:17%}
+.island-2{bottom:18%;right:12%}
+.island-3{bottom:16%;left:13%}
+.island-4{top:18%;left:14%}
+
+/* -----------------------------
+   CARDS
+------------------------------ */
+
+.grid-2{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+}
+
+.grid-3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+}
+
+.info-card{
+  background:rgba(243,240,229,.78);
+  padding:34px;
+  min-height:250px;
+  transition:
+    background .3s ease,
+    transform .3s ease;
+}
+
+.info-card:hover{
+  background:rgba(255,255,255,.55);
+  transform:translateY(-3px);
+}
+
+.card-icon{
+  width:32px;
+  height:32px;
+  margin-bottom:40px;
+  color:var(--ink-soft);
+}
+
+.info-card h3{
+  margin:0;
+  font-size:23px;
+  font-weight:550;
+  letter-spacing:-.03em;
+}
+
+.info-card p{
+  margin:13px 0 0;
+  font-size:13px;
+  line-height:1.8;
+  color:var(--ink-soft);
+}
+
+/* -----------------------------
+   FOOD
+------------------------------ */
+
+.food-toolbar{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:30px;
+}
+
+.search-box{
+  flex:1;
+  position:relative;
+}
+
+.search-box i{
+  position:absolute;
+  left:15px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--ink-soft);
+}
+
+.search-box input{
+  width:100%;
+  height:48px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.38);
+  padding:0 16px 0 46px;
+  outline:none;
+  color:var(--ink);
+}
+
+.search-box input:focus{
+  border-color:rgba(23,52,58,.45);
+}
+
+.food-list{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--line);
+  border-left:1px solid var(--line);
+}
+
+.food-item{
+  padding:23px;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  min-height:120px;
+  background:rgba(243,240,229,.55);
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+.food-item:hover{
+  background:rgba(255,255,255,.55);
+}
+
+.food-code{
+  font-size:8px;
+  color:var(--ink-soft);
+  letter-spacing:.2em;
+  text-transform:uppercase;
+}
+
+.food-name{
+  margin-top:15px;
+  font-size:18px;
+  font-weight:550;
+}
+
+.food-meta{
+  margin-top:8px;
+  font-size:10px;
+  color:var(--ink-soft);
+}
+
+/* -----------------------------
+   KUUGO
+------------------------------ */
+
+.alphabet{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  border-top:1px solid var(--line);
+  border-left:1px solid var(--line);
+}
+
+.letter{
+  min-height:120px;
+  padding:22px;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:rgba(243,240,229,.55);
+  position:relative;
+  overflow:hidden;
+  transition:.25s ease;
+}
+
+.letter:hover{
+  background:rgba(255,255,255,.55);
+}
+
+.letter-symbol{
+  font-size:34px;
+  line-height:1;
+}
+
+.letter-pronunciation{
+  margin-top:12px;
+  font-size:10px;
+  letter-spacing:.1em;
+  color:var(--ink-soft);
+}
+
+.letter-index{
+  position:absolute;
+  right:14px;
+  bottom:12px;
+  font-size:8px;
+  color:rgba(23,52,58,.35);
+}
+
+/* -----------------------------
+   CALENDAR
+------------------------------ */
+
+.calendar-display{
+  display:grid;
+  grid-template-columns:1fr 2fr;
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+}
+
+.calendar-main{
+  min-height:420px;
+  background:var(--deep);
+  color:var(--white);
+  padding:50px;
+  position:relative;
+  overflow:hidden;
+}
+
+.calendar-main::after{
+  content:"";
+  position:absolute;
+  width:360px;
+  height:360px;
+  right:-160px;
+  bottom:-160px;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:50%;
+}
+
+.calendar-day{
+  font-size:clamp(80px,12vw,150px);
+  letter-spacing:-.08em;
+  line-height:.8;
+}
+
+.calendar-caption{
+  margin-top:24px;
+  font-size:10px;
+  letter-spacing:.24em;
+  color:rgba(255,255,255,.55);
+}
+
+.calendar-info{
+  background:rgba(243,240,229,.78);
+  padding:50px;
+}
+
+.calendar-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  padding:20px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.calendar-row:first-child{
+  padding-top:0;
+}
+
+.calendar-row:last-child{
+  border-bottom:0;
+}
+
+.calendar-row strong{
+  font-size:24px;
+  font-weight:500;
+}
+
+.calendar-row span{
+  font-size:10px;
+  color:var(--ink-soft);
+  letter-spacing:.15em;
+}
+
+/* -----------------------------
+   FOOTER
+------------------------------ */
+
+.footer{
+  margin-top:80px;
+  padding:70px 0 30px;
+  background:var(--deep);
+  color:var(--white);
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  gap:60px;
+}
+
+.footer-brand{
+  font-size:34px;
+  letter-spacing:-.04em;
+}
+
+.footer-copy{
+  margin-top:18px;
+  max-width:480px;
+  font-size:12px;
+  line-height:1.9;
+  color:rgba(255,255,255,.58);
+}
+
+.footer h4{
+  margin:0 0 18px;
+  font-size:10px;
+  letter-spacing:.18em;
+  color:rgba(255,255,255,.45);
+  text-transform:uppercase;
+}
+
+.footer a{
+  display:block;
+  margin:9px 0;
+  font-size:12px;
+  color:rgba(255,255,255,.76);
+}
+
+.footer-bottom{
+  margin-top:60px;
+  padding-top:20px;
+  border-top:1px solid rgba(255,255,255,.1);
+  display:flex;
+  justify-content:space-between;
+  font-size:9px;
+  color:rgba(255,255,255,.38);
+}
+
+/* -----------------------------
+   TRANSITION
+------------------------------ */
+
+.page-transition{
+  position:fixed;
+  inset:0;
+  z-index:200;
+  pointer-events:none;
+  background:var(--deep);
+  transform:scaleY(0);
+  transform-origin:bottom;
+}
+
+/* -----------------------------
+   RESPONSIVE
+------------------------------ */
+
+@media(max-width:900px){
+
+  .topbar{
+    padding:0 18px;
+  }
+
+  .nav{
+    display:none;
+  }
+
+  .hero{
+    min-height:calc(100svh - 76px);
+  }
+
+  .hero-orbit{
+    opacity:.22;
+    right:-40vw;
+    width:100vw;
+  }
+
+  .hero-data{
+    right:20px;
+    bottom:20px;
+  }
+
+  .section-header{
+    grid-template-columns:1fr;
+    gap:25px;
+  }
+
+  .data-strip{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .data-cell:nth-child(2){
+    border-right:0;
+  }
+
+  .data-cell:nth-child(-n+2){
+    border-bottom:1px solid var(--line);
+  }
+
+  .grid-3{
+    grid-template-columns:1fr;
+  }
+
+  .grid-2{
+    grid-template-columns:1fr;
+  }
+
+  .food-list{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .alphabet{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .calendar-display{
+    grid-template-columns:1fr;
+  }
+
+  .footer-grid{
+    grid-template-columns:1fr;
+  }
+
+  .world-map{
+    min-height:520px;
+  }
+}
+
+@media(max-width:560px){
+
+  .page-inner,
+  .hero-content{
+    width:min(100% - 30px,1240px);
+  }
+
+  .topbar{
+    height:66px;
+  }
+
+  .page{
+    padding-top:66px;
+  }
+
+  .hero-title{
+    font-size:68px;
+  }
+
+  .hero-title small{
+    font-size:14px;
+  }
+
+  .section{
+    padding:75px 0;
+  }
+
+  .data-cell{
+    min-height:120px;
+    padding:22px;
+  }
+
+  .data-number{
+    font-size:32px;
+  }
+
+  .food-list{
+    grid-template-columns:1fr;
+  }
+
+  .alphabet{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .calendar-main,
+  .calendar-info{
+    padding:30px;
+  }
+
+  .footer-bottom{
+    flex-direction:column;
+    gap:8px;
+  }
+}
+
+/* reduced motion */
+
+@media(prefers-reduced-motion:reduce){
+  *,
+  *::before,
+  *::after{
+    scroll-behavior:auto !important;
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="sky-bg">
+  <div class="sky-glow"></div>
+  <div class="grid"></div>
+</div>
+
+<div class="page-transition"></div>
+
+<div class="app">
+
+<header class="topbar">
+
+  <div class="brand" data-page="home">
+    <div class="brand-mark"></div>
+
+    <div class="brand-name">
+      <strong>空の曆</strong>
+      <span>KUUNO KOYOMI</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <button class="active" data-page="home">
+      WORLD
+    </button>
+
+    <button data-page="world">
+      WORLD DATA
+    </button>
+
+    <button data-page="islands">
+      ISLANDS
+    </button>
+
+    <button data-page="travel">
+      TRAVEL
+    </button>
+
+    <button data-page="food">
+      FOOD
+    </button>
+
+    <button data-page="kuugo">
+      KUUGO
+    </button>
+
+    <button data-page="calendar">
+      CALENDAR
+    </button>
+
+  </nav>
+
+  <div class="system-actions">
+
+    <button
+      class="icon-button"
+      id="soundToggle"
+      aria-label="Toggle sound"
+    >
+      <i data-lucide="volume-2"></i>
+    </button>
+
+    <button
+      class="icon-button"
+      id="menuButton"
+      aria-label="Menu"
+    >
+      <i data-lucide="menu"></i>
+    </button>
+
+  </div>
+
+</header>
+
+
+<!-- =========================================================
+     HOME
+========================================================= -->
+
+<main id="home" class="page active">
+
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <div class="hero-kicker reveal">
+        OFFICIAL WORLD ARCHIVE
+      </div>
+
+      <h1 class="hero-title reveal">
+        空の曆
+        <small>THE WORLD ABOVE THE CLOUDS</small>
+      </h1>
+
+      <p class="hero-sub reveal">
+        一個漂浮在天空之上的世界。
+        四座島嶼、三萬名居民、三百五十天的曆法，
+        以及仍然持續生活著的人們。
+      </p>
+
+      <div class="hero-actions reveal">
+
+        <button
+          class="primary-button"
+          data-page="world"
+        >
+          EXPLORE THE WORLD
+          <i data-lucide="arrow-up-right"></i>
+        </button>
+
+        <button
+          class="secondary-button"
+          data-page="food"
+        >
+          FOOD ARCHIVE
+          <i data-lucide="utensils"></i>
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="hero-orbit" aria-hidden="true">
+
+      <div class="orbit"></div>
+      <div class="orbit"></div>
+      <div class="orbit"></div>
+
+      <div class="orbit-line"></div>
+      <div class="orbit-line vertical"></div>
+
+      <div class="orbit-node node-a"></div>
+      <div class="orbit-node node-b"></div>
+      <div class="orbit-node node-c"></div>
+      <div class="orbit-node node-d"></div>
+
+    </div>
+
+    <div class="hero-data">
+
+      <div class="big counter" data-target="30000">
+        0
+      </div>
+
+      <div class="label">
+        REGISTERED POPULATION
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <div class="page-inner">
+
+    <section class="data-strip">
+
+      <div class="data-cell">
+        <div class="data-number">30,000</div>
+        <div class="data-label">WORLD POPULATION</div>
+      </div>
+
+      <div class="data-cell">
+        <div class="data-number">4</div>
+        <div class="data-label">MAJOR ISLANDS</div>
+      </div>
+
+      <div class="data-cell">
+        <div class="data-number">350</div>
+        <div class="data-label">DAYS / YEAR</div>
+      </div>
+
+      <div class="data-cell">
+        <div class="data-number">10</div>
+        <div class="data-label">MONTHS / YEAR</div>
+      </div>
+
+    </section>
+
+
+    <section class="section">
+
+      <div class="section-header">
+
+        <div>
+          <div class="eyebrow">
+            01 / INTRODUCTION
+          </div>
+
+          <h2 class="section-title">
+            A WORLD<br>
+            ABOVE.
+          </h2>
+        </div>
+
+        <p class="section-copy">
+          空の曆不是一個等待玩家進入的空殼。
+          這裡有自己的城市、交通、食物、語言與時間。
+          每座島都有自己的氣候，也有自己的生活節奏。
+        </p>
+
+      </div>
+
+      <div class="grid-3">
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="map"></i>
+          <h3>Four Islands</h3>
+          <p>
+            平原島、森林島、礦山島與沙灘島，
+            形成空の曆最主要的地理結構。
+          </p>
+        </article>
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="users"></i>
+          <h3>30,000 Lives</h3>
+          <p>
+            三萬名居民分布於各座島嶼與城市，
+            每個地方都有不同的生活方式。
+          </p>
+        </article>
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="languages"></i>
+          <h3>Kuugo</h3>
+          <p>
+            空語是這個世界自己的語言系統，
+            擁有獨立的拼寫與發音規則。
+          </p>
+        </article>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+<!-- =========================================================
+     WORLD
+========================================================= -->
+
+<section id="world" class="page">
+
+  <div class="page-inner">
+
+    <section class="section">
+
+      <div class="section-header">
+
+        <div>
+          <div class="eyebrow">
+            WORLD DATA / 01
+          </div>
+
+          <h2 class="section-title">
+            空の曆
+          </h2>
+        </div>
+
+        <p class="section-copy">
+          這個世界由四座主要浮空島嶼組成。
+          島嶼之間透過空鷹與其他交通系統連接，
+          城市、村落與自然環境共同形成完整的生活圈。
+        </p>
+
+      </div>
+
+      <div class="world-map">
+
+        <div class="route one"></div>
+        <div class="route two"></div>
+        <div class="route three"></div>
+        <div class="route four"></div>
+
+        <div class="map-center">
+          <span>SKY WORLD</span>
+        </div>
+
+        <div class="island-node island-1">
+          <strong>森林島</strong>
+          <small>10–15°C</small>
+        </div>
+
+        <div class="island-node island-2">
+          <strong>沙灘島</strong>
+          <small>25–30°C</small>
+        </div>
+
+        <div class="island-node island-3">
+          <strong>礦山島</strong>
+          <small>15–20°C</small>
+        </div>
+
+        <div class="island-node island-4">
+          <strong>平原島</strong>
+          <small>20–25°C</small>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="section">
+
+      <div class="section-header">
+
+        <div>
+          <div class="eyebrow">
+            WORLD DATA / 02
+          </div>
+
+          <h2 class="section-title">
+            BASIC<br>
+            DATA
+          </h2>
+        </div>
+
+        <p class="section-copy">
+          世界的基本資料。
+          SkyWeb 將這些資料視為官方檔案，而不是單純的裝飾數字。
+        </p>
+
+      </div>
+
+      <div class="grid-2">
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="users"></i>
+          <h3>30,000</h3>
+          <p>目前世界人口。</p>
+        </article>
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="calendar-days"></i>
+          <h3>350 days</h3>
+          <p>每一年由十個月組成，每月三十五天。</p>
+        </article>
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="wind"></i>
+          <h3>Tawa Muru</h3>
+          <p>天空交通系統中的重要交通方式。</p>
+        </article>
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="coins"></i>
+          <h3>Matodamu</h3>
+          <p>空の曆使用的貨幣系統。</p>
+        </article>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     ISLANDS
+========================================================= -->
+
+<section id="islands" class="page">
+
+  <div class="page-inner">
+
+    <section class="section">
+
+      <div class="section-header">
+
+        <div>
+          <div class="eyebrow">
+            ISLANDS / 04
+          </div>
+
+          <h2 class="section-title">
+            FOUR<br>
+            ISLANDS
+          </h2>
+        </div>
+
+        <p class="section-copy">
+          四座島嶼不是單純的地圖區塊。
+          氣候、物產、城市與料理，都會受到島嶼環境影響。
+        </p>
+
+      </div>
+
+      <div class="grid-2">
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="sprout"></i>
+          <h3>平原島</h3>
+          <p>
+            20–25°C。人口與城市活動較集中。
+            首都比亞位於此島。
+          </p>
+        </article>
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="trees"></i>
+          <h3>森林島</h3>
+          <p>
+            10–15°C。森林環境與較低溫氣候形成獨特的生活型態。
+          </p>
+        </article>
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="pickaxe"></i>
+          <h3>礦山島</h3>
+          <p>
+            15–20°C。礦產與山地地形是島嶼的重要特徵。
+          </p>
+        </article>
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="waves"></i>
+          <h3>沙灘島</h3>
+          <p>
+            25–30°C。沿岸生活、海產與沙椰文化形成鮮明特色。
+          </p>
+        </article>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     TRAVEL
+========================================================= -->
+
+<section id="travel" class="page">
+
+  <div class="page-inner">
+
+    <section class="section">
+
+      <div class="section-header">
+
+        <div>
+          <div class="eyebrow">
+            TRAVEL SYSTEM
+          </div>
+
+          <h2 class="section-title">
+            MOVE<br>
+            THROUGH SKY.
+          </h2>
+        </div>
+
+        <p class="section-copy">
+          空の曆的島嶼並不是彼此孤立。
+          交通系統讓居民可以在不同島嶼之間移動，
+          也讓城市與村落形成真正的世界。
+        </p>
+
+      </div>
+
+      <div class="grid-3">
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="navigation"></i>
+          <h3>空鷹</h3>
+          <p>
+            Tawa Muru 是空の曆的重要天空交通系統。
+          </p>
+        </article>
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="train-front"></i>
+          <h3>風輪車</h3>
+          <p>
+            城市與地區之間的地面交通之一。
+          </p>
+        </article>
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="map-pin"></i>
+          <h3>Gualamontu</h3>
+          <p>
+            世界中的重要地區與城市生活場景。
+          </p>
+        </article>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     FOOD
+========================================================= -->
+
+<section id="food" class="page">
+
+  <div class="page-inner">
+
+    <section class="section">
+
+      <div class="section-header">
+
+        <div>
+          <div class="eyebrow">
+            FOOD ARCHIVE
+          </div>
+
+          <h2 class="section-title">
+            FOOD<br>
+            OF THE WORLD
+          </h2>
+        </div>
+
+        <p class="section-copy">
+          空の曆食材百科。
+          這裡的食材不是隨機生成的裝飾，
+          而是世界料理系統的一部分。
+        </p>
+
+      </div>
+
+      <div class="food-toolbar">
+
+        <div class="search-box">
+
+          <i data-lucide="search"></i>
+
+          <input
+            id="foodSearch"
+            type="search"
+            placeholder="Search ingredient..."
+            autocomplete="off"
+          >
+
+        </div>
+
+      </div>
+
+      <div id="foodList" class="food-list"></div>
+
+    </section>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     KUUGO
+========================================================= -->
+
+<section id="kuugo" class="page">
+
+  <div class="page-inner">
+
+    <section class="section">
+
+      <div class="section-header">
+
+        <div>
+          <div class="eyebrow">
+            LANGUAGE / KUUGO
+          </div>
+
+          <h2 class="section-title">
+            空語
+          </h2>
+        </div>
+
+        <p class="section-copy">
+          空の曆的語言系統。
+          字母全部以小寫呈現，並包含特殊字母。
+        </p>
+
+      </div>
+
+
+      <div class="grid-2">
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="languages"></i>
+
+          <h3>Writing System</h3>
+
+          <p>
+            空語使用獨立的字母與拼寫系統。
+            其中包含 ધ、ટ、ઉ 三個特殊字母。
+          </p>
+        </article>
+
+        <article class="info-card">
+          <i class="card-icon" data-lucide="book-open"></i>
+
+          <h3>Dictionary</h3>
+
+          <p>
+            空語詞彙資料將以官方字典形式持續擴充。
+          </p>
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <section class="section">
+
+      <div class="section-header">
+
+        <div>
+          <div class="eyebrow">
+            ALPHABET
+          </div>
+
+          <h2 class="section-title">
+            LETTERS
+          </h2>
+        </div>
+
+        <p class="section-copy">
+          空語目前使用的字母表。
+        </p>
+
+      </div>
+
+      <div id="alphabet" class="alphabet"></div>
+
+    </section>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     CALENDAR
+========================================================= -->
+
+<section id="calendar" class="page">
+
+  <div class="page-inner">
+
+    <section class="section">
+
+      <div class="section-header">
+
+        <div>
+          <div class="eyebrow">
+            TIME SYSTEM
+          </div>
+
+          <h2 class="section-title">
+            350<br>
+            DAYS
+          </h2>
+        </div>
+
+        <p class="section-copy">
+          空の曆擁有自己的曆法。
+          一年三百五十天，分成十個月份，
+          每月三十五天。
+        </p>
+
+      </div>
+
+      <div class="calendar-display">
+
+        <div class="calendar-main">
+
+          <div
+            id="calendarDay"
+            class="calendar-day"
+          >
+            001
+          </div>
+
+          <div class="calendar-caption">
+            CURRENT SKY DATE
+          </div>
+
+        </div>
+
+        <div class="calendar-info">
+
+          <div class="calendar-row">
+            <span>YEAR</span>
+            <strong>1357</strong>
+          </div>
+
+          <div class="calendar-row">
+            <span>DAYS / YEAR</span>
+            <strong>350</strong>
+          </div>
+
+          <div class="calendar-row">
+            <span>MONTHS / YEAR</span>
+            <strong>10</strong>
+          </div>
+
+          <div class="calendar-row">
+            <span>DAYS / MONTH</span>
+            <strong>35</strong>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="footer">
+
+  <div class="page-inner">
+
+    <div class="footer-grid">
+
+      <div>
+
+        <div class="footer-brand">
+          空の曆
+        </div>
+
+        <div class="footer-copy">
+          Official World Archive.
+          A living world above the clouds,
+          documented through geography,
+          language, food, travel and time.
+        </div>
+
+      </div>
+
+      <div>
+
+        <h4>Explore</h4>
+
+        <a href="#" data-page="world">
+          World
+        </a>
+
+        <a href="#" data-page="islands">
+          Islands
+        </a>
+
+        <a href="#" data-page="travel">
+          Travel
+        </a>
+
+      </div>
+
+      <div>
+
+        <h4>Archive</h4>
+
+        <a href="#" data-page="food">
+          Food
+        </a>
+
+        <a href="#" data-page="kuugo">
+          Kuugo
+        </a>
+
+        <a href="#" data-page="calendar">
+          Calendar
+        </a>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+      <span>
+        KUUNO KOYOMI / SKYWEB
+      </span>
+
+      <span>
+        ONE WORLD · FOUR ISLANDS · 350 DAYS
+      </span>
+
+    </div>
+
+  </div>
+
+</footer>
+
+</div>
+
+
+<script>
+/* ============================================================
+   SKYWEB DATA
+============================================================ */
+
+/*
+  食材：
+  這裡先放入目前已經確認過的核心資料。
+  完整 53 項 canonical Notion 清單可直接替換 FOOD_DATA。
+*/
+
+const FOOD_DATA = [
+
+  {
+    name:"穗風麥",
+    category:"grain",
+    meta:"grain / staple"
+  },
+
+  {
+    name:"穗風米",
+    category:"grain",
+    meta:"grain / staple"
+  },
+
+  {
+    name:"黑穀米",
+    category:"grain",
+    meta:"grain / staple"
+  },
+
+  {
+    name:"香毛牛",
+    category:"meat",
+    meta:"livestock / meat"
+  },
+
+  {
+    name:"松香豬",
+    category:"meat",
+    meta:"livestock / meat"
+  },
+
+  {
+    name:"草咩羊",
+    category:"meat",
+    meta:"livestock / meat"
+  },
+
+  {
+    name:"礦鹽羊",
+    category:"meat",
+    meta:"livestock / meat"
+  },
+
+  {
+    name:"瑪雅鳥",
+    category:"poultry",
+    meta:"bird / meat"
+  },
+
+  {
+    name:"穆瑪鳥",
+    category:"poultry",
+    meta:"bird / meat"
+  },
+
+  {
+    name:"藍鑽蝦",
+    category:"shellfish",
+    meta:"shellfish"
+  },
+
+  {
+    name:"蒼甲蝦",
+    category:"shellfish",
+    meta:"shellfish"
+  },
+
+  {
+    name:"紅巨蟹",
+    category:"shellfish",
+    meta:"crustacean"
+  },
+
+  {
+    name:"波光魚",
+    category:"fish",
+    meta:"fish"
+  },
+
+  {
+    name:"黑紋鰻",
+    category:"fish",
+    meta:"fish"
+  },
+
+  {
+    name:"白珠貝",
+    category:"shellfish",
+    meta:"shellfish"
+  },
+
+  {
+    name:"沙椰",
+    category:"plant",
+    meta:"coastal staple"
+  },
+
+  {
+    name:"芒蕉",
+    category:"fruit",
+    meta:"fruit"
+  }
+
+];
+
+
+/*
+  空語正式字母表
+*/
+
+const KUUGO_ALPHABET = [
+
+  ["a","a"],
+  ["b","b"],
+  ["c","c"],
+  ["d","d"],
+  ["e","e"],
+  ["f","f"],
+  ["g","g"],
+  ["ધ","gya"],
+  ["h","h"],
+  ["ઉ","hg"],
+  ["i","i"],
+  ["j","j"],
+  ["k","k"],
+  ["l","l"],
+  ["m","m"],
+  ["n","n"],
+  ["ટ","nya"],
+  ["o","o"],
+  ["p","p"],
+  ["q","q"],
+  ["r","r"],
+  ["s","s"],
+  ["t","t"],
+  ["u","u"],
+  ["v","v"],
+  ["w","w"],
+  ["x","x"],
+  ["y","y"],
+  ["z","z"]
+
+];
+
+
+/* ============================================================
+   ICONS
+============================================================ */
+
+if(window.lucide){
+  lucide.createIcons();
+}
+
+
+/* ============================================================
+   PAGE SYSTEM
+============================================================ */
+
+const pages = [...document.querySelectorAll(".page")];
+const pageButtons = [...document.querySelectorAll("[data-page]")];
+const transition = document.querySelector(".page-transition");
+
+let currentPage = "home";
+let isTransitioning = false;
+
+
+function vibrate(pattern = 8){
+
+  if(
+    "vibrate" in navigator &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ){
+
+    navigator.vibrate(pattern);
+
+  }
+
+}
+
+
+function softClick(){
+
+  vibrate(7);
+
+  if(!soundEnabled) return;
+
+  try{
+
+    const AudioContext =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    if(!AudioContext) return;
+
+    const ctx = new AudioContext();
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(520,ctx.currentTime);
+
+    gain.gain.setValueAtTime(.0001,ctx.currentTime);
+
+    gain.gain.exponentialRampToValueAtTime(
+      .035,
+      ctx.currentTime + .006
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .0001,
+      ctx.currentTime + .055
+    );
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    osc.stop(ctx.currentTime + .06);
+
+  }catch(error){
+
+    /* sound is intentionally non-critical */
+
+  }
+
+}
+
+
+function animatePageIn(){
+
+  const page = document.getElementById(currentPage);
+
+  if(!page) return;
+
+  const items = page.querySelectorAll(
+    ".reveal, .section-header, .info-card, .food-item, .letter"
+  );
+
+  gsap.fromTo(
+    items,
+    {
+      opacity:0,
+      y:18
+    },
+    {
+      opacity:1,
+      y:0,
+      duration:.65,
+      stagger:.035,
+      ease:"power3.out",
+      clearProps:"transform"
+    }
+  );
+
+}
+
+
+function navigate(pageName){
+
+  if(
+    isTransitioning ||
+    !document.getElementById(pageName) ||
+    pageName === currentPage
+  ){
+
+    return;
+
+  }
+
+  isTransitioning = true;
+
+  softClick();
+
+  gsap.to(transition,{
+    scaleY:1,
+    duration:.38,
+    ease:"power3.inOut",
+    onComplete:()=>{
+
+      pages.forEach(page=>{
+        page.classList.remove("active");
+      });
+
+      const next =
+        document.getElementById(pageName);
+
+      next.classList.add("active");
+
+      currentPage = pageName;
+
+      pageButtons.forEach(button=>{
+        button.classList.toggle(
+          "active",
+          button.dataset.page === pageName
+        );
+      });
+
+      window.scrollTo({
+        top:0,
+        behavior:"instant"
+      });
+
+      gsap.set(transition,{
+        transformOrigin:"top"
+      });
+
+      gsap.to(transition,{
+        scaleY:0,
+        duration:.45,
+        ease:"power3.inOut",
+        onComplete:()=>{
+
+          gsap.set(transition,{
+            transformOrigin:"bottom"
+          });
+
+          isTransitioning = false;
+
+          animatePageIn();
+
+        }
+      });
+
+    }
+  });
+
+}
+
+
+pageButtons.forEach(button=>{
+
+  button.addEventListener("click",event=>{
+
+    event.preventDefault();
+
+    navigate(button.dataset.page);
+
+  });
+
+});
+
+
+/* ============================================================
+   HERO COUNTER
+============================================================ */
+
+function animateCounter(){
+
+  const counter =
+    document.querySelector(".counter");
+
+  if(!counter) return;
+
+  const target =
+    Number(counter.dataset.target);
+
+  const state = {
+    value:0
+  };
+
+  gsap.to(state,{
+
+    value:target,
+
+    duration:1.8,
+
+    ease:"power2.out",
+
+    onUpdate:()=>{
+
+      counter.textContent =
+        Math.round(state.value).toLocaleString();
+
+    }
+
+  });
+
+}
+
+
+/* ============================================================
+   HERO ORBIT
+============================================================ */
+
+gsap.to(".hero-orbit",{
+
+  rotation:360,
+
+  duration:90,
+
+  repeat:-1,
+
+  ease:"none"
+
+});
+
+
+gsap.to(".sky-glow",{
+
+  scale:1.12,
+  opacity:.8,
+
+  duration:6,
+
+  repeat:-1,
+  yoyo:true,
+
+  ease:"sine.inOut"
+
+});
+
+
+gsap.to(".orbit-node",{
+
+  opacity:.55,
+
+  duration:1.6,
+
+  repeat:-1,
+
+  yoyo:true,
+
+  stagger:.3,
+
+  ease:"sine.inOut"
+
+});
+
+
+/* ============================================================
+   FOOD RENDER
+============================================================ */
+
+const foodList =
+  document.getElementById("foodList");
+
+const foodSearch =
+  document.getElementById("foodSearch");
+
+
+function renderFood(filter=""){
+
+  if(!foodList) return;
+
+  const query =
+    filter.trim().toLowerCase();
+
+  const results =
+    FOOD_DATA.filter(item=>{
+
+      const haystack =
+        `${item.name} ${item.category} ${item.meta}`
+        .toLowerCase();
+
+      return haystack.includes(query);
+
+    });
+
+  foodList.innerHTML =
+    results.map((item,index)=>`
+
+      <article
+        class="food-item"
+        data-food="${item.name}"
+      >
+
+        <div class="food-code">
+          ${String(index+1).padStart(2,"0")} /
+          ${item.category}
+        </div>
+
+        <div class="food-name">
+          ${item.name}
+        </div>
+
+        <div class="food-meta">
+          ${item.meta}
+        </div>
+
+      </article>
+
+    `).join("");
+
+  gsap.fromTo(
+    foodList.querySelectorAll(".food-item"),
+    {
+      opacity:0,
+      y:10
+    },
+    {
+      opacity:1,
+      y:0,
+      duration:.35,
+      stagger:.02,
+      ease:"power2.out"
+    }
+  );
+
+}
+
+
+renderFood();
+
+
+foodSearch?.addEventListener(
+  "input",
+  event=>{
+    renderFood(event.target.value);
+  }
+);
+
+
+/* ============================================================
+   KUUGO RENDER
+============================================================ */
+
+const alphabet =
+  document.getElementById("alphabet");
+
+
+function renderAlphabet(){
+
+  if(!alphabet) return;
+
+  alphabet.innerHTML =
+    KUUGO_ALPHABET.map((item,index)=>`
+
+      <div class="letter">
+
+        <div class="letter-symbol">
+          ${item[0]}
+        </div>
+
+        <div class="letter-pronunciation">
+          / ${item[1]} /
+        </div>
+
+        <div class="letter-index">
+          ${String(index+1).padStart(2,"0")}
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+renderAlphabet();
+
+
+/* ============================================================
+   CALENDAR MICRO MOTION
+============================================================ */
+
+const calendarDay =
+  document.getElementById("calendarDay");
+
+if(calendarDay){
+
+  let day = 1;
+
+  setInterval(()=>{
+
+    day++;
+
+    if(day > 350){
+      day = 1;
+    }
+
+    calendarDay.textContent =
+      String(day).padStart(3,"0");
+
+  },5000);
+
+}
+
+
+/* ============================================================
+   SOUND TOGGLE
+============================================================ */
+
+let soundEnabled = true;
+
+const soundToggle =
+  document.getElementById("soundToggle");
+
+soundToggle?.addEventListener(
+  "click",
+  ()=>{
+
+    soundEnabled = !soundEnabled;
+
+    softClick();
+
+    soundToggle.innerHTML =
+      soundEnabled
+        ? '<i data-lucide="volume-2"></i>'
+        : '<i data-lucide="volume-x"></i>';
+
+    lucide.createIcons();
+
+  }
+);
+
+
+/* ============================================================
+   MENU BUTTON
+============================================================ */
+
+const menuButton =
+  document.getElementById("menuButton");
+
+menuButton?.addEventListener(
+  "click",
+  ()=>{
+
+    softClick();
+
+    const nav =
+      document.querySelector(".nav");
+
+    if(window.innerWidth <= 900){
+
+      const visible =
+        nav.style.display === "flex";
+
+      nav.style.display =
+        visible ? "none" : "flex";
+
+      if(!visible){
+
+        nav.style.position="fixed";
+        nav.style.top="76px";
+        nav.style.left="0";
+        nav.style.right="0";
+        nav.style.padding="16px";
+        nav.style.background="rgba(243,240,229,.96)";
+        nav.style.backdropFilter="blur(20px)";
+        nav.style.flexDirection="column";
+        nav.style.alignItems="stretch";
+        nav.style.borderBottom="1px solid var(--line)";
+
+      }
+
+    }
+
+  }
+);
+
+
+/* ============================================================
+   HOVER MICRO MOTION
+============================================================ */
+
+document.addEventListener(
+  "pointerover",
+  event=>{
+
+    const target =
+      event.target.closest(
+        ".info-card, .food-item, .letter, .primary-button, .secondary-button"
+      );
+
+    if(!target) return;
+
+    gsap.to(target,{
+      duration:.22,
+      y:-2,
+      ease:"power2.out"
+    });
+
+  }
+);
+
+
+document.addEventListener(
+  "pointerout",
+  event=>{
+
+    const target =
+      event.target.closest(
+        ".info-card, .food-item, .letter, .primary-button, .secondary-button"
+      );
+
+    if(!target) return;
+
+    gsap.to(target,{
+      duration:.22,
+      y:0,
+      ease:"power2.out"
+    });
+
+  }
+);
+
+
+/* ============================================================
+   INITIAL LOAD
+============================================================ */
+
+gsap.fromTo(
+  ".topbar",
+  {
+    y:-30,
+    opacity:0
+  },
+  {
+    y:0,
+    opacity:1,
+    duration:.7,
+    ease:"power3.out"
+  }
+);
+
+
+gsap.fromTo(
+  ".hero-content > *",
+  {
+    opacity:0,
+    y:24
+  },
+  {
+    opacity:1,
+    y:0,
+    duration:.8,
+    stagger:.12,
+    delay:.25,
+    ease:"power3.out"
+  }
+);
+
+
+gsap.fromTo(
+  ".hero-data",
+  {
+    opacity:0,
+    x:20
+  },
+  {
+    opacity:1,
+    x:0,
+    duration:.7,
+    delay:.8,
+    ease:"power3.out"
+  }
+);
+
+
+animateCounter();
+
+
+/* ============================================================
+   KEYBOARD NAVIGATION
+============================================================ */
+
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    if(
+      event.target.tagName === "INPUT" ||
+      event.target.tagName === "TEXTAREA"
+    ){
+      return;
+    }
+
+    const keys = [
+      "home",
+      "world",
+      "islands",
+      "travel",
+      "food",
+      "kuugo",
+      "calendar"
+    ];
+
+    const number =
+      Number(event.key);
+
+    if(
+      number >= 1 &&
+      number <= keys.length
+    ){
+
+      navigate(keys[number-1]);
+
+    }
+
+  }
+);
+
+
+/* ============================================================
+   LUCIDE REFRESH
+============================================================ */
+
+if(window.lucide){
+  lucide.createIcons();
+}
+
+</script>
+
+</body>
+</html>
