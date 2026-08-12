@@ -3,76 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#CBC4B4">
-  <meta
-    name="description"
-    content="空の曆｜官方世界觀資料庫"
-  >
+  <meta name="theme-color" content="#17383B">
+  <title>空の曆 — Official World Archive</title>
 
-  <title>空の曆｜官方世界觀資料庫</title>
-
-  <!-- Fonts -->
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
-  <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  >
-
-  <!-- Lucide -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <!-- GSAP -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
 
   <style>
-    /* =========================================================
-       DESIGN TOKENS
-       ========================================================= */
-
     :root {
-      --color-background: #CBC4B4;
-      --color-background-soft: #D8D1C2;
-      --color-surface: #F1EDE4;
-      --color-surface-strong: #E7DFD0;
-
-      --color-primary: #B4BDCB;
-      --color-secondary: #CBC0B4;
-
-      --color-text: #391500;
-      --color-text-soft: #6D5A4D;
-      --color-text-muted: #8B7C70;
-
-      --color-border: rgba(57, 21, 0, 0.12);
-      --color-border-strong: rgba(57, 21, 0, 0.2);
-
-      --radius-small: 12px;
-      --radius-medium: 20px;
-      --radius-large: 30px;
-
-      --shadow-soft:
-        0 12px 40px rgba(57, 21, 0, 0.08);
-
-      --content-width: 1180px;
-
-      --font-sans:
-        "Noto Sans TC",
-        "Noto Sans JP",
-        "Noto Sans KR",
-        system-ui,
-        sans-serif;
+      --bg: #f3eee4;
+      --surface: #fffdf8;
+      --surface-soft: #e9e2d5;
+      --ink: #213437;
+      --muted: #718083;
+      --deep: #17383b;
+      --deep-2: #24565a;
+      --accent: #c49b63;
+      --line: rgba(33, 52, 55, 0.12);
+      --shadow: 0 20px 60px rgba(25, 43, 45, 0.10);
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --max: 1180px;
     }
-
-    /* =========================================================
-       RESET
-       ========================================================= */
 
     * {
       box-sizing: border-box;
@@ -84,11 +36,20 @@
 
     body {
       margin: 0;
-      background: var(--color-background);
-      color: var(--color-text);
-      font-family: var(--font-sans);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(196, 155, 99, 0.14), transparent 28%),
+        radial-gradient(circle at 90% 10%, rgba(36, 86, 90, 0.10), transparent 30%),
+        var(--bg);
+      color: var(--ink);
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "PingFang TC",
+        "Noto Sans TC",
+        sans-serif;
       line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
     }
 
     button,
@@ -106,38 +67,31 @@
       text-decoration: none;
     }
 
-    /* =========================================================
-       APP SHELL
-       ========================================================= */
-
-    #app {
-      min-height: 100vh;
-      overflow-x: hidden;
+    ::selection {
+      background: var(--accent);
+      color: white;
     }
 
     .site-header {
-      position: sticky;
-      top: 0;
+      position: fixed;
+      inset: 0 0 auto;
       z-index: 100;
-
-      border-bottom: 1px solid var(--color-border);
-
-      background:
-        rgba(203, 196, 180, 0.88);
-
+      height: 76px;
+      background: rgba(243, 238, 228, 0.78);
       backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid transparent;
+      transition: 0.3s ease;
     }
 
-    .header-inner {
-      width: min(
-        calc(100% - 40px),
-        var(--content-width)
-      );
+    .site-header.scrolled {
+      border-bottom-color: var(--line);
+      box-shadow: 0 8px 30px rgba(20, 40, 42, 0.05);
+    }
 
-      min-height: 76px;
-      margin: 0 auto;
-
+    .nav {
+      width: min(var(--max), calc(100% - 40px));
+      height: 100%;
+      margin: auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -145,808 +99,667 @@
     }
 
     .brand {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 12px;
-
-      font-weight: 700;
-      letter-spacing: 0.02em;
+      font-weight: 800;
+      letter-spacing: 0.04em;
       white-space: nowrap;
     }
 
     .brand-mark {
-      width: 40px;
-      height: 40px;
-
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
       display: grid;
       place-items: center;
-
-      border-radius: 50%;
-      background: var(--color-primary);
+      color: white;
+      background: var(--deep);
+      font-size: 15px;
     }
 
-    .brand-mark svg {
-      width: 21px;
-      height: 21px;
-      stroke-width: 1.8;
-    }
-
-    .brand-name {
-      font-size: 1.05rem;
-    }
-
-    .main-nav {
+    .nav-links {
       display: flex;
       align-items: center;
       gap: 4px;
     }
 
-    .nav-link {
+    .nav-button,
+    .language-button {
       border: 0;
       background: transparent;
-
-      padding: 9px 13px;
-      border-radius: 12px;
-
-      color: var(--color-text-soft);
-      transition:
-        background 180ms ease,
-        color 180ms ease;
+      color: var(--ink);
+      padding: 9px 12px;
+      border-radius: 10px;
+      transition: 0.2s ease;
     }
 
-    .nav-link:hover,
-    .nav-link.active {
-      background: rgba(241, 237, 228, 0.72);
-      color: var(--color-text);
+    .nav-button:hover,
+    .language-button:hover {
+      background: rgba(36, 86, 90, 0.08);
     }
 
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .language {
+      position: relative;
     }
 
-    .language-select {
-      border: 1px solid var(--color-border);
-      border-radius: 12px;
-
-      padding: 8px 10px;
-
-      background: rgba(241, 237, 228, 0.65);
-      color: var(--color-text);
-
-      outline: none;
-    }
-
-    .mobile-menu-button {
+    .language-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 150px;
+      padding: 7px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
       display: none;
-
-      width: 42px;
-      height: 42px;
-
-      border: 0;
-      border-radius: 12px;
-
-      background: rgba(241, 237, 228, 0.72);
-      color: var(--color-text);
     }
 
-    /* =========================================================
-       MAIN
-       ========================================================= */
+    .language.open .language-menu {
+      display: block;
+    }
+
+    .language-menu button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      padding: 9px 11px;
+      border-radius: 9px;
+    }
+
+    .language-menu button:hover {
+      background: var(--surface-soft);
+    }
 
     main {
-      width: min(
-        calc(100% - 40px),
-        var(--content-width)
-      );
-
-      margin: 0 auto;
+      min-height: 100vh;
     }
 
     .page {
-      min-height: calc(100vh - 76px);
-      padding: 84px 0 100px;
+      width: min(var(--max), calc(100% - 40px));
+      margin: auto;
+      padding: 126px 0 80px;
     }
 
-    .page-header {
-      max-width: 760px;
-      margin-bottom: 52px;
+    .hero {
+      min-height: 650px;
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 40px;
+      align-items: center;
     }
 
     .eyebrow {
-      margin: 0 0 12px;
-
-      color: var(--color-text-muted);
-      font-size: 0.82rem;
-      font-weight: 700;
-
-      letter-spacing: 0.12em;
+      color: var(--deep-2);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
+      margin-bottom: 18px;
     }
 
-    .page-title {
+    .hero h1 {
       margin: 0;
-
-      font-size: clamp(
-        2.4rem,
-        6vw,
-        5rem
-      );
-
-      line-height: 1.08;
-      letter-spacing: -0.04em;
+      font-size: clamp(62px, 10vw, 128px);
+      line-height: 0.95;
+      letter-spacing: -0.075em;
+      font-weight: 850;
     }
 
-    .page-description {
-      margin: 22px 0 0;
-
-      color: var(--color-text-soft);
-      font-size: 1.08rem;
-      max-width: 680px;
+    .hero h1 span {
+      display: block;
+      color: var(--deep-2);
+      font-size: 0.43em;
+      letter-spacing: -0.025em;
+      margin-top: 18px;
     }
 
-    /* =========================================================
-       HERO
-       ========================================================= */
-
-    .hero {
-      min-height: calc(100vh - 76px);
-
-      display: grid;
-      place-items: center;
-
-      text-align: center;
-    }
-
-    .hero-content {
-      max-width: 900px;
-    }
-
-    .hero-mark {
-      width: 92px;
-      height: 92px;
-
-      margin: 0 auto 28px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 32px;
-
-      background: var(--color-primary);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .hero-mark svg {
-      width: 48px;
-      height: 48px;
-      stroke-width: 1.5;
-    }
-
-    .hero-title {
-      margin: 0;
-
-      font-size: clamp(
-        3.4rem,
-        10vw,
-        8rem
-      );
-
-      line-height: 0.98;
-      letter-spacing: -0.06em;
-    }
-
-    .hero-subtitle {
-      margin: 22px auto 0;
-
-      color: var(--color-text-soft);
-      font-size: clamp(
-        1rem,
-        2vw,
-        1.25rem
-      );
-
+    .hero-copy {
       max-width: 620px;
+      color: var(--muted);
+      font-size: 17px;
+      margin: 32px 0;
     }
 
     .hero-actions {
-      margin-top: 36px;
-
       display: flex;
-      justify-content: center;
       flex-wrap: wrap;
       gap: 12px;
     }
 
-    /* =========================================================
-       BUTTONS
-       ========================================================= */
-
-    .button {
-      min-height: 46px;
-
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-
-      border: 1px solid var(--color-border);
-      border-radius: 14px;
-
-      padding: 10px 17px;
-
-      background: var(--color-surface);
-      color: var(--color-text);
-
-      transition:
-        transform 180ms ease,
-        box-shadow 180ms ease,
-        background 180ms ease;
-    }
-
-    .button:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .button-primary {
-      border-color: transparent;
-      background: var(--color-text);
-      color: var(--color-surface);
-    }
-
-    .button svg {
-      width: 17px;
-      height: 17px;
-    }
-
-    /* =========================================================
-       CARDS
-       ========================================================= */
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(
-        3,
-        minmax(0, 1fr)
-      );
-
-      gap: 18px;
-    }
-
-    .card {
-      padding: 25px;
-
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-medium);
-
-      background: rgba(
-        241,
-        237,
-        228,
-        0.72
-      );
-
-      box-shadow:
-        0 8px 30px
-        rgba(57, 21, 0, 0.035);
-
-      transition:
-        transform 220ms ease,
-        box-shadow 220ms ease;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .card-icon {
-      width: 42px;
-      height: 42px;
-
-      display: grid;
-      place-items: center;
-
-      margin-bottom: 18px;
-
+    .primary-button,
+    .secondary-button {
       border-radius: 13px;
-      background: var(--color-secondary);
-    }
-
-    .card-icon svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    .card-title {
-      margin: 0;
-      font-size: 1.15rem;
-    }
-
-    .card-text {
-      margin: 8px 0 0;
-      color: var(--color-text-soft);
-    }
-
-    .card-meta {
-      margin-top: 16px;
-
-      color: var(--color-text-muted);
-      font-size: 0.85rem;
-    }
-
-    /* =========================================================
-       STAT GRID
-       ========================================================= */
-
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(
-        4,
-        minmax(0, 1fr)
-      );
-
-      gap: 14px;
-      margin-bottom: 52px;
-    }
-
-    .stat {
-      padding: 22px;
-
-      border-radius: var(--radius-medium);
-      background: rgba(
-        241,
-        237,
-        228,
-        0.62
-      );
-
-      border: 1px solid var(--color-border);
-    }
-
-    .stat-value {
-      display: block;
-
-      font-size: 2rem;
+      padding: 12px 17px;
       font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .primary-button {
+      color: white;
+      background: var(--deep);
+      border: 1px solid var(--deep);
+    }
+
+    .secondary-button {
+      color: var(--ink);
+      background: transparent;
+      border: 1px solid var(--line);
+    }
+
+    .primary-button:hover,
+    .secondary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(20, 40, 42, 0.10);
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 430px;
+      border-radius: 40px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.48), transparent),
+        var(--deep);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-orbit {
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 50%;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .hero-orbit::before,
+    .hero-orbit::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+
+    .hero-orbit::before {
+      inset: 45px;
+    }
+
+    .hero-orbit::after {
+      inset: 105px;
+    }
+
+    .hero-island {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(-4deg);
+      width: 180px;
+      height: 105px;
+      border-radius: 50%;
+      background: #d7c29f;
+      box-shadow:
+        0 30px 0 -8px rgba(196, 155, 99, .4),
+        0 40px 50px rgba(0,0,0,.2);
+    }
+
+    .hero-island::before {
+      content: "";
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      left: 45px;
+      top: -42px;
+      border-radius: 50%;
+      background: #7eaa8e;
+      box-shadow: inset 20px -12px rgba(40, 80, 65, .12);
+    }
+
+    .hero-stat {
+      position: absolute;
+      left: 26px;
+      bottom: 24px;
+      color: rgba(255,255,255,.75);
+      font-size: 13px;
+    }
+
+    .hero-stat strong {
+      display: block;
+      color: white;
+      font-size: 30px;
       line-height: 1.1;
     }
 
-    .stat-label {
-      display: block;
-
-      margin-top: 6px;
-
-      color: var(--color-text-soft);
-      font-size: 0.9rem;
+    .section {
+      padding: 80px 0;
     }
 
-    /* =========================================================
-       ISLAND / CLIMATE
-       ========================================================= */
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
 
-    .island-card {
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1;
+      letter-spacing: -0.055em;
+    }
+
+    .section-heading p {
+      max-width: 430px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .island-card,
+    .data-card {
       position: relative;
       overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 253, 248, 0.78);
+      box-shadow: 0 10px 40px rgba(30, 48, 50, 0.04);
+      transition: transform .25s ease, box-shadow .25s ease;
     }
 
-    .island-temperature {
-      margin-top: 20px;
-
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-
-      padding: 7px 10px;
-
-      border-radius: 10px;
-
-      background: var(--color-primary);
-
-      font-size: 0.88rem;
-      font-weight: 600;
+    .island-card:hover,
+    .data-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
     }
 
-    .island-temperature svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    /* =========================================================
-       SEARCH
-       ========================================================= */
-
-    .search-bar {
-      margin-bottom: 28px;
-
-      position: relative;
-    }
-
-    .search-bar svg {
-      position: absolute;
-
-      left: 16px;
-      top: 50%;
-
-      width: 19px;
-      height: 19px;
-
-      transform: translateY(-50%);
-
-      color: var(--color-text-muted);
-    }
-
-    .search-input {
-      width: 100%;
-
-      min-height: 54px;
-
-      padding:
-        12px
-        16px
-        12px
-        48px;
-
-      border: 1px solid var(--color-border);
-      border-radius: 16px;
-
-      outline: none;
-
-      background: rgba(
-        241,
-        237,
-        228,
-        0.76
-      );
-
-      color: var(--color-text);
-    }
-
-    .search-input:focus {
-      border-color: var(--color-border-strong);
-      box-shadow:
-        0 0 0 4px
-        rgba(180, 189, 203, 0.25);
-    }
-
-    /* =========================================================
-       FILTERS
-       ========================================================= */
-
-    .filter-row {
+    .island-card {
+      min-height: 320px;
+      padding: 28px;
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-
-      margin-bottom: 26px;
+      flex-direction: column;
+      justify-content: flex-end;
     }
 
-    .filter-button {
-      border: 1px solid var(--color-border);
-      border-radius: 999px;
-
-      padding: 7px 13px;
-
-      background: transparent;
-      color: var(--color-text-soft);
+    .island-number {
+      position: absolute;
+      top: 24px;
+      right: 25px;
+      color: rgba(33,52,55,.22);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .12em;
     }
 
-    .filter-button.active {
-      background: var(--color-text);
-      color: var(--color-surface);
-      border-color: var(--color-text);
+    .island-shape {
+      position: absolute;
+      width: 190px;
+      height: 105px;
+      right: 35px;
+      top: 62px;
+      border-radius: 50%;
+      opacity: .65;
+      transform: rotate(-7deg);
     }
 
-    /* =========================================================
-       INGREDIENTS
-       ========================================================= */
-
-    .ingredient-grid {
-      display: grid;
-
-      grid-template-columns: repeat(
-        3,
-        minmax(0, 1fr)
-      );
-
-      gap: 14px;
+    .plain .island-shape {
+      background: #c8ad7a;
     }
 
-    .ingredient-card {
-      padding: 20px;
-
-      border:
-        1px solid
-        var(--color-border);
-
-      border-radius: 18px;
-
-      background:
-        rgba(
-          241,
-          237,
-          228,
-          0.72
-        );
+    .forest .island-shape {
+      background: #719479;
     }
 
-    .ingredient-category {
-      display: inline-block;
-
-      margin-bottom: 8px;
-
-      color: var(--color-text-muted);
-
-      font-size: 0.78rem;
-      font-weight: 700;
-
-      letter-spacing: 0.04em;
+    .mine .island-shape {
+      background: #7c7770;
     }
 
-    .ingredient-name {
+    .beach .island-shape {
+      background: #d2ae73;
+    }
+
+    .island-card h3 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      letter-spacing: -.04em;
+    }
+
+    .island-card p {
       margin: 0;
-      font-size: 1.08rem;
+      max-width: 430px;
+      color: var(--muted);
     }
 
-    .ingredient-description {
-      margin: 7px 0 0;
-
-      color: var(--color-text-soft);
-      font-size: 0.92rem;
+    .island-tag {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 12px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: var(--surface-soft);
+      font-size: 11px;
+      font-weight: 800;
     }
 
-    /* =========================================================
-       CUISINE
-       ========================================================= */
+    .archive-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
 
-    .dish-card {
+    .archive-card {
       min-height: 240px;
-
+      padding: 25px;
+      border-radius: var(--radius-lg);
+      background: var(--deep);
+      color: white;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      transition: transform .25s ease;
     }
 
-    .dish-island {
-      color: var(--color-text-muted);
-      font-size: 0.82rem;
-      font-weight: 700;
+    .archive-card:hover {
+      transform: translateY(-4px);
     }
 
-    .dish-name {
-      margin: 8px 0 0;
-
-      font-size: 1.55rem;
+    .archive-card:nth-child(2) {
+      background: #365e5c;
     }
 
-    .dish-description {
-      margin: 12px 0 0;
-
-      color: var(--color-text-soft);
+    .archive-card:nth-child(3) {
+      background: #74644e;
     }
 
-    .dish-ingredients {
-      margin-top: 20px;
+    .archive-card h3 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -.04em;
+    }
 
+    .archive-card p {
+      color: rgba(255,255,255,.68);
+      margin: 0;
+    }
+
+    .archive-arrow {
+      font-size: 24px;
+      opacity: .65;
+    }
+
+    .data-page-header {
+      padding-bottom: 35px;
+    }
+
+    .data-page-header h1 {
+      margin: 0 0 15px;
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: 1;
+      letter-spacing: -.065em;
+    }
+
+    .data-page-header p {
+      max-width: 650px;
+      color: var(--muted);
+    }
+
+    .toolbar {
       display: flex;
+      gap: 10px;
       flex-wrap: wrap;
-      gap: 7px;
+      margin: 25px 0;
     }
 
-    .ingredient-tag {
-      padding: 5px 9px;
-
-      border-radius: 8px;
-
-      background: var(--color-secondary);
-
-      font-size: 0.78rem;
+    .search-box {
+      flex: 1;
+      min-width: 240px;
+      position: relative;
     }
 
-    /* =========================================================
-       LANGUAGE
-       ========================================================= */
-
-    .language-section {
-      margin-top: 54px;
-    }
-
-    .section-title {
-      margin: 0 0 20px;
-
-      font-size: clamp(
-        1.7rem,
-        3vw,
-        2.4rem
-      );
-
-      letter-spacing: -0.03em;
-    }
-
-    .language-table-wrap {
-      overflow-x: auto;
-
-      border:
-        1px solid
-        var(--color-border);
-
-      border-radius: 18px;
-    }
-
-    .language-table {
+    .search-box input {
       width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 12px 15px;
+      background: var(--surface);
+      color: var(--ink);
+      outline: none;
+    }
 
+    .search-box input:focus {
+      border-color: var(--deep-2);
+    }
+
+    .filter-button {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      border-radius: 13px;
+      padding: 10px 14px;
+    }
+
+    .filter-button.active {
+      background: var(--deep);
+      color: white;
+      border-color: var(--deep);
+    }
+
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .data-card {
+      padding: 22px;
+      cursor: pointer;
+    }
+
+    .data-card small {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+
+    .data-card h3 {
+      margin: 10px 0 6px;
+      font-size: 24px;
+      letter-spacing: -.04em;
+    }
+
+    .data-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .status {
+      display: inline-flex;
+      margin-top: 17px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: #e7eee8;
+      color: #41634b;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .record-table {
+      width: 100%;
       border-collapse: collapse;
-
-      min-width: 680px;
-
-      background:
-        rgba(
-          241,
-          237,
-          228,
-          0.68
-        );
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--line);
     }
 
-    .language-table th,
-    .language-table td {
-      padding: 14px 16px;
-
-      border-bottom:
-        1px solid
-        var(--color-border);
-
+    .record-table th,
+    .record-table td {
       text-align: left;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
     }
 
-    .language-table th {
-      font-size: 0.83rem;
-
-      color:
-        var(--color-text-muted);
+    .record-table th {
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--surface-soft);
     }
 
-    .language-table tr:last-child td {
+    .record-table tr:last-child td {
       border-bottom: 0;
     }
 
-    /* =========================================================
-       FOOTER
-       ========================================================= */
-
-    .site-footer {
-      border-top:
-        1px solid
-        var(--color-border);
-
-      padding: 32px 0 40px;
+    .detail-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(20, 36, 38, .48);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
     }
 
-    .footer-inner {
-      width: min(
-        calc(100% - 40px),
-        var(--content-width)
-      );
-
-      margin: 0 auto;
-
+    .detail-panel.open {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+    }
 
+    .detail-sheet {
+      width: min(900px, 100%);
+      max-height: 86vh;
+      overflow: auto;
+      padding: 35px;
+      background: var(--surface);
+      border-radius: 30px 30px 0 0;
+      box-shadow: 0 -20px 80px rgba(0,0,0,.2);
+    }
+
+    .detail-close {
+      float: right;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: transparent;
+    }
+
+    .detail-sheet h2 {
+      margin: 15px 0 10px;
+      font-size: 42px;
+      letter-spacing: -.055em;
+    }
+
+    .detail-sheet p {
+      color: var(--muted);
+    }
+
+    .record-note {
+      padding: 20px;
+      border-radius: var(--radius-md);
+      background: var(--surface-soft);
+      margin-top: 20px;
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      padding: 60px 20px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: var(--radius-lg);
+    }
+
+    .footer {
+      width: min(var(--max), calc(100% - 40px));
+      margin: auto;
+      padding: 30px 0 45px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
       gap: 20px;
     }
 
-    .footer-text {
-      margin: 0;
-
-      color: var(--color-text-muted);
-      font-size: 0.85rem;
-    }
-
-    /* =========================================================
-       MOBILE NAV
-       ========================================================= */
-
-    @media (max-width: 860px) {
-      .main-nav {
-        position: absolute;
-
-        left: 20px;
-        right: 20px;
-        top: 70px;
-
-        display: none;
-        flex-direction: column;
-        align-items: stretch;
-
-        padding: 10px;
-
-        border:
-          1px solid
-          var(--color-border);
-
-        border-radius: 18px;
-
-        background:
-          rgba(
-            241,
-            237,
-            228,
-            0.96
-          );
-
-        box-shadow: var(--shadow-soft);
-      }
-
-      .main-nav.open {
-        display: flex;
-      }
-
-      .nav-link {
-        text-align: left;
-        padding: 12px;
-      }
-
-      .mobile-menu-button {
-        display: grid;
-        place-items: center;
-      }
-
-      .header-actions .language-select {
-        display: none;
-      }
-
-      .card-grid,
-      .ingredient-grid {
-        grid-template-columns: repeat(
-          2,
-          minmax(0, 1fr)
-        );
-      }
-
-      .stat-grid {
-        grid-template-columns: repeat(
-          2,
-          minmax(0, 1fr)
-        );
-      }
-    }
-
-    @media (max-width: 560px) {
-      .header-inner,
-      main,
-      .footer-inner {
-        width: min(
-          calc(100% - 28px),
-          var(--content-width)
-        );
-      }
-
-      .page {
-        padding-top: 58px;
-      }
-
+    @media (max-width: 900px) {
       .hero {
-        min-height: calc(100vh - 76px);
-      }
-
-      .hero-title {
-        font-size: 3.6rem;
-      }
-
-      .card-grid,
-      .ingredient-grid,
-      .stat-grid {
         grid-template-columns: 1fr;
       }
 
-      .footer-inner {
-        align-items: flex-start;
-        flex-direction: column;
+      .hero-visual {
+        min-height: 340px;
+      }
+
+      .archive-grid,
+      .data-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .site-header {
+        height: 68px;
+      }
+
+      .nav {
+        width: min(var(--max), calc(100% - 24px));
+      }
+
+      .nav-links .nav-button:nth-child(n+3) {
+        display: none;
+      }
+
+      .page {
+        width: min(var(--max), calc(100% - 24px));
+        padding-top: 105px;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 35px 0 50px;
+      }
+
+      .hero h1 {
+        font-size: clamp(56px, 18vw, 90px);
+      }
+
+      .grid,
+      .archive-grid,
+      .data-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading {
+        display: block;
+      }
+
+      .section-heading p {
+        margin-top: 15px;
+      }
+
+      .record-table {
+        display: block;
+        overflow-x: auto;
+      }
+
+      .footer {
+        display: block;
+      }
+
+      .footer > * + * {
+        margin-top: 8px;
       }
     }
   </style>
@@ -954,1751 +767,1212 @@
 
 <body>
 
-<div id="app"></div>
-
-<script>
-/* =========================================================
-   CONFIG
-   ========================================================= */
-
-const CONFIG = {
-  siteName: "空の曆",
-  defaultLocale: "zh-TW",
-  supportedLocales: [
-    "zh-TW",
-    "zh-CN",
-    "en",
-    "ja",
-    "ko"
-  ]
-};
-
-
-/* =========================================================
-   WORLD DATA
-   ========================================================= */
-
-const WORLD = {
-  population: 30000,
-
-  islands: [
-    {
-      id: "plains",
-      name: {
-        "zh-TW": "平原島",
-        "zh-CN": "平原岛",
-        en: "Plains Island",
-        ja: "平原島",
-        ko: "평원섬"
-      },
-      temperature: "20–25°C",
-      description: {
-        "zh-TW": "以開闊平原與農業環境為主要特色。",
-        "zh-CN": "以开阔平原与农业环境为主要特色。",
-        en: "An open island shaped by plains and agriculture.",
-        ja: "広い平原と農業環境を特徴とする島。",
-        ko: "넓은 평원과 농업 환경이 특징인 섬."
-      }
-    },
-
-    {
-      id: "forest",
-      name: {
-        "zh-TW": "森林島",
-        "zh-CN": "森林岛",
-        en: "Forest Island",
-        ja: "森林島",
-        ko: "숲섬"
-      },
-      temperature: "10–15°C",
-      description: {
-        "zh-TW": "森林覆蓋廣泛，氣候較為涼爽。",
-        "zh-CN": "森林覆盖广泛，气候较为凉爽。",
-        en: "A cool island with extensive forest environments.",
-        ja: "広い森林と涼しい気候を持つ島。",
-        ko: "넓은 숲과 서늘한 기후를 가진 섬."
-      }
-    },
-
-    {
-      id: "mining",
-      name: {
-        "zh-TW": "礦山島",
-        "zh-CN": "矿山岛",
-        en: "Mining Island",
-        ja: "鉱山島",
-        ko: "광산섬"
-      },
-      temperature: "15–20°C",
-      description: {
-        "zh-TW": "礦產與山地環境構成島嶼的重要自然條件。",
-        "zh-CN": "矿产与山地环境构成岛屿的重要自然条件。",
-        en: "A mountainous island shaped by mineral-rich environments.",
-        ja: "山地と鉱物資源を特徴とする島。",
-        ko: "산지와 광물 자원이 특징인 섬."
-      }
-    },
-
-    {
-      id: "beach",
-      name: {
-        "zh-TW": "沙灘島",
-        "zh-CN": "沙滩岛",
-        en: "Beach Island",
-        ja: "砂浜島",
-        ko: "해변섬"
-      },
-      temperature: "25–30°C",
-      description: {
-        "zh-TW": "溫暖的沿岸環境，沙椰等特色資源集中於此。",
-        "zh-CN": "温暖的沿岸环境，沙椰等特色资源集中于此。",
-        en: "A warm coastal island with distinctive resources such as 沙椰.",
-        ja: "温暖な沿岸環境と特色ある資源を持つ島。",
-        ko: "따뜻한 해안 환경과 독특한 자원을 가진 섬."
-      }
-    }
-  ]
-};
-
-
-/* =========================================================
-   INGREDIENT DATA
-   ========================================================= */
-
-const INGREDIENTS = [
-  {
-    name: "穗風麥",
-    category: "穀物",
-    use: "製作穗風麥粉、tagunu"
-  },
-  {
-    name: "穗風米",
-    category: "穀物",
-    use: "製作 yamalas 等料理"
-  },
-  {
-    name: "黑穀米",
-    category: "穀物",
-    use: "主食材料"
-  },
-
-  {
-    name: "香毛牛",
-    category: "牛類",
-    use: "平原島家畜，可取得香毛牛奶"
-  },
-  {
-    name: "松香豬",
-    category: "豬類",
-    use: "常用肉類；可作絞肉等料理材料"
-  },
-  {
-    name: "草咩羊",
-    category: "羊類",
-    use: "提供草咩羊奶"
-  },
-  {
-    name: "礦鹽羊",
-    category: "羊類",
-    use: "肉類食材"
-  },
-  {
-    name: "瑪雅鳥",
-    category: "鳥類",
-    use: "肉類食材"
-  },
-  {
-    name: "穆瑪鳥",
-    category: "鳥類",
-    use: "肉類食材"
-  },
-  {
-    name: "黑羽鳥",
-    category: "鳥類",
-    use: "肉類食材"
-  },
-  {
-    name: "風灰兔",
-    category: "兔類",
-    use: "肉類食材"
-  },
-  {
-    name: "紅角鹿",
-    category: "鹿類",
-    use: "肉類食材"
-  },
-
-  {
-    name: "三點鮭",
-    category: "魚類",
-    use: "魚類食材"
-  },
-  {
-    name: "蒼蘭鮪",
-    category: "魚類",
-    use: "魚類食材"
-  },
-  {
-    name: "紅霞鯛",
-    category: "魚類",
-    use: "魚類食材"
-  },
-  {
-    name: "黑紋鰻",
-    category: "魚類",
-    use: "魚類食材"
-  },
-  {
-    name: "波光魚",
-    category: "淡水魚",
-    use: "魚類料理材料"
-  },
-  {
-    name: "藍鑽蝦",
-    category: "蝦類",
-    use: "蝦類食材"
-  },
-  {
-    name: "蒼甲蝦",
-    category: "蝦類",
-    use: "蝦類食材"
-  },
-  {
-    name: "紅楓蟹",
-    category: "蟹類",
-    use: "蟹類食材"
-  },
-  {
-    name: "紅巨蟹",
-    category: "蟹類",
-    use: "沙灘島特色海產"
-  },
-  {
-    name: "白珠貝",
-    category: "貝類",
-    use: "貝類食材"
-  },
-  {
-    name: "灰背貝",
-    category: "貝類",
-    use: "貝類食材"
-  },
-
-  {
-    name: "黃葉菜",
-    category: "蔬菜",
-    use: "料理材料"
-  },
-  {
-    name: "紫藤菜",
-    category: "蔬菜",
-    use: "料理材料"
-  },
-  {
-    name: "豐金薯",
-    category: "根莖類",
-    use: "iwasgura 內餡"
-  },
-  {
-    name: "松香菇",
-    category: "菇類",
-    use: "料理材料"
-  },
-  {
-    name: "香滑菇",
-    category: "菇類",
-    use: "料理材料"
-  },
-
-  {
-    name: "芒蕉",
-    category: "水果",
-    use: "yamalas、wadasi 使用"
-  },
-  {
-    name: "百蜜果",
-    category: "水果",
-    use: "wadasi 原料"
-  },
-  {
-    name: "香蜜瓜",
-    category: "水果",
-    use: "wadasi 原料"
-  },
-  {
-    name: "沙椰",
-    category: "水果",
-    use: "wadasi 原料"
-  },
-  {
-    name: "沙椰棗",
-    category: "水果",
-    use: "wadasi 原料"
-  },
-
-  {
-    name: "卡塔爾葉",
-    category: "植物／葉類",
-    use: "製作 katarzan，也加入 pisnawa"
-  },
-  {
-    name: "nawabai葉",
-    category: "植物／葉類",
-    use: "製作 nawabaihgan"
-  },
-  {
-    name: "風蝶蜜",
-    category: "植物／葉類",
-    use: "甜味材料"
-  },
-
-  {
-    name: "波光鹽",
-    category: "調味料",
-    use: "調味"
-  },
-  {
-    name: "森椒",
-    category: "香辛料",
-    use: "香辛調味"
-  },
-  {
-    name: "礦物質鹽粉",
-    category: "特殊材料",
-    use: "ginyakah 使用"
-  },
-  {
-    name: "可食用火山泥",
-    category: "特殊材料",
-    use: "ginyakah 使用"
-  },
-  {
-    name: "岩礦粉",
-    category: "香辛料",
-    use: "類似黑胡椒的香辛料"
-  },
-  {
-    name: "火椒粉",
-    category: "香辛料",
-    use: "提供辣味與暖味"
-  },
-  {
-    name: "沙椰糖",
-    category: "甜味材料",
-    use: "甜點與飲品"
-  },
-
-  {
-    name: "香毛牛奶",
-    category: "乳製品",
-    use: "由香毛牛取得"
-  },
-  {
-    name: "草咩羊奶",
-    category: "乳製品",
-    use: "由草咩羊取得"
-  },
-  {
-    name: "香毛牛酪",
-    category: "乳製品",
-    use: "由香毛牛奶製成"
-  },
-
-  {
-    name: "沙椰塊根",
-    category: "根莖類",
-    use: "沙椰植物地下部位，可作料理材料"
-  },
-  {
-    name: "亞達麻果",
-    category: "特殊果實",
-    use: "可作食材或加工材料"
-  },
-  {
-    name: "黃酸果",
-    category: "酸味果實",
-    use: "提供酸味，用於料理調味"
-  },
-
-  {
-    name: "沙椰油",
-    category: "植物油脂",
-    use: "炸物、炒料理與甜點製作"
-  },
-  {
-    name: "瑪雅鳥油",
-    category: "動物油脂",
-    use: "煎煮、烘焙與肉類料理"
-  },
-  {
-    name: "穆瑪鳥油",
-    category: "動物油脂",
-    use: "濃郁料理與高溫烹調"
-  },
-
-  {
-    name: "風釀醬",
-    category: "發酵調味料",
-    use: "由邦卡果加工製成，可用於醃製、炒料理、海鮮調味與湯底"
-  },
-  {
-    name: "燻焰粉",
-    category: "特殊調味料",
-    use: "增加煙燻香氣，用於烤肉、烤魚與礦山島料理"
-  },
-
-  {
-    name: "黃芽豆",
-    category: "豆類",
-    use: "植物性蛋白質、增加飽足感；可煮食、磨粉、製作豆泥與發酵"
-  },
-  {
-    name: "瑪雅鳥蛋",
-    category: "蛋類",
-    use: "日常料理、烘焙、麵糊、蒸煮"
-  },
-  {
-    name: "木香果",
-    category: "堅果／種子類",
-    use: "種子可食；具有木頭味、油脂味與香料味"
-  },
-
-  {
-    name: "邦卡果",
-    category: "特殊果實",
-    use: "可作料理食材與加工材料；可加工製成風釀醬"
-  }
-];
-
-
-/* =========================================================
-   CUISINE DATA
-   ========================================================= */
-
-const DISHES = [
-  {
-    name: "katiyasu",
-    island: "森林島",
-    description:
-      "使用較厚的烤餅 tagunu，以香滑菇、苔黃菇、香毛牛酪製作的醬汁燉煮，口感 Q 彈。",
-    ingredients: [
-      "tagunu",
-      "香滑菇",
-      "苔黃菇",
-      "香毛牛酪"
-    ]
-  },
-
-  {
-    name: "tagunu",
-    island: "平原島",
-    description:
-      "烤餅類料理，通常會搭配類似巴西烤肉風格的肉片一起食用。",
-    ingredients: [
-      "穗風麥"
-    ]
-  },
-
-  {
-    name: "yamalas",
-    island: "沙灘島",
-    description:
-      "使用芒蕉與穗風米製成，上面淋上沙椰醬。",
-    ingredients: [
-      "芒蕉",
-      "穗風米",
-      "沙椰"
-    ]
-  },
-
-  {
-    name: "iwasgura",
-    island: "礦山島",
-    description:
-      "使用厚而韌性極強的烤餅，內部填入豐金薯，是具有高度飽足感的料理。",
-    ingredients: [
-      "穗風麥",
-      "豐金薯"
-    ]
-  }
-];
-
-
-/* =========================================================
-   LANGUAGE DATA
-   ========================================================= */
-
-const KUUGO = {
-  overview: {
-    "zh-TW":
-      "空語（Kuugo）是空の曆世界使用的人工語言。",
-    "zh-CN":
-      "空语（Kuugo）是空之历世界使用的人工语言。",
-    en:
-      "Kuugo is the constructed language used in the world of 空の曆.",
-    ja:
-      "空語（Kuugo）は空の曆世界で使われる人工言語です。",
-    ko:
-      "공어(Kuugo)는 空の曆 세계에서 사용되는 인공 언어입니다."
-  },
-
-  rules: [
-    ["Nai", "我", "代詞"],
-    ["Vatu", "你", "代詞"],
-    ["hgtu", "他／她", "代詞"],
-    ["hgdaras", "我們", "代詞"],
-    ["vaturas", "他們", "代詞"],
-
-    ["puihga", "人", "社會身份"],
-    ["puihgnu", "族群", "社會身份"],
-    ["puihgana", "居民／人們", "社會身份"],
-    ["puihganu", "家族", "社會身份"],
-    ["tuyapuihga", "島民", "社會身份"],
-
-    ["yarapu", "農夫", "職業"],
-    ["piyada", "工匠", "職業"],
-    ["gidama", "商人", "職業"],
-    ["semuga", "學生", "職業"],
-    ["semuya", "老師", "職業"],
-
-    ["haras", "你好", "招呼"],
-    ["ogomo", "早安", "招呼"],
-    ["naigomo", "晚安", "招呼"],
-    ["hgjas", "再見", "招呼"],
-    ["fugatus", "謝謝", "禮貌"],
-    ["mahatus", "不客氣", "禮貌"],
-    ["masera", "對不起", "禮貌"],
-    ["maputa", "沒關係", "禮貌"],
-
-    ["potoni", "0", "數詞"],
-    ["yiyasu", "1", "數詞"],
-    ["jakamu", "2", "數詞"],
-    ["trapi", "3", "數詞"],
-    ["sitaya", "4", "數詞"],
-    ["guyava", "5", "數詞"],
-    ["muyaga", "6", "數詞"],
-    ["serati", "7", "數詞"],
-    ["pahgna", "8", "數詞"],
-    ["buiva", "9", "數詞"],
-    ["toyauo", "10", "數詞"],
-    ["dunaq", "100", "數詞"],
-    ["guahayasu", "10000", "數詞"],
-
-    ["denasa", "天", "時間"],
-    ["dokasa", "年", "時間"],
-    ["domuosa", "月", "時間"],
-    ["denuisa", "日", "時間"],
-    ["weuoka", "星期", "時間"],
-
-    ["tojala", "今天", "時間副詞"],
-    ["yahgla", "昨天", "時間副詞"],
-    ["muisaba", "明天", "時間副詞"],
-    ["tuoisina", "早上", "時間副詞"],
-    ["iwahga", "現在", "時間副詞"],
-    ["jasuhga", "現在之後", "時間副詞"],
-
-    ["mikahg", "水", "自然"],
-    ["fasita", "火", "自然"],
-    ["mihgfa", "天空", "自然"],
-    ["lahgfa", "風", "自然"],
-    ["swahgfa", "雨", "自然"],
-    ["hasita", "太陽", "自然"],
-    ["pusita", "月亮", "自然"],
-    ["hehgsita", "星星", "自然"],
-    ["tunahgi", "樹", "自然"],
-    ["tuhgfa", "花", "自然"],
-    ["tuhgomu", "石頭", "自然"],
-    ["tunasi", "木頭", "自然"],
-    ["puita", "土地", "自然"],
-    ["puiko", "動物", "自然"],
-    ["tuyamu", "島", "自然"],
-
-    ["ruifa", "食物", "食物"],
-    ["putan", "飯", "食物"],
-    ["puyahg", "肉", "食物"],
-    ["tunahgfa", "蔬菜", "食物"],
-    ["fayaga", "水果", "食物"],
-    ["burahg", "麵包", "食物"],
-    ["safahg", "湯", "食物"],
-    ["mihjara", "茶", "飲品"],
-    ["salamu", "鹽", "調味"],
-    ["sukamu", "糖", "調味"],
-
-    ["capaya", "家", "居家"],
-    ["cajaya", "房間", "居家"],
-    ["mirauo", "門", "居家"],
-    ["karauo", "窗戶", "居家"],
-    ["bitaz", "床", "居家"],
-    ["mihgz", "桌子", "居家"],
-    ["pihgz", "椅子", "居家"],
-    ["lamuo", "燈", "居家"],
-    ["laguoz", "火爐", "居家"],
-    ["poidaz", "鍋子", "居家"],
-    ["koidaz", "刀", "居家"],
-
-    ["bihgya", "大", "形容詞"],
-    ["ponya", "小", "形容詞"],
-    ["hgsulo", "長", "形容詞"],
-    ["posulo", "短", "形容詞"],
-    ["tipon", "高", "形容詞"],
-    ["potibon", "低", "形容詞"],
-    ["nuinya", "想睡的", "形容詞"],
-    ["ponui", "清醒的", "形容詞"],
-    ["buihg", "好", "形容詞"],
-    ["pobuj", "壞", "形容詞"],
-    ["hgsuwan", "美麗", "形容詞"],
-    ["pohgsu", "醜", "形容詞"],
-    ["poyawon", "老的", "形容詞"],
-
-    ["hoyag", "開心", "情緒"],
-    ["pohoyag", "難過", "情緒"],
-    ["tagahg", "生氣", "情緒"],
-    ["sawing", "害怕", "情緒"],
-    ["yagahg", "驚訝", "情緒"],
-    ["nufahg", "疲累", "情緒"],
-
-    ["haja", "喝", "動詞"],
-    ["kasufa", "吃", "動詞"],
-    ["nuifa", "睡", "動詞"],
-    ["nuika", "醒來", "動詞"],
-    ["sitam", "坐", "動詞"],
-    ["guitam", "站", "動詞"],
-    ["lojah", "走", "動詞"],
-    ["fajah", "跑", "動詞"],
-    ["habajah", "說", "動詞"],
-    ["ruigafa", "聽", "動詞"],
-    ["ulahga", "寫", "動詞"],
-    ["relahga", "讀", "動詞"],
-    ["sinaka", "看見", "動詞"],
-    ["sinamu", "想", "動詞"],
-    ["sinaya", "喜歡", "動詞"],
-    ["posinaya", "討厭", "動詞"],
-
-    ["rugahg", "去", "移動"],
-    ["runahg", "來", "移動"],
-    ["puitah", "進入", "移動"],
-    ["nuitah", "出去", "移動"],
-    ["poiku", "拿", "操作"],
-    ["paiku", "放", "操作"],
-    ["opika", "打開", "操作"],
-    ["opaika", "關閉", "操作"],
-
-    ["dahg", "做", "工作"],
-    ["gavah", "給", "工作"],
-    ["tokahg", "得到", "工作"],
-    ["finahg", "找", "工作"],
-    ["senahg", "等待", "工作"],
-    ["hafahg", "幫助", "工作"],
-    ["pikahg", "玩", "工作"],
-    ["semuhg", "學習", "工作"],
-    ["worahg", "工作", "工作"],
-    ["biyahg", "製作", "工作"],
-
-    ["guaho", "運輸", "交通"],
-    ["waguaro", "車", "交通"],
-    ["Tawa Muru", "空鷹", "交通"],
-    ["giyaj", "物品／東西", "概念"],
-    ["mato damu", "貨幣", "概念"],
-
-    ["kuugoi", "語言", "文化詞彙"],
-    ["kuugonu", "方言", "文化詞彙"],
-    ["noigaya", "文化", "文化詞彙"],
-    ["yasuha", "傳統", "文化詞彙"],
-
-    ["mihgora", "海", "世界概念"],
-    ["swahgora", "雲", "世界概念"],
-    ["tawara", "飛行", "世界概念"],
-    ["ruyafa", "旅程", "世界概念"],
-    ["poyafa", "冒險", "世界概念"],
-    ["fugaya", "祝福", "世界概念"],
-    ["magahg", "魔法", "世界概念"],
-    ["namuhg", "傳說", "世界概念"],
-    ["dokahg", "古代", "世界概念"]
-  ]
-};
-
-
-/* =========================================================
-   I18N
-   ========================================================= */
-
-const I18N = {
-  "zh-TW": {
-    nav: {
-      home: "首頁",
-      climate: "氣候",
-      ingredients: "食材",
-      cuisine: "料理",
-      language: "空語"
-    },
-
-    home: {
-      eyebrow: "OFFICIAL WORLD DATABASE",
-      title: "空の曆",
-      description:
-        "一個漂浮於天空之中的世界。這裡整理目前已確認的世界資料、氣候、食材、料理與空語。",
-      explore: "開始探索",
-      climate: "查看氣候"
-    },
-
-    stats: {
-      population: "世界人口",
-      islands: "主要島嶼",
-      ingredients: "已收錄食材",
-      languages: "網站語言"
-    },
-
-    climate: {
-      eyebrow: "CLIMATE",
-      title: "島嶼氣候",
-      description:
-        "目前以四大島的氣候資料為核心。地理系統尚未完成，因此這裡不預設尚未確認的地理資訊。"
-    },
-
-    ingredients: {
-      eyebrow: "INGREDIENTS",
-      title: "食材百科",
-      description:
-        "空の曆目前已確認的食材與加工材料。",
-      search: "搜尋食材……",
-      all: "全部"
-    },
-
-    cuisine: {
-      eyebrow: "CUISINE",
-      title: "料理",
-      description:
-        "目前已確認的空の曆島嶼料理。",
-    },
-
-    language: {
-      eyebrow: "KUUGO",
-      title: "空語",
-      description:
-        "空の曆世界使用的人工語言。拉丁字母為主要轉寫系統。",
-      word: "空語",
-      meaning: "中文",
-      type: "詞性"
-    },
-
-    footer: "空の曆官方世界觀資料庫"
-  },
-
-  "zh-CN": {
-    nav: {
-      home: "首页",
-      climate: "气候",
-      ingredients: "食材",
-      cuisine: "料理",
-      language: "空语"
-    },
-
-    home: {
-      eyebrow: "OFFICIAL WORLD DATABASE",
-      title: "空之历",
-      description:
-        "一个漂浮于天空之中的世界。这里整理目前已确认的世界资料、气候、食材、料理与空语。",
-      explore: "开始探索",
-      climate: "查看气候"
-    },
-
-    stats: {
-      population: "世界人口",
-      islands: "主要岛屿",
-      ingredients: "已收录食材",
-      languages: "网站语言"
-    },
-
-    climate: {
-      eyebrow: "CLIMATE",
-      title: "岛屿气候",
-      description:
-        "目前以四大岛的气候资料为核心。地理系统尚未完成，因此这里不预设尚未确认的地理资讯。"
-    },
-
-    ingredients: {
-      eyebrow: "INGREDIENTS",
-      title: "食材百科",
-      description: "空之历目前已确认的食材与加工材料。",
-      search: "搜索食材……",
-      all: "全部"
-    },
-
-    cuisine: {
-      eyebrow: "CUISINE",
-      title: "料理",
-      description: "目前已确认的空之历岛屿料理。"
-    },
-
-    language: {
-      eyebrow: "KUUGO",
-      title: "空语",
-      description: "空之历世界使用的人工语言。拉丁字母为主要转写系统。",
-      word: "空语",
-      meaning: "中文",
-      type: "词性"
-    },
-
-    footer: "空之历官方世界观资料库"
-  },
-
-  en: {
-    nav: {
-      home: "Home",
-      climate: "Climate",
-      ingredients: "Ingredients",
-      cuisine: "Cuisine",
-      language: "Kuugo"
-    },
-
-    home: {
-      eyebrow: "OFFICIAL WORLD DATABASE",
-      title: "Sora no Koyomi",
-      description:
-        "A world suspended in the sky. Explore confirmed information about its islands, climate, ingredients, cuisine and Kuugo.",
-      explore: "Explore",
-      climate: "View climate"
-    },
-
-    stats: {
-      population: "World population",
-      islands: "Major islands",
-      ingredients: "Ingredients",
-      languages: "Site languages"
-    },
-
-    climate: {
-      eyebrow: "CLIMATE",
-      title: "Island climate",
-      description:
-        "The current climate database focuses on the four major islands. Geography remains under development."
-    },
-
-    ingredients: {
-      eyebrow: "INGREDIENTS",
-      title: "Ingredient encyclopedia",
-      description:
-        "Confirmed ingredients and processed materials currently recorded for the world.",
-      search: "Search ingredients...",
-      all: "All"
-    },
-
-    cuisine: {
-      eyebrow: "CUISINE",
-      title: "Cuisine",
-      description:
-        "Currently confirmed island dishes of the world."
-    },
-
-    language: {
-      eyebrow: "KUUGO",
-      title: "Kuugo",
-      description:
-        "The constructed language used in the world of Sora no Koyomi. Latin letters are the primary transcription system.",
-      word: "Kuugo",
-      meaning: "Meaning",
-      type: "Part of speech"
-    },
-
-    footer: "Official Sora no Koyomi World Database"
-  },
-
-  ja: {
-    nav: {
-      home: "ホーム",
-      climate: "気候",
-      ingredients: "食材",
-      cuisine: "料理",
-      language: "空語"
-    },
-
-    home: {
-      eyebrow: "OFFICIAL WORLD DATABASE",
-      title: "空の曆",
-      description:
-        "空に浮かぶ世界。確認済みの島、気候、食材、料理、空語の情報をまとめています。",
-      explore: "探索する",
-      climate: "気候を見る"
-    },
-
-    stats: {
-      population: "世界人口",
-      islands: "主要な島",
-      ingredients: "登録食材",
-      languages: "対応言語"
-    },
-
-    climate: {
-      eyebrow: "CLIMATE",
-      title: "島の気候",
-      description:
-        "現在は四つの主要な島の気候情報を中心に整理しています。地理設定はまだ開発中です。"
-    },
-
-    ingredients: {
-      eyebrow: "INGREDIENTS",
-      title: "食材百科",
-      description:
-        "現在確認されている空の曆の食材と加工材料。",
-      search: "食材を検索…",
-      all: "すべて"
-    },
-
-    cuisine: {
-      eyebrow: "CUISINE",
-      title: "料理",
-      description:
-        "現在確認されている島の料理。"
-    },
-
-    language: {
-      eyebrow: "KUUGO",
-      title: "空語",
-      description:
-        "空の曆世界で使われる人工言語。ラテン文字を主な転写方式とします。",
-      word: "空語",
-      meaning: "意味",
-      type: "品詞"
-    },
-
-    footer: "空の曆公式世界観データベース"
-  },
-
-  ko: {
-    nav: {
-      home: "홈",
-      climate: "기후",
-      ingredients: "식재료",
-      cuisine: "요리",
-      language: "공어"
-    },
-
-    home: {
-      eyebrow: "OFFICIAL WORLD DATABASE",
-      title: "空の曆",
-      description:
-        "하늘에 떠 있는 세계. 확인된 섬, 기후, 식재료, 요리와 공어의 정보를 정리합니다.",
-      explore: "탐험하기",
-      climate: "기후 보기"
-    },
-
-    stats: {
-      population: "세계 인구",
-      islands: "주요 섬",
-      ingredients: "등록 식재료",
-      languages: "지원 언어"
-    },
-
-    climate: {
-      eyebrow: "CLIMATE",
-      title: "섬의 기후",
-      description:
-        "현재는 네 개의 주요 섬의 기후 정보를 중심으로 정리합니다. 지리 설정은 아직 개발 중입니다."
-    },
-
-    ingredients: {
-      eyebrow: "INGREDIENTS",
-      title: "식재료 백과",
-      description:
-        "현재 확인된 空の曆의 식재료와 가공 재료입니다.",
-      search: "식재료 검색…",
-      all: "전체"
-    },
-
-    cuisine: {
-      eyebrow: "CUISINE",
-      title: "요리",
-      description:
-        "현재 확인된 섬의 요리입니다."
-    },
-
-    language: {
-      eyebrow: "KUUGO",
-      title: "공어",
-      description:
-        "空の曆 세계에서 사용하는 인공 언어입니다. 라틴 문자를 주요 표기 체계로 사용합니다.",
-      word: "공어",
-      meaning: "의미",
-      type: "품사"
-    },
-
-    footer: "空の曆 공식 세계관 데이터베이스"
-  }
-};
-
-
-/* =========================================================
-   UTILITIES
-   ========================================================= */
-
-let currentLocale =
-  localStorage.getItem("sora-locale") ||
-  CONFIG.defaultLocale;
-
-function translate(path) {
-  const source = I18N[currentLocale];
-
-  return path
-    .split(".")
-    .reduce(
-      (value, key) => value?.[key],
-      source
-    ) ?? path;
-}
-
-function localized(value) {
-  if (
-    value &&
-    typeof value === "object" &&
-    !Array.isArray(value)
-  ) {
-    return (
-      value[currentLocale] ||
-      value[CONFIG.defaultLocale] ||
-      Object.values(value)[0]
-    );
-  }
-
-  return value;
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function navigate(page) {
-  window.location.hash = page;
-}
-
-function getCurrentPage() {
-  return (
-    window.location.hash.replace("#", "") ||
-    "home"
-  );
-}
-
-
-/* =========================================================
-   COMPONENTS
-   ========================================================= */
-
-function renderHeader() {
-  const pages = [
-    ["home", "nav.home"],
-    ["climate", "nav.climate"],
-    ["ingredients", "nav.ingredients"],
-    ["cuisine", "nav.cuisine"],
-    ["language", "nav.language"]
-  ];
-
-  return `
-    <header class="site-header">
-      <div class="header-inner">
-
-        <a
-          class="brand"
-          href="#home"
-          aria-label="${CONFIG.siteName}"
-        >
-          <span class="brand-mark">
-            <i data-lucide="cloud"></i>
-          </span>
-
-          <span class="brand-name">
-            ${CONFIG.siteName}
-          </span>
-        </a>
-
-        <nav
-          class="main-nav"
-          id="main-nav"
-          aria-label="Main navigation"
-        >
-          ${pages.map(([page, label]) => `
-            <button
-              class="nav-link"
-              data-page="${page}"
-              onclick="navigate('${page}')"
-            >
-              ${translate(label)}
-            </button>
-          `).join("")}
-        </nav>
-
-        <div class="header-actions">
-
-          <select
-            class="language-select"
-            id="language-select"
-            aria-label="Language"
-            onchange="changeLocale(this.value)"
-          >
-            <option value="zh-TW">繁中</option>
-            <option value="zh-CN">简中</option>
-            <option value="en">EN</option>
-            <option value="ja">日本語</option>
-            <option value="ko">한국어</option>
-          </select>
-
-          <button
-            class="mobile-menu-button"
-            aria-label="Menu"
-            onclick="toggleMobileNav()"
-          >
-            <i data-lucide="menu"></i>
-          </button>
-
+  <header class="site-header" id="siteHeader">
+    <nav class="nav">
+      <a class="brand" href="#/" data-route="/">
+        <span class="brand-mark">空</span>
+        <span>空の曆</span>
+      </a>
+
+      <div class="nav-links">
+        <button class="nav-button" data-route="/world"></button>
+        <button class="nav-button" data-route="/ingredients"></button>
+        <button class="nav-button" data-route="/food"></button>
+        <button class="nav-button" data-route="/kuugo"></button>
+
+        <div class="language">
+          <button class="language-button" id="languageButton">繁中</button>
+          <div class="language-menu" id="languageMenu">
+            <button data-language="zh-TW">繁體中文</button>
+            <button data-language="zh-CN">简体中文</button>
+            <button data-language="en">English</button>
+            <button data-language="ja">日本語</button>
+            <button data-language="ko">한국어</button>
+          </div>
         </div>
       </div>
-    </header>
-  `;
-}
-
-function renderFooter() {
-  return `
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <p class="footer-text">
-          ${translate("footer")}
-        </p>
-
-        <p class="footer-text">
-          ${WORLD.population.toLocaleString()}
-        </p>
-      </div>
-    </footer>
-  `;
-}
-
-function renderPageHeader(
-  eyebrow,
-  title,
-  description
-) {
-  return `
-    <header class="page-header">
-      <p class="eyebrow">${eyebrow}</p>
-      <h1 class="page-title">${title}</h1>
-      <p class="page-description">${description}</p>
-    </header>
-  `;
-}
-
-
-/* =========================================================
-   PAGE: HOME
-   ========================================================= */
-
-function renderHomePage() {
-  return `
-    <section class="hero page">
-
-      <div class="hero-content">
-
-        <div class="hero-mark">
-          <i data-lucide="cloud"></i>
-        </div>
-
-        <p class="eyebrow">
-          ${translate("home.eyebrow")}
-        </p>
-
-        <h1 class="hero-title">
-          ${translate("home.title")}
-        </h1>
-
-        <p class="hero-subtitle">
-          ${translate("home.description")}
-        </p>
-
-        <div class="hero-actions">
-
-          <button
-            class="button button-primary"
-            onclick="navigate('climate')"
-          >
-            <i data-lucide="compass"></i>
-            ${translate("home.explore")}
-          </button>
-
-          <button
-            class="button"
-            onclick="navigate('ingredients')"
-          >
-            <i data-lucide="leaf"></i>
-            ${translate("home.climate")}
-          </button>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <section class="page">
-
-      <div class="stat-grid">
-
-        <article class="stat">
-          <span class="stat-value">
-            ${WORLD.population.toLocaleString()}
-          </span>
-          <span class="stat-label">
-            ${translate("stats.population")}
-          </span>
-        </article>
-
-        <article class="stat">
-          <span class="stat-value">
-            ${WORLD.islands.length}
-          </span>
-          <span class="stat-label">
-            ${translate("stats.islands")}
-          </span>
-        </article>
-
-        <article class="stat">
-          <span class="stat-value">
-            ${INGREDIENTS.length}
-          </span>
-          <span class="stat-label">
-            ${translate("stats.ingredients")}
-          </span>
-        </article>
-
-        <article class="stat">
-          <span class="stat-value">
-            ${CONFIG.supportedLocales.length}
-          </span>
-          <span class="stat-label">
-            ${translate("stats.languages")}
-          </span>
-        </article>
-
-      </div>
-
-      <div class="card-grid">
-
-        ${WORLD.islands.map(island => `
-          <article class="card island-card">
-
-            <div class="card-icon">
-              <i data-lucide="mountain"></i>
-            </div>
-
-            <h2 class="card-title">
-              ${localized(island.name)}
-            </h2>
-
-            <p class="card-text">
-              ${localized(island.description)}
-            </p>
-
-            <span class="island-temperature">
-              <i data-lucide="thermometer"></i>
-              ${island.temperature}
-            </span>
-
-          </article>
-        `).join("")}
-
-      </div>
-
-    </section>
-  `;
-}
-
-
-/* =========================================================
-   PAGE: CLIMATE
-   ========================================================= */
-
-function renderClimatePage() {
-  return `
-    <section class="page">
-
-      ${renderPageHeader(
-        translate("climate.eyebrow"),
-        translate("climate.title"),
-        translate("climate.description")
-      )}
-
-      <div class="card-grid">
-
-        ${WORLD.islands.map(island => `
-          <article class="card island-card">
-
-            <div class="card-icon">
-              <i data-lucide="cloud-sun"></i>
-            </div>
-
-            <h2 class="card-title">
-              ${localized(island.name)}
-            </h2>
-
-            <p class="card-text">
-              ${localized(island.description)}
-            </p>
-
-            <div class="island-temperature">
-              <i data-lucide="thermometer"></i>
-              ${island.temperature}
-            </div>
-
-          </article>
-        `).join("")}
-
-      </div>
-
-    </section>
-  `;
-}
-
-
-/* =========================================================
-   PAGE: INGREDIENTS
-   ========================================================= */
-
-function renderIngredientsPage() {
-  const categories = [
-    "全部",
-    ...new Set(
-      INGREDIENTS.map(
-        ingredient => ingredient.category
-      )
-    )
-  ];
-
-  return `
-    <section class="page">
-
-      ${renderPageHeader(
-        translate("ingredients.eyebrow"),
-        translate("ingredients.title"),
-        translate("ingredients.description")
-      )}
-
-      <div class="search-bar">
-
-        <i data-lucide="search"></i>
-
-        <input
-          id="ingredient-search"
-          class="search-input"
-          type="search"
-          placeholder="${translate("ingredients.search")}"
-          oninput="filterIngredients()"
-        >
-
-      </div>
-
-      <div class="filter-row">
-
-        ${categories.map(
-          category => `
-            <button
-              class="filter-button ${
-                category === "全部"
-                  ? "active"
-                  : ""
-              }"
-              data-category="${escapeHtml(category)}"
-              onclick="selectIngredientCategory(this)"
-            >
-              ${
-                category === "全部"
-                  ? translate("ingredients.all")
-                  : escapeHtml(category)
-              }
-            </button>
-          `
-        ).join("")}
-
-      </div>
-
-      <div
-        class="ingredient-grid"
-        id="ingredient-grid"
-      >
-        ${renderIngredientCards(INGREDIENTS)}
-      </div>
-
-    </section>
-  `;
-}
-
-function renderIngredientCards(items) {
-  if (!items.length) {
-    return `
-      <div class="card">
-        <h2 class="card-title">
-          No results
-        </h2>
-      </div>
-    `;
-  }
-
-  return items.map(ingredient => `
-    <article
-      class="ingredient-card"
-      data-ingredient-card
-      data-category="${escapeHtml(ingredient.category)}"
-    >
-      <span class="ingredient-category">
-        ${escapeHtml(ingredient.category)}
-      </span>
-
-      <h2 class="ingredient-name">
-        ${escapeHtml(ingredient.name)}
-      </h2>
-
-      <p class="ingredient-description">
-        ${escapeHtml(ingredient.use)}
-      </p>
+    </nav>
+  </header>
+
+  <main id="app"></main>
+
+  <footer class="footer">
+    <span>空の曆 — Official World Archive</span>
+    <span data-footer-status></span>
+  </footer>
+
+  <div class="detail-panel" id="detailPanel">
+    <article class="detail-sheet">
+      <button class="detail-close" id="detailClose">×</button>
+      <div id="detailContent"></div>
     </article>
-  `).join("");
-}
+  </div>
 
-let selectedIngredientCategory = "全部";
+  <script>
+    const translations = {
+      "zh-TW": {
+        "世界": "世界",
+        "食材百科": "食材百科",
+        "料理百科": "料理百科",
+        "空語": "空語",
+        "探索空の曆": "探索空の曆",
+        "浮在天空之上的世界": "浮在天空之上的世界",
+        "空の曆是一個由四座主要浮空島構成的世界。": "空の曆是一個由四座主要浮空島構成的世界。",
+        "世界人口": "世界人口",
+        "四大島": "四大島",
+        "探索世界": "探索世界",
+        "開始探索": "開始探索",
+        "平原島": "平原島",
+        "森林島": "森林島",
+        "礦山島": "礦山島",
+        "沙灘島": "沙灘島",
+        "農業與開闊土地": "農業與開闊土地",
+        "森林與菌類": "森林與菌類",
+        "礦山與礦產": "礦山與礦產",
+        "海岸與沙椰": "海岸與沙椰",
+        "資料庫": "資料庫",
+        "料理": "料理",
+        "料理與食材": "料理與食材",
+        "世界基本料理骨架": "世界基本料理骨架",
+        "官方資料": "官方資料",
+        "搜尋": "搜尋",
+        "全部": "全部",
+        "正式": "正式",
+        "尚未確認": "尚未確認",
+        "空語官方詞典": "空語官方詞典",
+        "語言、文字與詞源資料": "語言、文字與詞源資料",
+        "世界資料": "世界資料",
+        "四座島嶼": "四座島嶼",
+        "食材": "食材",
+        "料理": "料理",
+        "語言": "語言",
+        "查看資料": "查看資料",
+        "回到首頁": "回到首頁",
+        "世界基本料理骨架巡檢": "世界基本料理骨架巡檢",
+        "日期": "日期",
+        "狀態": "狀態",
+        "通過": "通過",
+        "大致通過": "大致通過",
+        "近乎通過": "近乎通過",
+        "觀察項": "觀察項",
+        "發酵麵團／酵母": "發酵麵團／酵母",
+        "清新草本": "清新草本",
+        "液態酸香": "液態酸香",
+        "目前不因這輪檢查直接新增食材。": "目前不因這輪檢查直接新增食材。",
+        "官方詞典": "官方詞典",
+        "語序": "語序",
+        "音韻": "音韻",
+        "文字系統": "文字系統",
+        "語源": "語源",
+        "目前資料以已確認的世界設定為準。": "目前資料以已確認的世界設定為準。"
+      },
 
-function filterIngredients() {
-  const search =
-    document
-      .getElementById("ingredient-search")
-      ?.value
-      .trim()
-      .toLowerCase() || "";
+      "zh-CN": {
+        "世界": "世界",
+        "食材百科": "食材百科",
+        "料理百科": "料理百科",
+        "空語": "空语",
+        "探索空の曆": "探索空の曆",
+        "浮在天空之上的世界": "浮在天空之上的世界",
+        "空の曆是一個由四座主要浮空島構成的世界。": "空の曆是一个由四座主要浮空岛构成的世界。",
+        "世界人口": "世界人口",
+        "四大島": "四大岛",
+        "探索世界": "探索世界",
+        "開始探索": "开始探索",
+        "平原島": "平原岛",
+        "森林島": "森林岛",
+        "礦山島": "矿山岛",
+        "沙灘島": "沙滩岛",
+        "農業與開闊土地": "农业与开阔土地",
+        "森林與菌類": "森林与菌类",
+        "礦山與礦產": "矿山与矿产",
+        "海岸與沙椰": "海岸与沙椰",
+        "資料庫": "数据库",
+        "料理": "料理",
+        "料理與食材": "料理与食材",
+        "世界基本料理骨架": "世界基本料理骨架",
+        "官方資料": "官方资料",
+        "搜尋": "搜索",
+        "全部": "全部",
+        "正式": "正式",
+        "尚未確認": "尚未确认",
+        "空語官方詞典": "空语官方词典",
+        "語言、文字與詞源資料": "语言、文字与词源资料",
+        "世界資料": "世界资料",
+        "四座島嶼": "四座岛屿",
+        "食材": "食材",
+        "料理": "料理",
+        "語言": "语言",
+        "查看資料": "查看资料",
+        "回到首頁": "回到首页",
+        "世界基本料理骨架巡檢": "世界基本料理骨架巡检",
+        "日期": "日期",
+        "狀態": "状态",
+        "通過": "通过",
+        "大致通過": "大致通过",
+        "近乎通過": "近乎通过",
+        "觀察項": "观察项",
+        "發酵麵團／酵母": "发酵面团／酵母",
+        "清新草本": "清新草本",
+        "液態酸香": "液态酸香",
+        "目前不因這輪檢查直接新增食材。": "目前不因这轮检查直接新增食材。",
+        "官方詞典": "官方词典",
+        "語序": "语序",
+        "音韻": "音韵",
+        "文字系統": "文字系统",
+        "語源": "语源",
+        "目前資料以已確認的世界設定為準。": "目前资料以已确认的世界设定为准。"
+      },
 
-  const cards =
-    document.querySelectorAll(
-      "[data-ingredient-card]"
-    );
+      "en": {
+        "世界": "World",
+        "食材百科": "Ingredients",
+        "料理百科": "Cuisine",
+        "空語": "Kuugo",
+        "探索空の曆": "Explore Sora no Koyomi",
+        "浮在天空之上的世界": "A world above the sky",
+        "空の曆是一個由四座主要浮空島構成的世界。": "Sora no Koyomi is a world formed by four major floating islands.",
+        "世界人口": "World Population",
+        "四大島": "Four Islands",
+        "探索世界": "Explore the World",
+        "開始探索": "Start Exploring",
+        "平原島": "Plain Island",
+        "森林島": "Forest Island",
+        "礦山島": "Mining Island",
+        "沙灘島": "Beach Island",
+        "農業與開闊土地": "Agriculture and open land",
+        "森林與菌類": "Forests and fungi",
+        "礦山與礦產": "Mines and minerals",
+        "海岸與沙椰": "Coast and saye",
+        "資料庫": "Archive",
+        "料理": "Cuisine",
+        "料理與食材": "Cuisine & Ingredients",
+        "世界基本料理骨架": "Basic Cuisine Framework",
+        "官方資料": "Official Data",
+        "搜尋": "Search",
+        "全部": "All",
+        "正式": "Confirmed",
+        "尚未確認": "Unconfirmed",
+        "空語官方詞典": "Official Kuugo Dictionary",
+        "語言、文字與詞源資料": "Language, script and etymology",
+        "世界資料": "World Data",
+        "四座島嶼": "Four Islands",
+        "食材": "Ingredient",
+        "料理": "Cuisine",
+        "語言": "Language",
+        "查看資料": "View Data",
+        "回到首頁": "Back Home",
+        "世界基本料理骨架巡檢": "Basic Cuisine Framework Review",
+        "日期": "Date",
+        "狀態": "Status",
+        "通過": "Passed",
+        "大致通過": "Mostly Passed",
+        "近乎通過": "Nearly Passed",
+        "觀察項": "Observation",
+        "發酵麵團／酵母": "Fermented dough / yeast",
+        "清新草本": "Fresh herbs",
+        "液態酸香": "Liquid acidity",
+        "目前不因這輪檢查直接新增食材。": "No ingredients are added directly as a result of this review.",
+        "官方詞典": "Official Dictionary",
+        "語序": "Word order",
+        "音韻": "Phonology",
+        "文字系統": "Writing system",
+        "語源": "Etymology",
+        "目前資料以已確認的世界設定為準。": "Only confirmed worldbuilding data is treated as canonical."
+      },
 
-  cards.forEach(card => {
-    const name =
-      card
-        .querySelector(".ingredient-name")
-        ?.textContent
-        .toLowerCase() || "";
+      "ja": {
+        "世界": "世界",
+        "食材百科": "食材図鑑",
+        "料理百科": "料理図鑑",
+        "空語": "空語",
+        "探索空の曆": "空の曆を探索する",
+        "浮在天空之上的世界": "空に浮かぶ世界",
+        "空の曆是一個由四座主要浮空島構成的世界。": "空の曆は四つの主要な浮遊島からなる世界です。",
+        "世界人口": "世界人口",
+        "四大島": "四つの島",
+        "探索世界": "世界を探索",
+        "開始探索": "探索を始める",
+        "平原島": "平原島",
+        "森林島": "森林島",
+        "礦山島": "鉱山島",
+        "沙灘島": "砂浜島",
+        "農業與開闊土地": "農業と広い土地",
+        "森林與菌類": "森林と菌類",
+        "礦山與礦產": "鉱山と鉱物",
+        "海岸與沙椰": "海岸とサヤ",
+        "資料庫": "アーカイブ",
+        "料理": "料理",
+        "料理與食材": "料理と食材",
+        "世界基本料理骨架": "基本料理体系",
+        "官方資料": "公式資料",
+        "搜尋": "検索",
+        "全部": "すべて",
+        "正式": "確定",
+        "尚未確認": "未確認",
+        "空語官方詞典": "空語公式辞典",
+        "語言、文字與詞源資料": "言語・文字・語源資料",
+        "世界資料": "世界資料",
+        "四座島嶼": "四つの島",
+        "食材": "食材",
+        "料理": "料理",
+        "語言": "言語",
+        "查看資料": "資料を見る",
+        "回到首頁": "ホームへ戻る",
+        "世界基本料理骨架巡檢": "基本料理体系の確認",
+        "日期": "日付",
+        "狀態": "状態",
+        "通過": "通過",
+        "大致通過": "おおむね通過",
+        "近乎通過": "ほぼ通過",
+        "觀察項": "観察項目",
+        "發酵麵團／酵母": "発酵生地／酵母",
+        "清新草本": "新鮮なハーブ",
+        "液態酸香": "液体の酸味",
+        "目前不因這輪檢查直接新增食材。": "今回の確認によって食材を直接追加することはありません。",
+        "官方詞典": "公式辞典",
+        "語序": "語順",
+        "音韻": "音韻",
+        "文字系統": "文字体系",
+        "語源": "語源",
+        "目前資料以已確認的世界設定為準。": "確認済みの世界設定のみを正式資料として扱います。"
+      },
 
-    const category =
-      card.dataset.category || "";
+      "ko": {
+        "世界": "세계",
+        "食材百科": "식재료 도감",
+        "料理百科": "요리 도감",
+        "空語": "공어",
+        "探索空の曆": "공의력을 탐험하다",
+        "浮在天空之上的世界": "하늘 위에 떠 있는 세계",
+        "空の曆是一個由四座主要浮空島構成的世界。": "空の曆은 네 개의 주요 부유섬으로 이루어진 세계입니다.",
+        "世界人口": "세계 인구",
+        "四大島": "네 개의 섬",
+        "探索世界": "세계 탐험",
+        "開始探索": "탐험 시작",
+        "平原島": "평원섬",
+        "森林島": "숲섬",
+        "礦山島": "광산섬",
+        "沙灘島": "해변섬",
+        "農業與開闊土地": "농업과 넓은 토지",
+        "森林與菌類": "숲과 균류",
+        "礦山與礦產": "광산과 광물",
+        "海岸與沙椰": "해안과 사야",
+        "資料庫": "아카이브",
+        "料理": "요리",
+        "料理與食材": "요리와 식재료",
+        "世界基本料理骨架": "세계 기본 요리 체계",
+        "官方資料": "공식 자료",
+        "搜尋": "검색",
+        "全部": "전체",
+        "正式": "확정",
+        "尚未確認": "미확인",
+        "空語官方詞典": "공어 공식 사전",
+        "語言、文字與詞源資料": "언어·문자·어원 자료",
+        "世界資料": "세계 자료",
+        "四座島嶼": "네 개의 섬",
+        "食材": "식재료",
+        "料理": "요리",
+        "語言": "언어",
+        "查看資料": "자료 보기",
+        "回到首頁": "홈으로",
+        "世界基本料理骨架巡檢": "세계 기본 요리 체계 점검",
+        "日期": "날짜",
+        "狀態": "상태",
+        "通過": "통과",
+        "大致通過": "대체로 통과",
+        "近乎通過": "거의 통과",
+        "觀察項": "관찰 항목",
+        "發酵麵團／酵母": "발효 반죽／효모",
+        "清新草本": "신선한 허브",
+        "液態酸香": "액체 산미",
+        "目前不因這輪檢查直接新增食材。": "이번 점검으로 식재료를 직접 추가하지 않습니다.",
+        "官方詞典": "공식 사전",
+        "語序": "어순",
+        "音韻": "음운",
+        "文字系統": "문자 체계",
+        "語源": "어원",
+        "目前資料以已確認的世界設定為準。": "확인된 세계관 설정만 공식 자료로 취급합니다."
+      }
+    };
 
-    const matchesSearch =
-      !search ||
-      name.includes(search);
+    let currentLanguage = localStorage.getItem("sora-language") || "zh-TW";
 
-    const matchesCategory =
-      selectedIngredientCategory === "全部" ||
-      category === selectedIngredientCategory;
+    function i18n(text) {
+      return translations[currentLanguage]?.[text] ?? text;
+    }
 
-    card.hidden =
-      !(matchesSearch && matchesCategory);
-  });
-}
+    function setLanguage(language) {
+      if (!translations[language]) return;
 
-function selectIngredientCategory(button) {
-  document
-    .querySelectorAll(".filter-button")
-    .forEach(item =>
-      item.classList.remove("active")
-    );
+      currentLanguage = language;
+      localStorage.setItem("sora-language", language);
+      document.documentElement.lang = language;
+      render();
+    }
 
-  button.classList.add("active");
+    const islands = [
+      {
+        key: "平原島",
+        className: "plain",
+        description: "農業與開闊土地",
+        cuisine: "tagunu",
+        cuisineDescription: "烤餅類料理，通常配上類似巴西烤肉的肉片一起食用。",
+        regionWords: [
+          ["nayhga", "麥"],
+          ["nayhgapiu", "麥田"],
+          ["nayhgafa", "麥製食品"]
+        ]
+      },
+      {
+        key: "森林島",
+        className: "forest",
+        description: "森林與菌類",
+        cuisine: "katiyasu",
+        cuisineDescription: "使用較厚的烤餅 tagunu，以香滑菇、苔黃菇、香毛牛酪製作的醬汁燉煮，口感 Q 彈。",
+        regionWords: []
+      },
+      {
+        key: "礦山島",
+        className: "mine",
+        description: "礦山與礦產",
+        cuisine: "iwasgura",
+        cuisineDescription: "使用厚、韌性極強的烤餅，裡面塞入豐金薯，是具有飽足感的料理。",
+        regionWords: [
+          ["poiguo", "採礦工具"],
+          ["tuhguo", "礦石"]
+        ]
+      },
+      {
+        key: "沙灘島",
+        className: "beach",
+        description: "海岸與沙椰",
+        cuisine: "yamalas",
+        cuisineDescription: "使用芒蕉、穗風米製成，上面淋上沙椰醬。",
+        regionWords: []
+      }
+    ];
 
-  selectedIngredientCategory =
-    button.dataset.category;
+    const foods = [
+      {
+        name: "tagunu",
+        island: "平原島",
+        description: "烤餅類料理，通常配上類似巴西烤肉的肉片一起食用。"
+      },
+      {
+        name: "katiyasu",
+        island: "森林島",
+        description: "較厚的烤餅以香滑菇、苔黃菇、香毛牛酪製作的醬汁燉煮，口感 Q 彈。"
+      },
+      {
+        name: "yamalas",
+        island: "沙灘島",
+        description: "以芒蕉、穗風米製成，上面淋上沙椰醬。"
+      },
+      {
+        name: "iwasgura",
+        island: "礦山島",
+        description: "厚、韌性極強的烤餅，內部填入豐金薯。"
+      }
+    ];
 
-  filterIngredients();
-}
+    const ingredients = [
+      {
+        name: "邦卡果",
+        category: "特殊果實",
+        description: "可作料理食材與加工材料；可加工製成風釀醬。"
+      }
+    ];
 
+    const kuugo = [
+      ["Nai", "我", "代詞"],
+      ["Vatu", "你", "代詞"],
+      ["hgtu", "他／她", "代詞"],
+      ["hgdaras", "我們", "代詞"],
+      ["vaturas", "他們", "代詞"],
 
-/* =========================================================
-   PAGE: CUISINE
-   ========================================================= */
+      ["puihga", "人", "身份"],
+      ["puihgnu", "族群", "身份"],
+      ["puihgana", "居民／人們", "身份"],
+      ["puihganu", "家族", "身份"],
+      ["tuyapuihga", "島民", "身份"],
+      ["puihgama", "父母", "身份"],
+      ["cayoga", "孩子", "身份"],
+      ["puihgasi", "兄弟姊妹／手足", "身份"],
 
-function renderCuisinePage() {
-  return `
-    <section class="page">
+      ["haras", "你好", "招呼"],
+      ["ogomo", "早安", "招呼"],
+      ["naigomo", "晚安", "招呼"],
+      ["hgjas", "再見", "招呼"],
+      ["fugatus", "謝謝", "禮貌"],
+      ["mahatus", "不客氣", "禮貌"],
+      ["masera", "對不起", "禮貌"],
+      ["maputa", "沒關係", "禮貌"],
 
-      ${renderPageHeader(
-        translate("cuisine.eyebrow"),
-        translate("cuisine.title"),
-        translate("cuisine.description")
-      )}
+      ["potoni", "0", "數詞"],
+      ["yiyasu", "1", "數詞"],
+      ["jakamu", "2", "數詞"],
+      ["trapi", "3", "數詞"],
+      ["sitaya", "4", "數詞"],
+      ["guyava", "5", "數詞"],
+      ["muyaga", "6", "數詞"],
+      ["serati", "7", "數詞"],
+      ["pahgna", "8", "數詞"],
+      ["buiva", "9", "數詞"],
+      ["toyauo", "10", "數詞"],
+      ["dunaq", "100", "數詞"],
+      ["guahayasu", "10000", "數詞"],
 
-      <div class="card-grid">
+      ["denasa", "天", "時間"],
+      ["dokasa", "年", "時間"],
+      ["domuosa", "月", "時間"],
+      ["denuisa", "日", "時間"],
+      ["weuoka", "星期", "時間"],
 
-        ${DISHES.map(dish => `
-          <article class="card dish-card">
+      ["tojala", "今天", "時間"],
+      ["yahgla", "昨天", "時間"],
+      ["muisaba", "明天", "時間"],
+      ["tuoisina", "早上", "時間"],
+      ["iwahga", "現在", "時間"],
+      ["jasuhga", "現在之後", "時間"],
 
-            <div>
+      ["mikahg", "水", "自然"],
+      ["fasita", "火", "自然"],
+      ["mihgfa", "天空", "自然"],
+      ["lahgfa", "風", "自然"],
+      ["swahgfa", "雨", "自然"],
+      ["hasita", "太陽", "自然"],
+      ["pusita", "月亮", "自然"],
+      ["hehgsita", "星星", "自然"],
+      ["tunahgi", "樹", "自然"],
+      ["tuhgfa", "花", "自然"],
+      ["tuhgomu", "石頭", "自然"],
+      ["tunasi", "木頭", "自然"],
+      ["puita", "土地", "自然"],
+      ["puiko", "動物", "自然"],
+      ["tuyamu", "島", "自然"],
 
-              <span class="dish-island">
-                ${escapeHtml(dish.island)}
-              </span>
+      ["ruifa", "食物", "食物"],
+      ["ruifaras", "各種食物", "食物"],
+      ["putan", "飯", "食物"],
+      ["puyahg", "肉", "食物"],
+      ["tunahgfa", "蔬菜", "食物"],
+      ["fayaga", "水果", "食物"],
+      ["burahg", "麵包", "食物"],
+      ["safahg", "湯", "食物"],
+      ["mihjara", "茶", "飲品"],
+      ["salamu", "鹽", "調味"],
+      ["sukamu", "糖", "調味"],
 
-              <h2 class="dish-name">
-                ${escapeHtml(dish.name)}
-              </h2>
+      ["capaya", "家", "居家"],
+      ["cajaya", "房間", "居家"],
+      ["mirauo", "門", "居家"],
+      ["karauo", "窗戶", "居家"],
+      ["bitaz", "床", "居家"],
+      ["mihgz", "桌子", "居家"],
+      ["pihgz", "椅子", "居家"],
+      ["lamuo", "燈", "居家"],
+      ["laguoz", "火爐", "居家"],
+      ["poidaz", "鍋子", "居家"],
+      ["koidaz", "刀", "居家"],
 
-              <p class="dish-description">
-                ${escapeHtml(dish.description)}
+      ["yahgi", "顏色／色彩", "顏色"],
+      ["kaijo", "紅色", "顏色"],
+      ["puikoj", "綠色", "顏色"],
+      ["pobuj", "黃色", "顏色"],
+      ["pufan", "棕色", "顏色"],
+      ["lanoi", "紫色", "顏色"],
+      ["pahgnoi", "灰色", "顏色"],
+      ["guijo", "相反色", "顏色"],
+      ["guiyasu", "相反", "形容詞"],
+
+      ["bihgya", "大", "形容詞"],
+      ["ponya", "小", "形容詞"],
+      ["hgsulo", "長", "形容詞"],
+      ["posulo", "短", "形容詞"],
+      ["tipon", "高", "形容詞"],
+      ["potibon", "低", "形容詞"],
+      ["nuinya", "想睡的", "形容詞"],
+      ["ponui", "清醒的", "形容詞"],
+      ["buihg", "好", "形容詞"],
+      ["pobuj", "壞", "形容詞"],
+      ["hgsuwan", "美麗", "形容詞"],
+      ["pohgsu", "醜", "形容詞"],
+      ["poyawon", "老的", "形容詞"],
+
+      ["mihgu", "裡面", "空間"],
+      ["pohgu", "外面", "空間"],
+      ["tawaga", "上方", "空間"],
+      ["pudaga", "下方", "空間"],
+      ["layahg", "前方", "空間"],
+      ["ruyohg", "後方", "空間"],
+      ["midamu", "中間", "空間"],
+      ["farahg", "遠", "空間"],
+      ["narahg", "近", "空間"],
+
+      ["hoyag", "開心", "情緒"],
+      ["pohoyag", "難過", "情緒"],
+      ["tagahg", "生氣", "情緒"],
+      ["sawing", "害怕", "情緒"],
+      ["yagahg", "驚訝", "情緒"],
+      ["nufahg", "疲累", "情緒"],
+
+      ["haja", "喝", "動詞"],
+      ["kasufa", "吃", "動詞"],
+      ["nuifa", "睡", "動詞"],
+      ["nuika", "醒來", "動詞"],
+      ["sitam", "坐", "動詞"],
+      ["guitam", "站", "動詞"],
+      ["lojah", "走", "動詞"],
+      ["fajah", "跑", "動詞"],
+      ["habajah", "說", "動詞"],
+      ["ruigafa", "聽", "動詞"],
+      ["ulahga", "寫", "動詞"],
+      ["relahga", "讀", "動詞"],
+      ["sinaka", "看見", "動詞"],
+      ["sinamu", "想", "動詞"],
+      ["sinaya", "喜歡", "動詞"],
+      ["posinaya", "討厭", "動詞"],
+
+      ["rugahg", "去", "動詞"],
+      ["runahg", "來", "動詞"],
+      ["puitah", "進入", "動詞"],
+      ["nuitah", "出去", "動詞"],
+      ["poiku", "拿", "動詞"],
+      ["paiku", "放", "動詞"],
+      ["opika", "打開", "動詞"],
+      ["opaika", "關閉", "動詞"],
+
+      ["dahg", "做", "動詞"],
+      ["gavah", "給", "動詞"],
+      ["tokahg", "得到", "動詞"],
+      ["finahg", "找", "動詞"],
+      ["senahg", "等待", "動詞"],
+      ["hafahg", "幫助", "動詞"],
+      ["pikahg", "玩", "動詞"],
+      ["semuhg", "學習", "動詞"],
+      ["worahg", "工作", "動詞"],
+      ["biyahg", "製作", "動詞"],
+      ["koidazpuiko", "打獵", "動詞"],
+
+      ["guaho", "運輸", "交通"],
+      ["waguaro", "車", "交通"],
+      ["Tawa Muru", "空鷹", "交通"],
+      ["giyaj", "物品／東西", "概念"],
+      ["mato damu", "貨幣", "概念"],
+
+      ["kuugoi", "語言", "文化"],
+      ["kuugonu", "方言", "文化"],
+      ["noigaya", "文化", "文化"],
+      ["yasuha", "傳統", "文化"],
+
+      ["mihgora", "海", "世界概念"],
+      ["swahgora", "雲", "世界概念"],
+      ["tawara", "飛行", "世界概念"],
+      ["ruyafa", "旅程", "世界概念"],
+      ["poyafa", "冒險", "世界概念"],
+      ["fugaya", "祝福", "世界概念"],
+      ["magahg", "魔法", "世界概念"],
+      ["namuhg", "傳說", "世界概念"],
+      ["dokahg", "古代", "世界概念"],
+
+      ["nayhga", "麥", "區域詞彙"],
+      ["nayhgapiu", "麥田", "區域詞彙"],
+      ["nayhgafa", "麥製食品", "區域詞彙"],
+      ["poiguo", "採礦工具", "區域詞彙"],
+      ["tuhguo", "礦石", "區域詞彙"]
+    ];
+
+    const reviewRows = [
+      ["飯類", "穗風米、黑穀米、風芽蔥、球芽蒜、瑪雅鳥蛋、肉類等", "通過"],
+      ["麵類", "穗風麥、穗風米、黃芽豆及湯底食材", "通過"],
+      ["餃／包／餅皮類", "穗風麥、黃芽豆、瑪雅鳥蛋、風芽蔥", "通過"],
+      ["湯類", "魚類、肉類、蔬菜、乳製品、調味料", "通過"],
+      ["燉菜", "肉、魚、根莖、乳製品、香辛料", "通過"],
+      ["烤／燒烤", "肉類、魚類、燻焰粉、球芽蒜、風芽蔥、油脂", "通過"],
+      ["炸物", "沙椰油、瑪雅鳥蛋、穗風麥、黃芽豆", "通過"],
+      ["炒物", "球芽蒜、風芽蔥、沙椰油、肉類、蔬菜", "通過"],
+      ["蒸物", "卡塔爾葉、nawabai葉、瑪雅鳥蛋、波光魚", "通過"],
+      ["沙拉／涼拌", "黃酸果、黃芽豆、木香果、黃葉菜、風芽蔥", "大致通過"],
+      ["早餐類", "穗風麥、穗風米、黃芽豆、瑪雅鳥蛋、香毛牛酪", "通過"],
+      ["麵包／餅類", "穗風麥粉可支撐，但發酵麵團功能尚未明確", "近乎通過"],
+      ["乳製品料理", "香毛牛奶、草咩羊奶、香毛牛酪", "通過"],
+      ["發酵料理", "風釀醬、香毛牛酪、黃芽豆可延伸", "通過"],
+      ["甜點", "瑪雅鳥蛋、香毛牛酪、沙椰糖、風螺蜜、芒蕉", "通過"],
+      ["甜飲／糊飲", "香毛牛奶、草咩羊奶、沙椰糖、百蜜果、芒蕉", "通過"]
+    ];
+
+    function renderNav() {
+      document.querySelectorAll("[data-route]").forEach(button => {
+        const route = button.dataset.route;
+
+        if (route === "/world") button.textContent = i18n("世界");
+        if (route === "/ingredients") button.textContent = i18n("食材百科");
+        if (route === "/food") button.textContent = i18n("料理百科");
+        if (route === "/kuugo") button.textContent = i18n("空語");
+      });
+
+      document.querySelector("[data-footer-status]").textContent =
+        i18n("目前資料以已確認的世界設定為準。");
+
+      const labels = {
+        "zh-TW": "繁中",
+        "zh-CN": "简中",
+        "en": "EN",
+        "ja": "日本語",
+        "ko": "한국어"
+      };
+
+      document.getElementById("languageButton").textContent =
+        labels[currentLanguage];
+    }
+
+    function islandCards() {
+      return islands.map((island, index) => `
+        <article class="island-card ${island.className}" data-island="${island.key}">
+          <span class="island-number">0${index + 1}</span>
+          <div class="island-shape"></div>
+          <div>
+            <span class="island-tag">${i18n("世界")}</span>
+            <h3>${i18n(island.key)}</h3>
+            <p>${i18n(island.description)}</p>
+            <p style="margin-top:10px"><strong>${island.cuisine}</strong></p>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function homePage() {
+      return `
+        <div class="page">
+          <section class="hero">
+            <div class="hero-copy-block">
+              <div class="eyebrow">Official World Archive</div>
+              <h1>
+                空の曆
+                <span>${i18n("浮在天空之上的世界")}</span>
+              </h1>
+
+              <p class="hero-copy">
+                ${i18n("空の曆是一個由四座主要浮空島構成的世界。")}
               </p>
 
+              <div class="hero-actions">
+                <button class="primary-button" data-route="/world">
+                  ${i18n("探索世界")}
+                </button>
+                <button class="secondary-button" data-route="/food">
+                  ${i18n("料理與食材")}
+                </button>
+              </div>
             </div>
 
-            <div class="dish-ingredients">
+            <div class="hero-visual">
+              <div class="hero-orbit"></div>
+              <div class="hero-island"></div>
+              <div class="hero-stat">
+                ${i18n("世界人口")}
+                <strong>30,000</strong>
+              </div>
+            </div>
+          </section>
 
-              ${dish.ingredients.map(
-                ingredient => `
-                  <span class="ingredient-tag">
-                    ${escapeHtml(ingredient)}
-                  </span>
-                `
-              ).join("")}
-
+          <section class="section">
+            <div class="section-heading">
+              <div>
+                <div class="eyebrow">${i18n("世界")}</div>
+                <h2>${i18n("四大島")}</h2>
+              </div>
+              <p>
+                ${i18n("目前資料以已確認的世界設定為準。")}
+              </p>
             </div>
 
-          </article>
-        `).join("")}
+            <div class="grid">
+              ${islandCards()}
+            </div>
+          </section>
 
-      </div>
+          <section class="section">
+            <div class="section-heading">
+              <div>
+                <div class="eyebrow">${i18n("官方資料")}</div>
+                <h2>${i18n("資料庫")}</h2>
+              </div>
+            </div>
 
-    </section>
-  `;
-}
+            <div class="archive-grid">
+              <article class="archive-card" data-route="/ingredients">
+                <div>
+                  <h3>${i18n("食材百科")}</h3>
+                  <p>${i18n("料理與食材")}</p>
+                </div>
+                <div class="archive-arrow">↗</div>
+              </article>
 
+              <article class="archive-card" data-route="/food">
+                <div>
+                  <h3>${i18n("料理百科")}</h3>
+                  <p>${i18n("世界基本料理骨架")}</p>
+                </div>
+                <div class="archive-arrow">↗</div>
+              </article>
 
-/* =========================================================
-   PAGE: KUUGO
-   ========================================================= */
-
-function renderLanguagePage() {
-  return `
-    <section class="page">
-
-      ${renderPageHeader(
-        translate("language.eyebrow"),
-        translate("language.title"),
-        translate("language.description")
-      )}
-
-      <section class="language-section">
-
-        <h2 class="section-title">
-          ${translate("language.title")}
-        </h2>
-
-        <div class="card">
-          <p class="card-text">
-            ${escapeHtml(
-              localized(KUUGO.overview)
-            )}
-          </p>
+              <article class="archive-card" data-route="/kuugo">
+                <div>
+                  <h3>${i18n("空語")}</h3>
+                  <p>${i18n("空語官方詞典")}</p>
+                </div>
+                <div class="archive-arrow">↗</div>
+              </article>
+            </div>
+          </section>
         </div>
+      `;
+    }
 
-      </section>
+    function worldPage() {
+      return `
+        <div class="page">
+          <header class="data-page-header">
+            <div class="eyebrow">${i18n("世界資料")}</div>
+            <h1>${i18n("四大島")}</h1>
+            <p>${i18n("空の曆是一個由四座主要浮空島構成的世界。")}</p>
+          </header>
 
-      <section class="language-section">
+          <div class="grid">
+            ${islandCards()}
+          </div>
 
-        <div class="language-table-wrap">
+          <section class="section">
+            <div class="section-heading">
+              <div>
+                <div class="eyebrow">${i18n("官方資料")}</div>
+                <h2>${i18n("世界基本料理骨架")}</h2>
+              </div>
+              <p>2026-08-10</p>
+            </div>
 
-          <table class="language-table">
-
-            <thead>
-              <tr>
-                <th>
-                  ${translate("language.word")}
-                </th>
-
-                <th>
-                  ${translate("language.meaning")}
-                </th>
-
-                <th>
-                  ${translate("language.type")}
-                </th>
-              </tr>
-            </thead>
-
-            <tbody>
-
-              ${KUUGO.rules.map(
-                ([word, meaning, type]) => `
+            <table class="record-table">
+              <thead>
+                <tr>
+                  <th>${i18n("料理")}</th>
+                  <th>${i18n("官方資料")}</th>
+                  <th>${i18n("狀態")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${reviewRows.map(row => `
                   <tr>
-                    <td>
-                      <strong>
-                        ${escapeHtml(word)}
-                      </strong>
-                    </td>
-
-                    <td>
-                      ${escapeHtml(meaning)}
-                    </td>
-
-                    <td>
-                      ${escapeHtml(type)}
-                    </td>
+                    <td>${row[0]}</td>
+                    <td>${row[1]}</td>
+                    <td>${row[2]}</td>
                   </tr>
-                `
-              ).join("")}
+                `).join("")}
+              </tbody>
+            </table>
+          </section>
 
-            </tbody>
+          <section class="section">
+            <div class="section-heading">
+              <div>
+                <div class="eyebrow">${i18n("觀察項")}</div>
+                <h2>${i18n("觀察項")}</h2>
+              </div>
+            </div>
 
-          </table>
+            <div class="grid">
+              <article class="data-card">
+                <small>${i18n("觀察項")}</small>
+                <h3>${i18n("發酵麵團／酵母")}</h3>
+                <p>麵粉本身足夠，但蓬鬆發酵口感尚未正式建立。</p>
+              </article>
 
+              <article class="data-card">
+                <small>${i18n("觀察項")}</small>
+                <h3>${i18n("清新草本")}</h3>
+                <p>目前由卡塔爾葉、nawabai葉承擔部分功能，暫不新增。</p>
+              </article>
+
+              <article class="data-card">
+                <small>${i18n("觀察項")}</small>
+                <h3>${i18n("液態酸香")}</h3>
+                <p>目前由黃酸果與風釀醬提供相關功能。</p>
+              </article>
+
+              <article class="data-card">
+                <small>${i18n("正式決策")}</small>
+                <h3>${i18n("正式")}</h3>
+                <p>${i18n("目前不因這輪檢查直接新增食材。")}</p>
+              </article>
+            </div>
+          </section>
         </div>
+      `;
+    }
 
-      </section>
+    function ingredientsPage() {
+      return `
+        <div class="page">
+          <header class="data-page-header">
+            <div class="eyebrow">${i18n("官方資料")}</div>
+            <h1>${i18n("食材百科")}</h1>
+            <p>
+              目前只展示本次已確認並可回收的正式食材資料。
+              未取得的逐項資料不自行補完。
+            </p>
+          </header>
 
-    </section>
-  `;
-}
+          <div class="toolbar">
+            <div class="search-box">
+              <input
+                id="ingredientSearch"
+                type="search"
+                placeholder="${i18n("搜尋")}"
+                autocomplete="off"
+              >
+            </div>
+            <button class="filter-button active">${i18n("全部")}</button>
+            <button class="filter-button">${i18n("正式")}</button>
+          </div>
 
+          <div class="data-grid" id="ingredientGrid">
+            ${ingredients.map(item => `
+              <article
+                class="data-card searchable"
+                data-name="${item.name} ${item.category} ${item.description}"
+                data-detail-type="ingredient"
+                data-detail-name="${item.name}"
+              >
+                <small>${item.category}</small>
+                <h3>${item.name}</h3>
+                <p>${item.description}</p>
+                <span class="status">${i18n("正式")}</span>
+              </article>
+            `).join("")}
+          </div>
 
-/* =========================================================
-   ROUTER
-   ========================================================= */
+          <div class="record-note">
+            <strong>資料完整性原則</strong>
+            <p>
+              這裡不把目前缺少的逐項食材資料猜出來。
+              等正式清單重新提供後，再直接併入資料庫。
+            </p>
+          </div>
+        </div>
+      `;
+    }
 
-const PAGES = {
-  home: renderHomePage,
-  climate: renderClimatePage,
-  ingredients: renderIngredientsPage,
-  cuisine: renderCuisinePage,
-  language: renderLanguagePage
-};
+    function foodPage() {
+      return `
+        <div class="page">
+          <header class="data-page-header">
+            <div class="eyebrow">${i18n("官方資料")}</div>
+            <h1>${i18n("料理百科")}</h1>
+            <p>${i18n("料理與食材")}</p>
+          </header>
 
-function renderApp() {
-  const pageName = getCurrentPage();
-  const renderPage =
-    PAGES[pageName] ||
-    PAGES.home;
+          <div class="data-grid">
+            ${foods.map(item => `
+              <article
+                class="data-card"
+                data-detail-type="food"
+                data-detail-name="${item.name}"
+              >
+                <small>${i18n(item.island)}</small>
+                <h3>${item.name}</h3>
+                <p>${item.description}</p>
+                <span class="status">${i18n("正式")}</span>
+              </article>
+            `).join("")}
+          </div>
 
-  document.getElementById("app").innerHTML = `
-    ${renderHeader()}
+          <section class="section">
+            <div class="section-heading">
+              <div>
+                <div class="eyebrow">${i18n("官方資料")}</div>
+                <h2>${i18n("世界基本料理骨架")}</h2>
+              </div>
+              <p>2026-08-10</p>
+            </div>
 
-    <main>
-      ${renderPage()}
-    </main>
+            <table class="record-table">
+              <thead>
+                <tr>
+                  <th>類型</th>
+                  <th>目前狀態</th>
+                  <th>${i18n("狀態")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${reviewRows.map(row => `
+                  <tr>
+                    <td>${row[0]}</td>
+                    <td>${row[1]}</td>
+                    <td>${row[2]}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </section>
+        </div>
+      `;
+    }
 
-    ${renderFooter()}
-  `;
+    function kuugoPage() {
+      return `
+        <div class="page">
+          <header class="data-page-header">
+            <div class="eyebrow">Kuugo</div>
+            <h1>${i18n("空語官方詞典")}</h1>
+            <p>${i18n("語言、文字與詞源資料")}</p>
+          </header>
 
-  updateActiveNavigation(pageName);
-  syncLanguageSelector();
-  refreshIcons();
-  animatePage();
-}
+          <div class="toolbar">
+            <div class="search-box">
+              <input
+                id="kuugoSearch"
+                type="search"
+                placeholder="${i18n("搜尋")}"
+                autocomplete="off"
+              >
+            </div>
+          </div>
 
-function updateActiveNavigation(pageName) {
-  document
-    .querySelectorAll(".nav-link")
-    .forEach(link => {
-      link.classList.toggle(
-        "active",
-        link.dataset.page === pageName
+          <div class="data-grid" id="kuugoGrid">
+            ${kuugo.map(word => `
+              <article
+                class="data-card searchable"
+                data-name="${word[0]} ${word[1]} ${word[2]}"
+              >
+                <small>${word[2]}</small>
+                <h3>${word[0]}</h3>
+                <p>${word[1]}</p>
+              </article>
+            `).join("")}
+          </div>
+
+          <section class="section">
+            <div class="section-heading">
+              <div>
+                <div class="eyebrow">${i18n("官方詞典")}</div>
+                <h2>${i18n("文字系統")}</h2>
+              </div>
+            </div>
+
+            <div class="grid">
+              <article class="data-card">
+                <small>${i18n("音韻")}</small>
+                <h3>Latin</h3>
+                <p>Aa Ee Ii Oo Uu，以及正式空語子音系統。</p>
+              </article>
+
+              <article class="data-card">
+                <small>${i18n("音韻")}</small>
+                <h3>hg / uo / nya / gya</h3>
+                <p>正式特殊音節。</p>
+              </article>
+
+              <article class="data-card">
+                <small>${i18n("語序")}</small>
+                <h3>SOV</h3>
+                <p>主語 + 受詞 + 動詞。</p>
+              </article>
+
+              <article class="data-card">
+                <small>${i18n("語源")}</small>
+                <h3>gui / noi</h3>
+                <p>分別與對立、珍貴概念相關。</p>
+              </article>
+            </div>
+          </section>
+        </div>
+      `;
+    }
+
+    function render() {
+      const path = location.hash.replace("#", "") || "/";
+
+      let content;
+
+      if (path === "/world") {
+        content = worldPage();
+      } else if (path === "/ingredients") {
+        content = ingredientsPage();
+      } else if (path === "/food") {
+        content = foodPage();
+      } else if (path === "/kuugo") {
+        content = kuugoPage();
+      } else {
+        content = homePage();
+      }
+
+      document.getElementById("app").innerHTML = content;
+
+      renderNav();
+      bindRoutes();
+      bindSearch();
+      bindDetails();
+      animatePage();
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    function bindRoutes() {
+      document.querySelectorAll("[data-route]").forEach(element => {
+        element.addEventListener("click", event => {
+          const route = element.dataset.route;
+
+          if (route === "/") {
+            location.hash = "/";
+          } else {
+            location.hash = route;
+          }
+
+          document.getElementById("languageMenu")
+            .parentElement
+            .classList.remove("open");
+        });
+      });
+    }
+
+    function bindSearch() {
+      const searches = [
+        ["ingredientSearch", "ingredientGrid"],
+        ["kuugoSearch", "kuugoGrid"]
+      ];
+
+      searches.forEach(([inputId, gridId]) => {
+        const input = document.getElementById(inputId);
+        const grid = document.getElementById(gridId);
+
+        if (!input || !grid) return;
+
+        input.addEventListener("input", () => {
+          const query = input.value.trim().toLowerCase();
+
+          grid.querySelectorAll(".searchable").forEach(card => {
+            const content = card.dataset.name.toLowerCase();
+            card.style.display =
+              !query || content.includes(query) ? "" : "none";
+          });
+        });
+      });
+    }
+
+    function bindDetails() {
+      document.querySelectorAll("[data-detail-type]").forEach(card => {
+        card.addEventListener("click", () => {
+          const type = card.dataset.detailType;
+          const name = card.dataset.detailName;
+
+          let item;
+
+          if (type === "ingredient") {
+            item = ingredients.find(entry => entry.name === name);
+
+            if (!item) return;
+
+            openDetail(`
+              <div class="eyebrow">${item.category}</div>
+              <h2>${item.name}</h2>
+              <p>${item.description}</p>
+              <span class="status">${i18n("正式")}</span>
+            `);
+          }
+
+          if (type === "food") {
+            item = foods.find(entry => entry.name === name);
+
+            if (!item) return;
+
+            openDetail(`
+              <div class="eyebrow">${i18n(item.island)}</div>
+              <h2>${item.name}</h2>
+              <p>${item.description}</p>
+              <span class="status">${i18n("正式")}</span>
+            `);
+          }
+        });
+      });
+    }
+
+    function openDetail(content) {
+      const panel = document.getElementById("detailPanel");
+      document.getElementById("detailContent").innerHTML = content;
+      panel.classList.add("open");
+
+      gsap.fromTo(
+        ".detail-sheet",
+        { y: 80, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }
       );
+    }
+
+    function closeDetail() {
+      const panel = document.getElementById("detailPanel");
+
+      gsap.to(".detail-sheet", {
+        y: 80,
+        opacity: 0,
+        duration: 0.25,
+        ease: "power2.in",
+        onComplete: () => panel.classList.remove("open")
+      });
+    }
+
+    function animatePage() {
+      const items = document.querySelectorAll(
+        ".hero-copy-block, .hero-visual, .section-heading, .island-card, .archive-card, .data-card, .record-table"
+      );
+
+      gsap.fromTo(
+        items,
+        {
+          opacity: 0,
+          y: 18
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          stagger: 0.045,
+          ease: "power3.out",
+          clearProps: "transform"
+        }
+      );
+    }
+
+    window.addEventListener("hashchange", render);
+
+    document.getElementById("detailClose")
+      .addEventListener("click", closeDetail);
+
+    document.getElementById("detailPanel")
+      .addEventListener("click", event => {
+        if (event.target.id === "detailPanel") {
+          closeDetail();
+        }
+      });
+
+    document.getElementById("languageButton")
+      .addEventListener("click", () => {
+        document.querySelector(".language").classList.toggle("open");
+      });
+
+    document.querySelectorAll("[data-language]").forEach(button => {
+      button.addEventListener("click", () => {
+        setLanguage(button.dataset.language);
+        document.querySelector(".language").classList.remove("open");
+      });
     });
-}
 
-function refreshIcons() {
-  if (window.lucide) {
-    lucide.createIcons();
-  }
-}
+    window.addEventListener("scroll", () => {
+      document
+        .getElementById("siteHeader")
+        .classList.toggle("scrolled", window.scrollY > 20);
+    });
 
-
-/* =========================================================
-   LANGUAGE
-   ========================================================= */
-
-function changeLocale(locale) {
-  if (
-    !CONFIG.supportedLocales.includes(locale)
-  ) {
-    return;
-  }
-
-  currentLocale = locale;
-
-  localStorage.setItem(
-    "sora-locale",
-    locale
-  );
-
-  renderApp();
-}
-
-function syncLanguageSelector() {
-  const selector =
-    document.getElementById(
-      "language-select"
-    );
-
-  if (selector) {
-    selector.value = currentLocale;
-  }
-}
-
-
-/* =========================================================
-   MOBILE NAV
-   ========================================================= */
-
-function toggleMobileNav() {
-  document
-    .getElementById("main-nav")
-    ?.classList.toggle("open");
-}
-
-
-/* =========================================================
-   GSAP
-   ========================================================= */
-
-function animatePage() {
-  if (!window.gsap) {
-    return;
-  }
-
-  gsap.from(
-    ".page > *, .hero-content > *",
-    {
-      opacity: 0,
-      y: 18,
-      duration: 0.55,
-      stagger: 0.045,
-      ease: "power2.out",
-      clearProps: "transform"
-    }
-  );
-}
-
-
-/* =========================================================
-   APPLICATION
-   ========================================================= */
-
-function initializeApplication() {
-  window.addEventListener(
-    "hashchange",
-    () => {
-      selectedIngredientCategory = "全部";
-      renderApp();
-    }
-  );
-
-  renderApp();
-}
-
-initializeApplication();
-</script>
-
+    render();
+  </script>
 </body>
 </html>
