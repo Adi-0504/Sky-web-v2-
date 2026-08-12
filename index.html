@@ -1,2071 +1,2703 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#427692">
-<meta name="description" content="空の曆 Sora no Koyomi — Official World Information Portal">
-<title>空の曆 — Sora no Koyomi</title>
-
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-
-<style>
-:root{
-  --ink:#273b42;
-  --muted:#687b82;
-  --line:#d8e0df;
-  --paper:#f5f6f2;
-  --surface:#ffffff;
-  --soft:#e9efed;
-  --accent:#427692;
-  --accent-dark:#315d70;
-  --gold:#d4bb00;
-  --radius:10px;
-  --max:1440px;
-}
-
-*{box-sizing:border-box}
-
-html{
-  scroll-behavior:auto;
-  background:var(--paper);
-}
-
-body{
-  margin:0;
-  color:var(--ink);
-  background:var(--paper);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",
-  "PingFang TC","Noto Sans TC",sans-serif;
-  -webkit-font-smoothing:antialiased;
-}
-
-button,
-a{
-  font:inherit;
-}
-
-button{
-  border:0;
-  background:none;
-  color:inherit;
-}
-
-a{
-  color:inherit;
-  text-decoration:none;
-}
-
-::selection{
-  background:var(--accent);
-  color:#fff;
-}
-
-/* ---------- HEADER ---------- */
-
-.site-header{
-  position:fixed;
-  z-index:1000;
-  top:0;
-  left:0;
-  width:100%;
-  height:72px;
-  border-bottom:1px solid rgba(39,59,66,.12);
-  background:rgba(245,246,242,.86);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-}
-
-.header-inner{
-  width:min(calc(100% - 48px),var(--max));
-  height:100%;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.brand{
-  display:flex;
-  align-items:baseline;
-  gap:11px;
-  white-space:nowrap;
-}
-
-.brand-main{
-  font-size:21px;
-  font-weight:700;
-  letter-spacing:.08em;
-}
-
-.brand-sub{
-  color:var(--muted);
-  font-size:10px;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-}
-
-.main-nav{
-  display:flex;
-  align-items:center;
-  gap:4px;
-}
-
-.nav-link{
-  position:relative;
-  padding:9px 11px;
-  border-radius:6px;
-  color:#52666d;
-  font-size:11px;
-  letter-spacing:.08em;
-  transition:.25s ease;
-}
-
-.nav-link::after{
-  content:"";
-  position:absolute;
-  left:11px;
-  right:11px;
-  bottom:5px;
-  height:1px;
-  background:var(--accent);
-  transform:scaleX(0);
-  transform-origin:left;
-  transition:.3s ease;
-}
-
-.nav-link:hover,
-.nav-link.active{
-  color:var(--ink);
-  background:rgba(66,118,146,.07);
-}
-
-.nav-link:hover::after,
-.nav-link.active::after{
-  transform:scaleX(1);
-}
-
-.header-status{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-
-.year-status{
-  color:var(--muted);
-  font-size:10px;
-  letter-spacing:.08em;
-}
-
-.sound-toggle{
-  width:34px;
-  height:34px;
-  display:grid;
-  place-items:center;
-  border:1px solid var(--line);
-  border-radius:7px;
-  cursor:pointer;
-  transition:.25s ease;
-}
-
-.sound-toggle:hover{
-  border-color:var(--accent);
-  transform:translateY(-1px);
-}
-
-.sound-icon{
-  width:14px;
-  height:14px;
-  position:relative;
-}
-
-.sound-icon::before{
-  content:"";
-  position:absolute;
-  left:1px;
-  top:5px;
-  width:5px;
-  height:5px;
-  background:currentColor;
-  clip-path:polygon(0 25%,45% 25%,100% 0,100% 100%,45% 75%,0 75%);
-}
-
-.sound-icon::after{
-  content:")";
-  position:absolute;
-  right:-2px;
-  top:-3px;
-  font-size:15px;
-  transform:scaleX(.65);
-}
-
-.mobile-menu{
-  display:none;
-}
-
-/* ---------- PAGE SYSTEM ---------- */
-
-#app{
-  min-height:100vh;
-}
-
-.page{
-  display:none;
-  min-height:100vh;
-  padding-top:72px;
-}
-
-.page.active{
-  display:block;
-}
-
-/* ---------- GENERAL ---------- */
-
-.container{
-  width:min(calc(100% - 48px),var(--max));
-  margin:auto;
-}
-
-.eyebrow{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:18px;
-  color:var(--accent-dark);
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-}
-
-.eyebrow::before{
-  content:"";
-  width:28px;
-  height:1px;
-  background:currentColor;
-}
-
-.section{
-  padding:120px 0;
-}
-
-.section-head{
-  display:grid;
-  grid-template-columns:1fr 2fr;
-  gap:60px;
-  margin-bottom:70px;
-}
-
-.section-title{
-  margin:0;
-  font-size:clamp(36px,5vw,70px);
-  line-height:.98;
-  letter-spacing:-.045em;
-  font-weight:650;
-}
-
-.section-copy{
-  max-width:680px;
-  margin:0;
-  color:var(--muted);
-  font-size:16px;
-  line-height:2;
-}
-
-.rule{
-  width:100%;
-  height:1px;
-  background:var(--line);
-}
-
-/* ---------- HOME HERO ---------- */
-
-.hero{
-  min-height:calc(100vh - 72px);
-  display:flex;
-  align-items:center;
-  position:relative;
-  overflow:hidden;
-  background:
-    radial-gradient(circle at 78% 35%,rgba(66,118,146,.10),transparent 32%),
-    var(--paper);
-}
-
-.hero-grid{
-  position:absolute;
-  inset:0;
-  opacity:.38;
-  background-image:
-    linear-gradient(rgba(66,118,146,.07) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(66,118,146,.07) 1px,transparent 1px);
-  background-size:64px 64px;
-  mask-image:linear-gradient(to bottom,black,transparent 85%);
-}
-
-.hero-orbit{
-  position:absolute;
-  width:640px;
-  height:640px;
-  right:-110px;
-  top:50%;
-  border:1px solid rgba(66,118,146,.16);
-  border-radius:50%;
-  transform:translateY(-50%);
-}
-
-.hero-orbit::before,
-.hero-orbit::after{
-  content:"";
-  position:absolute;
-  inset:65px;
-  border:1px solid rgba(66,118,146,.11);
-  border-radius:50%;
-}
-
-.hero-orbit::after{
-  inset:140px;
-}
-
-.hero-content{
-  position:relative;
-  z-index:2;
-  width:min(900px,100%);
-  padding:110px 0 120px;
-}
-
-.hero-kicker{
-  color:var(--accent-dark);
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.2em;
-  text-transform:uppercase;
-}
-
-.hero-title{
-  margin:28px 0 25px;
-  font-size:clamp(70px,12vw,170px);
-  line-height:.82;
-  letter-spacing:-.07em;
-  font-weight:700;
-}
-
-.hero-title span{
-  display:block;
-  color:var(--accent);
-}
-
-.hero-description{
-  max-width:570px;
-  color:var(--muted);
-  font-size:17px;
-  line-height:1.9;
-}
-
-.hero-actions{
-  display:flex;
-  align-items:center;
-  gap:18px;
-  margin-top:42px;
-}
-
-.primary-button{
-  display:inline-flex;
-  align-items:center;
-  gap:18px;
-  padding:14px 18px;
-  color:white;
-  background:var(--accent);
-  border-radius:7px;
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.1em;
-  cursor:pointer;
-  transition:.25s ease;
-}
-
-.primary-button:hover{
-  background:var(--accent-dark);
-  transform:translateY(-2px);
-}
-
-.arrow{
-  transition:.25s ease;
-}
-
-.primary-button:hover .arrow{
-  transform:translateX(5px);
-}
-
-.secondary-button{
-  padding:14px 4px;
-  color:var(--muted);
-  font-size:11px;
-  letter-spacing:.1em;
-  cursor:pointer;
-}
-
-.hero-meta{
-  position:absolute;
-  right:0;
-  bottom:42px;
-  display:flex;
-  gap:32px;
-  color:var(--muted);
-  font-size:9px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-}
-
-/* ---------- STATS ---------- */
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
-}
-
-.stat{
-  min-height:180px;
-  padding:34px 28px;
-  border-right:1px solid var(--line);
-}
-
-.stat:last-child{
-  border-right:0;
-}
-
-.stat-number{
-  font-size:clamp(36px,5vw,58px);
-  line-height:1;
-  letter-spacing:-.05em;
-  font-weight:650;
-}
-
-.stat-label{
-  margin-top:14px;
-  color:var(--muted);
-  font-size:10px;
-  letter-spacing:.13em;
-  text-transform:uppercase;
-}
-
-/* ---------- ISLANDS ---------- */
-
-.islands-list{
-  border-top:1px solid var(--line);
-}
-
-.island{
-  display:grid;
-  grid-template-columns:100px 1.5fr 1fr 120px;
-  align-items:center;
-  min-height:160px;
-  padding:28px 0;
-  border-bottom:1px solid var(--line);
-  transition:.35s ease;
-}
-
-.island:hover{
-  padding-left:18px;
-  padding-right:18px;
-  background:rgba(66,118,146,.045);
-}
-
-.island-index{
-  color:var(--muted);
-  font-size:10px;
-  letter-spacing:.1em;
-}
-
-.island-name{
-  margin:0;
-  font-size:30px;
-  letter-spacing:-.03em;
-  font-weight:620;
-}
-
-.island-name small{
-  display:block;
-  margin-top:7px;
-  color:var(--muted);
-  font-size:9px;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  font-weight:500;
-}
-
-.island-description{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.7;
-}
-
-.island-temp{
-  text-align:right;
-  font-size:12px;
-  letter-spacing:.08em;
-}
-
-/* ---------- DATA TABLE ---------- */
-
-.data-shell{
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  overflow:hidden;
-  background:var(--surface);
-}
-
-.data-toolbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-  padding:18px;
-  border-bottom:1px solid var(--line);
-}
-
-.search{
-  flex:1;
-  max-width:420px;
-  padding:11px 13px;
-  border:1px solid var(--line);
-  border-radius:7px;
-  outline:none;
-  background:#fafbf9;
-  color:var(--ink);
-  font-size:12px;
-}
-
-.search:focus{
-  border-color:var(--accent);
-}
-
-.filters{
-  display:flex;
-  flex-wrap:wrap;
-  gap:5px;
-}
-
-.filter{
-  padding:8px 10px;
-  border:1px solid transparent;
-  border-radius:6px;
-  color:var(--muted);
-  cursor:pointer;
-  font-size:9px;
-  letter-spacing:.08em;
-}
-
-.filter:hover,
-.filter.active{
-  border-color:var(--line);
-  color:var(--ink);
-  background:var(--soft);
-}
-
-.table{
-  width:100%;
-  border-collapse:collapse;
-}
-
-.table th,
-.table td{
-  padding:15px 18px;
-  text-align:left;
-  border-bottom:1px solid var(--line);
-}
-
-.table th{
-  color:var(--muted);
-  background:#fafbf9;
-  font-size:9px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-}
-
-.table td{
-  font-size:12px;
-}
-
-.table tr:last-child td{
-  border-bottom:0;
-}
-
-.table tbody tr{
-  transition:.2s ease;
-}
-
-.table tbody tr:hover{
-  background:rgba(66,118,146,.04);
-}
-
-/* ---------- LANGUAGE ---------- */
-
-.language-layout{
-  display:grid;
-  grid-template-columns:260px 1fr;
-  gap:70px;
-}
-
-.side-nav{
-  position:sticky;
-  top:110px;
-  align-self:start;
-}
-
-.side-nav a{
-  display:block;
-  padding:11px 0;
-  border-bottom:1px solid var(--line);
-  color:var(--muted);
-  font-size:11px;
-}
-
-.side-nav a:hover{
-  color:var(--accent);
-}
-
-.alphabet{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  border-top:1px solid var(--line);
-  border-left:1px solid var(--line);
-}
-
-.letter{
-  min-height:130px;
-  padding:18px;
-  border-right:1px solid var(--line);
-  border-bottom:1px solid var(--line);
-  background:var(--surface);
-  transition:.25s ease;
-}
-
-.letter:hover{
-  background:rgba(66,118,146,.055);
-  transform:translateY(-2px);
-}
-
-.letter-symbol{
-  font-size:32px;
-  font-weight:600;
-}
-
-.letter-reading{
-  margin-top:12px;
-  color:var(--muted);
-  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-  font-size:11px;
-}
-
-.special-letter{
-  color:var(--accent-dark);
-}
-
-/* ---------- CALENDAR ---------- */
-
-.calendar-card{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  overflow:hidden;
-  background:var(--surface);
-}
-
-.calendar-main{
-  padding:60px;
-  border-right:1px solid var(--line);
-}
-
-.calendar-side{
-  padding:60px;
-  background:#fafbf9;
-}
-
-.calendar-big{
-  font-size:110px;
-  line-height:.85;
-  letter-spacing:-.07em;
-  color:var(--accent);
-}
-
-.month-grid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:1px;
-  margin-top:38px;
-  background:var(--line);
-}
-
-.month{
-  padding:18px 10px;
-  background:var(--surface);
-  font-size:11px;
-  text-align:center;
-}
-
-.month span{
-  display:block;
-  margin-top:5px;
-  color:var(--muted);
-  font-size:9px;
-}
-
-/* ---------- ABOUT ---------- */
-
-.about-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1px;
-  background:var(--line);
-  border:1px solid var(--line);
-}
-
-.about-block{
-  min-height:300px;
-  padding:44px;
-  background:var(--surface);
-}
-
-.about-block h3{
-  margin:0 0 18px;
-  font-size:20px;
-}
-
-.about-block p{
-  margin:0;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.9;
-}
-
-/* ---------- FOOTER ---------- */
-
-footer{
-  margin-top:120px;
-  padding:55px 0;
-  border-top:1px solid var(--line);
-}
-
-.footer-inner{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:30px;
-}
-
-.footer-brand{
-  font-size:18px;
-  font-weight:700;
-  letter-spacing:.06em;
-}
-
-.footer-copy{
-  margin-top:10px;
-  color:var(--muted);
-  font-size:10px;
-  line-height:1.8;
-}
-
-.footer-meta{
-  color:var(--muted);
-  font-size:9px;
-  text-align:right;
-  letter-spacing:.1em;
-}
-
-/* ---------- RESPONSIVE ---------- */
-
-@media(max-width:900px){
-  .main-nav{
-    display:none;
-  }
-
-  .mobile-menu{
-    display:block;
-    width:36px;
-    height:36px;
-    border:1px solid var(--line);
-    border-radius:7px;
-    cursor:pointer;
-  }
-
-  .mobile-menu span,
-  .mobile-menu span::before,
-  .mobile-menu span::after{
-    display:block;
-    width:13px;
-    height:1px;
-    margin:auto;
-    background:currentColor;
-  }
-
-  .mobile-menu span::before,
-  .mobile-menu span::after{
-    content:"";
-    position:relative;
-  }
-
-  .mobile-menu span::before{top:-5px}
-  .mobile-menu span::after{top:4px}
-
-  .header-status .year-status{
-    display:none;
-  }
-
-  .section-head{
-    grid-template-columns:1fr;
-    gap:25px;
-  }
-
-  .language-layout{
-    grid-template-columns:1fr;
-  }
-
-  .side-nav{
-    position:static;
-    display:flex;
-    overflow:auto;
-    gap:25px;
-  }
-
-  .side-nav a{
-    flex:none;
-    border-bottom:0;
-  }
-
-  .alphabet{
-    grid-template-columns:repeat(3,1fr);
-  }
-}
-
-@media(max-width:650px){
-  .container,
-  .header-inner{
-    width:min(calc(100% - 30px),var(--max));
-  }
-
-  .page{
-    padding-top:60px;
-  }
-
-  .site-header{
-    height:60px;
-  }
-
-  .brand-main{
-    font-size:18px;
-  }
-
-  .brand-sub{
-    display:none;
-  }
-
-  .hero{
-    min-height:calc(100svh - 60px);
-  }
-
-  .hero-title{
-    font-size:clamp(64px,22vw,120px);
-  }
-
-  .hero-description{
-    font-size:15px;
-  }
-
-  .hero-meta{
-    display:none;
-  }
-
-  .section{
-    padding:80px 0;
-  }
-
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .stat:nth-child(2){
-    border-right:0;
-  }
-
-  .stat{
-    border-bottom:1px solid var(--line);
-  }
-
-  .island{
-    grid-template-columns:45px 1fr;
-    gap:10px;
-  }
-
-  .island-description{
-    grid-column:2;
-  }
-
-  .island-temp{
-    grid-column:2;
-    text-align:left;
-  }
-
-  .data-toolbar{
-    align-items:stretch;
-    flex-direction:column;
-  }
-
-  .search{
-    max-width:none;
-  }
-
-  .table{
-    min-width:620px;
-  }
-
-  .data-shell{
-    overflow:auto;
-  }
-
-  .alphabet{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .calendar-card{
-    grid-template-columns:1fr;
-  }
-
-  .calendar-main{
-    border-right:0;
-    border-bottom:1px solid var(--line);
-  }
-
-  .calendar-main,
-  .calendar-side{
-    padding:35px;
-  }
-
-  .calendar-big{
-    font-size:80px;
-  }
-
-  .about-grid{
-    grid-template-columns:1fr;
-  }
-
-  .footer-inner{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  .footer-meta{
-    text-align:left;
-  }
-}
-
-/* ---------- MOTION ---------- */
-
-.reveal{
-  opacity:0;
-  transform:translateY(24px);
-}
-
-.reveal.is-visible{
-  opacity:1;
-  transform:none;
-}
-
-@media(prefers-reduced-motion:reduce){
-  *,
-  *::before,
-  *::after{
-    scroll-behavior:auto!important;
-    transition:none!important;
-    animation:none!important;
-  }
-
-  .reveal{
-    opacity:1;
-    transform:none;
-  }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#CBC4B4">
+  <meta
+    name="description"
+    content="空の曆｜官方世界觀資料庫"
+  >
+
+  <title>空の曆｜官方世界觀資料庫</title>
+
+  <!-- Fonts -->
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+
+  <style>
+    /* =========================================================
+       DESIGN TOKENS
+       ========================================================= */
+
+    :root {
+      --color-background: #CBC4B4;
+      --color-background-soft: #D8D1C2;
+      --color-surface: #F1EDE4;
+      --color-surface-strong: #E7DFD0;
+
+      --color-primary: #B4BDCB;
+      --color-secondary: #CBC0B4;
+
+      --color-text: #391500;
+      --color-text-soft: #6D5A4D;
+      --color-text-muted: #8B7C70;
+
+      --color-border: rgba(57, 21, 0, 0.12);
+      --color-border-strong: rgba(57, 21, 0, 0.2);
+
+      --radius-small: 12px;
+      --radius-medium: 20px;
+      --radius-large: 30px;
+
+      --shadow-soft:
+        0 12px 40px rgba(57, 21, 0, 0.08);
+
+      --content-width: 1180px;
+
+      --font-sans:
+        "Noto Sans TC",
+        "Noto Sans JP",
+        "Noto Sans KR",
+        system-ui,
+        sans-serif;
+    }
+
+    /* =========================================================
+       RESET
+       ========================================================= */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--color-background);
+      color: var(--color-text);
+      font-family: var(--font-sans);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* =========================================================
+       APP SHELL
+       ========================================================= */
+
+    #app {
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      border-bottom: 1px solid var(--color-border);
+
+      background:
+        rgba(203, 196, 180, 0.88);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .header-inner {
+      width: min(
+        calc(100% - 40px),
+        var(--content-width)
+      );
+
+      min-height: 76px;
+      margin: 0 auto;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+      background: var(--color-primary);
+    }
+
+    .brand-mark svg {
+      width: 21px;
+      height: 21px;
+      stroke-width: 1.8;
+    }
+
+    .brand-name {
+      font-size: 1.05rem;
+    }
+
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-link {
+      border: 0;
+      background: transparent;
+
+      padding: 9px 13px;
+      border-radius: 12px;
+
+      color: var(--color-text-soft);
+      transition:
+        background 180ms ease,
+        color 180ms ease;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background: rgba(241, 237, 228, 0.72);
+      color: var(--color-text);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .language-select {
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+
+      padding: 8px 10px;
+
+      background: rgba(241, 237, 228, 0.65);
+      color: var(--color-text);
+
+      outline: none;
+    }
+
+    .mobile-menu-button {
+      display: none;
+
+      width: 42px;
+      height: 42px;
+
+      border: 0;
+      border-radius: 12px;
+
+      background: rgba(241, 237, 228, 0.72);
+      color: var(--color-text);
+    }
+
+    /* =========================================================
+       MAIN
+       ========================================================= */
+
+    main {
+      width: min(
+        calc(100% - 40px),
+        var(--content-width)
+      );
+
+      margin: 0 auto;
+    }
+
+    .page {
+      min-height: calc(100vh - 76px);
+      padding: 84px 0 100px;
+    }
+
+    .page-header {
+      max-width: 760px;
+      margin-bottom: 52px;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+
+      color: var(--color-text-muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .page-title {
+      margin: 0;
+
+      font-size: clamp(
+        2.4rem,
+        6vw,
+        5rem
+      );
+
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .page-description {
+      margin: 22px 0 0;
+
+      color: var(--color-text-soft);
+      font-size: 1.08rem;
+      max-width: 680px;
+    }
+
+    /* =========================================================
+       HERO
+       ========================================================= */
+
+    .hero {
+      min-height: calc(100vh - 76px);
+
+      display: grid;
+      place-items: center;
+
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 900px;
+    }
+
+    .hero-mark {
+      width: 92px;
+      height: 92px;
+
+      margin: 0 auto 28px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 32px;
+
+      background: var(--color-primary);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero-mark svg {
+      width: 48px;
+      height: 48px;
+      stroke-width: 1.5;
+    }
+
+    .hero-title {
+      margin: 0;
+
+      font-size: clamp(
+        3.4rem,
+        10vw,
+        8rem
+      );
+
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+    }
+
+    .hero-subtitle {
+      margin: 22px auto 0;
+
+      color: var(--color-text-soft);
+      font-size: clamp(
+        1rem,
+        2vw,
+        1.25rem
+      );
+
+      max-width: 620px;
+    }
+
+    .hero-actions {
+      margin-top: 36px;
+
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    .button {
+      min-height: 46px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+
+      border: 1px solid var(--color-border);
+      border-radius: 14px;
+
+      padding: 10px 17px;
+
+      background: var(--color-surface);
+      color: var(--color-text);
+
+      transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        background 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .button-primary {
+      border-color: transparent;
+      background: var(--color-text);
+      color: var(--color-surface);
+    }
+
+    .button svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    /* =========================================================
+       CARDS
+       ========================================================= */
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(
+        3,
+        minmax(0, 1fr)
+      );
+
+      gap: 18px;
+    }
+
+    .card {
+      padding: 25px;
+
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-medium);
+
+      background: rgba(
+        241,
+        237,
+        228,
+        0.72
+      );
+
+      box-shadow:
+        0 8px 30px
+        rgba(57, 21, 0, 0.035);
+
+      transition:
+        transform 220ms ease,
+        box-shadow 220ms ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .card-icon {
+      width: 42px;
+      height: 42px;
+
+      display: grid;
+      place-items: center;
+
+      margin-bottom: 18px;
+
+      border-radius: 13px;
+      background: var(--color-secondary);
+    }
+
+    .card-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 1.15rem;
+    }
+
+    .card-text {
+      margin: 8px 0 0;
+      color: var(--color-text-soft);
+    }
+
+    .card-meta {
+      margin-top: 16px;
+
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* =========================================================
+       STAT GRID
+       ========================================================= */
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(
+        4,
+        minmax(0, 1fr)
+      );
+
+      gap: 14px;
+      margin-bottom: 52px;
+    }
+
+    .stat {
+      padding: 22px;
+
+      border-radius: var(--radius-medium);
+      background: rgba(
+        241,
+        237,
+        228,
+        0.62
+      );
+
+      border: 1px solid var(--color-border);
+    }
+
+    .stat-value {
+      display: block;
+
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .stat-label {
+      display: block;
+
+      margin-top: 6px;
+
+      color: var(--color-text-soft);
+      font-size: 0.9rem;
+    }
+
+    /* =========================================================
+       ISLAND / CLIMATE
+       ========================================================= */
+
+    .island-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .island-temperature {
+      margin-top: 20px;
+
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+
+      padding: 7px 10px;
+
+      border-radius: 10px;
+
+      background: var(--color-primary);
+
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .island-temperature svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* =========================================================
+       SEARCH
+       ========================================================= */
+
+    .search-bar {
+      margin-bottom: 28px;
+
+      position: relative;
+    }
+
+    .search-bar svg {
+      position: absolute;
+
+      left: 16px;
+      top: 50%;
+
+      width: 19px;
+      height: 19px;
+
+      transform: translateY(-50%);
+
+      color: var(--color-text-muted);
+    }
+
+    .search-input {
+      width: 100%;
+
+      min-height: 54px;
+
+      padding:
+        12px
+        16px
+        12px
+        48px;
+
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+
+      outline: none;
+
+      background: rgba(
+        241,
+        237,
+        228,
+        0.76
+      );
+
+      color: var(--color-text);
+    }
+
+    .search-input:focus {
+      border-color: var(--color-border-strong);
+      box-shadow:
+        0 0 0 4px
+        rgba(180, 189, 203, 0.25);
+    }
+
+    /* =========================================================
+       FILTERS
+       ========================================================= */
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      margin-bottom: 26px;
+    }
+
+    .filter-button {
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+
+      padding: 7px 13px;
+
+      background: transparent;
+      color: var(--color-text-soft);
+    }
+
+    .filter-button.active {
+      background: var(--color-text);
+      color: var(--color-surface);
+      border-color: var(--color-text);
+    }
+
+    /* =========================================================
+       INGREDIENTS
+       ========================================================= */
+
+    .ingredient-grid {
+      display: grid;
+
+      grid-template-columns: repeat(
+        3,
+        minmax(0, 1fr)
+      );
+
+      gap: 14px;
+    }
+
+    .ingredient-card {
+      padding: 20px;
+
+      border:
+        1px solid
+        var(--color-border);
+
+      border-radius: 18px;
+
+      background:
+        rgba(
+          241,
+          237,
+          228,
+          0.72
+        );
+    }
+
+    .ingredient-category {
+      display: inline-block;
+
+      margin-bottom: 8px;
+
+      color: var(--color-text-muted);
+
+      font-size: 0.78rem;
+      font-weight: 700;
+
+      letter-spacing: 0.04em;
+    }
+
+    .ingredient-name {
+      margin: 0;
+      font-size: 1.08rem;
+    }
+
+    .ingredient-description {
+      margin: 7px 0 0;
+
+      color: var(--color-text-soft);
+      font-size: 0.92rem;
+    }
+
+    /* =========================================================
+       CUISINE
+       ========================================================= */
+
+    .dish-card {
+      min-height: 240px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .dish-island {
+      color: var(--color-text-muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .dish-name {
+      margin: 8px 0 0;
+
+      font-size: 1.55rem;
+    }
+
+    .dish-description {
+      margin: 12px 0 0;
+
+      color: var(--color-text-soft);
+    }
+
+    .dish-ingredients {
+      margin-top: 20px;
+
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .ingredient-tag {
+      padding: 5px 9px;
+
+      border-radius: 8px;
+
+      background: var(--color-secondary);
+
+      font-size: 0.78rem;
+    }
+
+    /* =========================================================
+       LANGUAGE
+       ========================================================= */
+
+    .language-section {
+      margin-top: 54px;
+    }
+
+    .section-title {
+      margin: 0 0 20px;
+
+      font-size: clamp(
+        1.7rem,
+        3vw,
+        2.4rem
+      );
+
+      letter-spacing: -0.03em;
+    }
+
+    .language-table-wrap {
+      overflow-x: auto;
+
+      border:
+        1px solid
+        var(--color-border);
+
+      border-radius: 18px;
+    }
+
+    .language-table {
+      width: 100%;
+
+      border-collapse: collapse;
+
+      min-width: 680px;
+
+      background:
+        rgba(
+          241,
+          237,
+          228,
+          0.68
+        );
+    }
+
+    .language-table th,
+    .language-table td {
+      padding: 14px 16px;
+
+      border-bottom:
+        1px solid
+        var(--color-border);
+
+      text-align: left;
+    }
+
+    .language-table th {
+      font-size: 0.83rem;
+
+      color:
+        var(--color-text-muted);
+    }
+
+    .language-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .site-footer {
+      border-top:
+        1px solid
+        var(--color-border);
+
+      padding: 32px 0 40px;
+    }
+
+    .footer-inner {
+      width: min(
+        calc(100% - 40px),
+        var(--content-width)
+      );
+
+      margin: 0 auto;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 20px;
+    }
+
+    .footer-text {
+      margin: 0;
+
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* =========================================================
+       MOBILE NAV
+       ========================================================= */
+
+    @media (max-width: 860px) {
+      .main-nav {
+        position: absolute;
+
+        left: 20px;
+        right: 20px;
+        top: 70px;
+
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+
+        padding: 10px;
+
+        border:
+          1px solid
+          var(--color-border);
+
+        border-radius: 18px;
+
+        background:
+          rgba(
+            241,
+            237,
+            228,
+            0.96
+          );
+
+        box-shadow: var(--shadow-soft);
+      }
+
+      .main-nav.open {
+        display: flex;
+      }
+
+      .nav-link {
+        text-align: left;
+        padding: 12px;
+      }
+
+      .mobile-menu-button {
+        display: grid;
+        place-items: center;
+      }
+
+      .header-actions .language-select {
+        display: none;
+      }
+
+      .card-grid,
+      .ingredient-grid {
+        grid-template-columns: repeat(
+          2,
+          minmax(0, 1fr)
+        );
+      }
+
+      .stat-grid {
+        grid-template-columns: repeat(
+          2,
+          minmax(0, 1fr)
+        );
+      }
+    }
+
+    @media (max-width: 560px) {
+      .header-inner,
+      main,
+      .footer-inner {
+        width: min(
+          calc(100% - 28px),
+          var(--content-width)
+        );
+      }
+
+      .page {
+        padding-top: 58px;
+      }
+
+      .hero {
+        min-height: calc(100vh - 76px);
+      }
+
+      .hero-title {
+        font-size: 3.6rem;
+      }
+
+      .card-grid,
+      .ingredient-grid,
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<header class="site-header">
-  <div class="header-inner">
-
-    <a class="brand" href="#home" data-page="home">
-      <span class="brand-main">空の曆</span>
-      <span class="brand-sub">Sora no Koyomi</span>
-    </a>
-
-    <nav class="main-nav">
-      <a class="nav-link active" href="#world" data-page="world">WORLD</a>
-      <a class="nav-link" href="#islands" data-page="islands">ISLANDS</a>
-      <a class="nav-link" href="#travel" data-page="travel">TRAVEL</a>
-      <a class="nav-link" href="#food" data-page="food">FOOD</a>
-      <a class="nav-link" href="#language" data-page="language">LANGUAGE</a>
-      <a class="nav-link" href="#calendar" data-page="calendar">CALENDAR</a>
-      <a class="nav-link" href="#about" data-page="about">ABOUT</a>
-    </nav>
-
-    <div class="header-status">
-      <span class="year-status">YEAR 1357 · 350 DAYS</span>
-      <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound">
-        <span class="sound-icon"></span>
-      </button>
-      <button class="mobile-menu" id="mobileMenu" aria-label="Menu">
-        <span></span>
-      </button>
-    </div>
-
-  </div>
-</header>
-
-<main id="app">
-
-<!-- ================= HOME ================= -->
-
-<section class="page active" id="page-home">
-
-  <div class="hero">
-    <div class="hero-grid"></div>
-    <div class="hero-orbit"></div>
-
-    <div class="container">
-      <div class="hero-content">
-
-        <div class="hero-kicker">Official World Information Portal</div>
-
-        <h1 class="hero-title">
-          空の
-          <span>曆</span>
-        </h1>
-
-        <p class="hero-description">
-          一個存在於雲海之上的世界。
-          四座島嶼、三萬名居民、三百五十日的曆法，
-          以及人們每天生活、旅行、料理與交流所構成的世界。
-        </p>
-
-        <div class="hero-actions">
-          <button class="primary-button" data-page="world">
-            EXPLORE WORLD
-            <span class="arrow">→</span>
-          </button>
-
-          <button class="secondary-button" data-page="food">
-            VIEW FOOD ARCHIVE
-          </button>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="container hero-meta">
-      <span>WORLD 1357</span>
-      <span>POP. 30,000</span>
-      <span>350 DAYS / YEAR</span>
-    </div>
-  </div>
-
-  <div class="container">
-    <section class="section">
-
-      <div class="section-head reveal">
-        <div>
-          <div class="eyebrow">At a glance</div>
-          <h2 class="section-title">A world<br>above.</h2>
-        </div>
-
-        <p class="section-copy">
-          空の曆是一個由四座主要島嶼構成的世界。
-          人們生活在不同的氣候、地形與文化之中，
-          卻透過旅行、交易、料理與語言彼此連結。
-        </p>
-      </div>
-
-      <div class="stats reveal">
-
-        <div class="stat">
-          <div class="stat-number counter" data-value="30000">0</div>
-          <div class="stat-label">World Population</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-number counter" data-value="350">0</div>
-          <div class="stat-label">Days / Year</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-number counter" data-value="10">0</div>
-          <div class="stat-label">Months</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-number counter" data-value="4">0</div>
-          <div class="stat-label">Major Islands</div>
-        </div>
-
-      </div>
-
-    </section>
-  </div>
-
-</section>
-
-
-<!-- ================= WORLD ================= -->
-
-<section class="page" id="page-world">
-
-  <div class="container">
-    <section class="section">
-
-      <div class="section-head reveal">
-        <div>
-          <div class="eyebrow">The World</div>
-          <h1 class="section-title">空の曆</h1>
-        </div>
-
-        <p class="section-copy">
-          這個世界的天空不是邊界。
-          它是道路、居所，也是人們每天看見的風景。
-          四座主要島嶼共同構成目前已知世界的核心。
-        </p>
-      </div>
-
-      <div class="rule"></div>
-
-      <div class="section" style="padding-bottom:0">
-
-        <div class="section-head reveal">
-          <div>
-            <div class="eyebrow">Population</div>
-            <h2 class="section-title">30,000</h2>
-          </div>
-
-          <p class="section-copy">
-            目前世界總人口約為三萬人。
-            人口主要集中於各島的城市與聚落，
-            其中比亞是平原島的重要城市與世界交流中心。
-          </p>
-        </div>
-
-      </div>
-
-    </section>
-  </div>
-
-</section>
-
-
-<!-- ================= ISLANDS ================= -->
-
-<section class="page" id="page-islands">
-
-  <div class="container">
-    <section class="section">
-
-      <div class="section-head reveal">
-        <div>
-          <div class="eyebrow">Geography</div>
-          <h1 class="section-title">Islands</h1>
-        </div>
-
-        <p class="section-copy">
-          四座主要島嶼擁有截然不同的地理環境。
-          從溫暖的沙灘島，到寒冷的森林島，
-          氣候也決定了當地居民的生活與食材。
-        </p>
-      </div>
-
-      <div class="islands-list">
-
-        <article class="island reveal">
-          <div class="island-index">01</div>
-          <h2 class="island-name">
-            平原島
-            <small>Plains Island</small>
-          </h2>
-          <div class="island-description">
-            廣闊的平原與人口密集的城市區域。
-            比亞位於此地。
-          </div>
-          <div class="island-temp">20–25°C</div>
-        </article>
-
-        <article class="island reveal">
-          <div class="island-index">02</div>
-          <h2 class="island-name">
-            森林島
-            <small>Forest Island</small>
-          </h2>
-          <div class="island-description">
-            茂密森林覆蓋大部分土地，
-            氣候較為寒冷。
-          </div>
-          <div class="island-temp">10–15°C</div>
-        </article>
-
-        <article class="island reveal">
-          <div class="island-index">03</div>
-          <h2 class="island-name">
-            礦山島
-            <small>Mining Island</small>
-          </h2>
-          <div class="island-description">
-            礦產資源豐富的島嶼，
-            山地與工業聚落構成主要景觀。
-          </div>
-          <div class="island-temp">15–20°C</div>
-        </article>
-
-        <article class="island reveal">
-          <div class="island-index">04</div>
-          <h2 class="island-name">
-            沙灘島
-            <small>Beach Island</small>
-          </h2>
-          <div class="island-description">
-            溫暖的沿岸地區，
-            沙椰與紅巨蟹等特色食材源自這裡。
-          </div>
-          <div class="island-temp">25–30°C</div>
-        </article>
-
-      </div>
-
-    </section>
-  </div>
-
-</section>
-
-
-<!-- ================= TRAVEL ================= -->
-
-<section class="page" id="page-travel">
-
-  <div class="container">
-    <section class="section">
-
-      <div class="section-head reveal">
-        <div>
-          <div class="eyebrow">Transportation</div>
-          <h1 class="section-title">Travel</h1>
-        </div>
-
-        <p class="section-copy">
-          島嶼之間的距離並不是阻隔。
-          空鷹 Tawa Muru 是世界重要的空中交通方式，
-          讓人們能夠在不同島嶼之間移動。
-        </p>
-      </div>
-
-      <div class="about-grid reveal">
-
-        <div class="about-block">
-          <div class="eyebrow">01</div>
-          <h3>Tawa Muru</h3>
-          <p>
-            空鷹是空の曆世界的重要交通工具。
-            它們穿越島嶼之間的天空，
-            也是旅行者最熟悉的景象之一。
-          </p>
-        </div>
-
-        <div class="about-block">
-          <div class="eyebrow">02</div>
-          <h3>風輪車</h3>
-          <p>
-            在島嶼內部，人們也使用風輪車進行移動。
-            它們連結城市、聚落與周圍地區。
-          </p>
-        </div>
-
-        <div class="about-block">
-          <div class="eyebrow">03</div>
-          <h3>旅行</h3>
-          <p>
-            旅行不只是從一座島到另一座島，
-            也是了解不同飲食、語言與生活方式的過程。
-          </p>
-        </div>
-
-        <div class="about-block">
-          <div class="eyebrow">04</div>
-          <h3>Gualamontu</h3>
-          <p>
-            瓜拉蒙圖是重要的旅行地區。
-            城市與聚落之間透過交通網絡彼此連接。
-          </p>
-        </div>
-
-      </div>
-
-    </section>
-  </div>
-
-</section>
-
-
-<!-- ================= FOOD ================= -->
-
-<section class="page" id="page-food">
-
-  <div class="container">
-    <section class="section">
-
-      <div class="section-head reveal">
-        <div>
-          <div class="eyebrow">Food Archive</div>
-          <h1 class="section-title">Food</h1>
-        </div>
-
-        <p class="section-copy">
-          空の曆的食材資料庫。
-          這裡收錄世界各地已確認的食材與加工食材，
-          並依照類型建立索引。
-        </p>
-      </div>
-
-      <div class="data-shell reveal">
-
-        <div class="data-toolbar">
-          <input
-            class="search"
-            id="foodSearch"
-            type="search"
-            placeholder="Search ingredients..."
-            autocomplete="off"
-          >
-
-          <div class="filters">
-            <button class="filter active" data-filter="all">ALL</button>
-            <button class="filter" data-filter="grain">GRAINS</button>
-            <button class="filter" data-filter="meat">MEAT</button>
-            <button class="filter" data-filter="fish">FISH</button>
-            <button class="filter" data-filter="shellfish">SHELLFISH</button>
-            <button class="filter" data-filter="vegetable">VEGETABLES</button>
-          </div>
-        </div>
-
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Region</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-
-          <tbody id="foodTable"></tbody>
-        </table>
-
-      </div>
-
-    </section>
-  </div>
-
-</section>
-
-
-<!-- ================= LANGUAGE ================= -->
-
-<section class="page" id="page-language">
-
-  <div class="container">
-    <section class="section">
-
-      <div class="section-head reveal">
-        <div>
-          <div class="eyebrow">Language</div>
-          <h1 class="section-title">空語</h1>
-        </div>
-
-        <p class="section-copy">
-          空語是空の曆世界使用的語言系統。
-          本頁記錄其文字、讀音與詞彙資料。
-        </p>
-      </div>
-
-      <div class="language-layout">
-
-        <aside class="side-nav">
-          <a href="#alphabet">ORTHOGRAPHY</a>
-          <a href="#phonetics">PHONETICS</a>
-          <a href="#dictionary">DICTIONARY</a>
-        </aside>
-
-        <div>
-
-          <div id="alphabet" class="reveal">
-            <div class="eyebrow">Orthography</div>
-            <h2 class="section-title" style="font-size:42px;margin-bottom:35px">
-              Alphabet
-            </h2>
-
-            <div class="alphabet" id="alphabetGrid"></div>
-          </div>
-
-          <div id="phonetics" class="section reveal">
-            <div class="eyebrow">Phonetics</div>
-
-            <h2 style="font-size:28px;margin:0 0 20px">
-              Sound system
-            </h2>
-
-            <p class="section-copy">
-              空語的拼寫系統以拉丁字母與特殊文字共同構成。
-              字母表與讀音會在此持續更新。
-            </p>
-          </div>
-
-          <div id="dictionary" class="reveal">
-            <div class="eyebrow">Dictionary</div>
-
-            <div class="data-shell">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>空語拼法</th>
-                    <th>中文</th>
-                    <th>詞性</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  <tr>
-                    <td>dasumui</td>
-                    <td>村落</td>
-                    <td>noun</td>
-                  </tr>
-                  <tr>
-                    <td>piyadasu</td>
-                    <td>工坊</td>
-                    <td>noun</td>
-                  </tr>
-                  <tr>
-                    <td>gidamui</td>
-                    <td>市場</td>
-                    <td>noun</td>
-                  </tr>
-                  <tr>
-                    <td>semui</td>
-                    <td>學堂</td>
-                    <td>noun</td>
-                  </tr>
-                  <tr>
-                    <td>nuimui</td>
-                    <td>旅店</td>
-                    <td>noun</td>
-                  </tr>
-                  <tr>
-                    <td>ras</td>
-                    <td>複數標記</td>
-                    <td>marker</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-  </div>
-
-</section>
-
-
-<!-- ================= CALENDAR ================= -->
-
-<section class="page" id="page-calendar">
-
-  <div class="container">
-    <section class="section">
-
-      <div class="section-head reveal">
-        <div>
-          <div class="eyebrow">Time System</div>
-          <h1 class="section-title">Calendar</h1>
-        </div>
-
-        <p class="section-copy">
-          空の曆採用一年三百五十日的曆法。
-          一年分為十個月，每月三十五日。
-          目前世界紀年為 1357。
-        </p>
-      </div>
-
-      <div class="calendar-card reveal">
-
-        <div class="calendar-main">
-          <div class="eyebrow">Current year</div>
-          <div class="calendar-big">1357</div>
-          <p class="section-copy" style="margin-top:30px">
-            350 days / year<br>
-            10 months<br>
-            35 days / month
-          </p>
-        </div>
-
-        <div class="calendar-side">
-          <div class="eyebrow">Year structure</div>
-          <div class="month-grid">
-            <div class="month">01<span>35 days</span></div>
-            <div class="month">02<span>35 days</span></div>
-            <div class="month">03<span>35 days</span></div>
-            <div class="month">04<span>35 days</span></div>
-            <div class="month">05<span>35 days</span></div>
-            <div class="month">06<span>35 days</span></div>
-            <div class="month">07<span>35 days</span></div>
-            <div class="month">08<span>35 days</span></div>
-            <div class="month">09<span>35 days</span></div>
-            <div class="month">10<span>35 days</span></div>
-          </div>
-        </div>
-
-      </div>
-
-    </section>
-  </div>
-
-</section>
-
-
-<!-- ================= ABOUT ================= -->
-
-<section class="page" id="page-about">
-
-  <div class="container">
-    <section class="section">
-
-      <div class="section-head reveal">
-        <div>
-          <div class="eyebrow">About</div>
-          <h1 class="section-title">About<br>the world</h1>
-        </div>
-
-        <p class="section-copy">
-          SKYWEB 是空の曆的官方世界資訊入口。
-          這裡保存世界的地理、語言、食材、曆法與文化資料。
-        </p>
-      </div>
-
-      <div class="about-grid reveal">
-
-        <div class="about-block">
-          <h3>Official World Portal</h3>
-          <p>
-            SKYWEB 不是遊戲介面，而是空の曆世界的官方資訊平台。
-            所有世界資料都可以在這裡被整理、閱讀與持續更新。
-          </p>
-        </div>
-
-        <div class="about-block">
-          <h3>World 1357</h3>
-          <p>
-            目前世界人口約三萬人。
-            四座主要島嶼共同構成已知世界的核心區域。
-          </p>
-        </div>
-
-        <div class="about-block">
-          <h3>Living Archive</h3>
-          <p>
-            世界會持續成長。
-            新的城市、食材、語言詞彙、交通方式與歷史資料，
-            都能被加入這份世界檔案。
-          </p>
-        </div>
-
-        <div class="about-block">
-          <h3>Version</h3>
-          <p>
-            SKYWEB<br>
-            World Data Edition<br>
-            1357
-          </p>
-        </div>
-
-      </div>
-
-    </section>
-  </div>
-
-</section>
-
-</main>
-
-<footer>
-  <div class="container footer-inner">
-    <div>
-      <div class="footer-brand">空の曆 · SKYWEB</div>
-      <div class="footer-copy">
-        Official World Information Portal<br>
-        World 1357 · 350 days / year
-      </div>
-    </div>
-
-    <div class="footer-meta">
-      SORA NO KOYOMI<br>
-      WORLD INFORMATION SYSTEM
-    </div>
-  </div>
-</footer>
-
+<div id="app"></div>
 
 <script>
 /* =========================================================
-   SKYWEB — DATA
+   CONFIG
    ========================================================= */
 
-const foodData = [
-  ["穗風米","grain","平原島"],
-  ["穗風麥","grain","平原島"],
-  ["黑穀米","grain","平原島"],
-  ["香毛牛","meat","平原島"],
-  ["松香豬","meat","森林島"],
-  ["草咩羊","meat","森林島"],
-  ["礦鹽羊","meat","礦山島"],
-  ["瑪雅鳥","meat","平原島"],
-  ["穆瑪鳥","meat","森林島"],
-  ["黑羽鳥","meat","森林島"],
-  ["波光魚","fish","沙灘島"],
-  ["黑紋鰻","fish","沙灘島"],
-  ["藍鑽蝦","shellfish","沙灘島"],
-  ["蒼甲蝦","shellfish","沙灘島"],
-  ["紅巨蟹","shellfish","沙灘島"],
-  ["白珠貝","shellfish","沙灘島"],
-  ["沙椰","vegetable","沙灘島"]
-];
+const CONFIG = {
+  siteName: "空の曆",
+  defaultLocale: "zh-TW",
+  supportedLocales: [
+    "zh-TW",
+    "zh-CN",
+    "en",
+    "ja",
+    "ko"
+  ]
+};
 
-const alphabetData = [
-  ["a","a"],
-  ["b","b"],
-  ["c","c"],
-  ["d","d"],
-  ["e","e"],
-  ["f","f"],
-  ["g","g"],
-  ["h","h"],
-  ["i","i"],
-  ["j","j"],
-  ["k","k"],
-  ["l","l"],
-  ["m","m"],
-  ["n","n"],
-  ["o","o"],
-  ["p","p"],
-  ["q","q"],
-  ["r","r"],
-  ["s","s"],
-  ["t","t"],
-  ["u","u"],
-  ["v","v"],
-  ["w","w"],
-  ["x","x"],
-  ["y","y"],
-  ["z","z"],
-  ["dh","dh"],
-  ["gya","gya · ધ"],
-  ["nya","nya · ટ"],
-  ["hg","hg · ઉ"]
+
+/* =========================================================
+   WORLD DATA
+   ========================================================= */
+
+const WORLD = {
+  population: 30000,
+
+  islands: [
+    {
+      id: "plains",
+      name: {
+        "zh-TW": "平原島",
+        "zh-CN": "平原岛",
+        en: "Plains Island",
+        ja: "平原島",
+        ko: "평원섬"
+      },
+      temperature: "20–25°C",
+      description: {
+        "zh-TW": "以開闊平原與農業環境為主要特色。",
+        "zh-CN": "以开阔平原与农业环境为主要特色。",
+        en: "An open island shaped by plains and agriculture.",
+        ja: "広い平原と農業環境を特徴とする島。",
+        ko: "넓은 평원과 농업 환경이 특징인 섬."
+      }
+    },
+
+    {
+      id: "forest",
+      name: {
+        "zh-TW": "森林島",
+        "zh-CN": "森林岛",
+        en: "Forest Island",
+        ja: "森林島",
+        ko: "숲섬"
+      },
+      temperature: "10–15°C",
+      description: {
+        "zh-TW": "森林覆蓋廣泛，氣候較為涼爽。",
+        "zh-CN": "森林覆盖广泛，气候较为凉爽。",
+        en: "A cool island with extensive forest environments.",
+        ja: "広い森林と涼しい気候を持つ島。",
+        ko: "넓은 숲과 서늘한 기후를 가진 섬."
+      }
+    },
+
+    {
+      id: "mining",
+      name: {
+        "zh-TW": "礦山島",
+        "zh-CN": "矿山岛",
+        en: "Mining Island",
+        ja: "鉱山島",
+        ko: "광산섬"
+      },
+      temperature: "15–20°C",
+      description: {
+        "zh-TW": "礦產與山地環境構成島嶼的重要自然條件。",
+        "zh-CN": "矿产与山地环境构成岛屿的重要自然条件。",
+        en: "A mountainous island shaped by mineral-rich environments.",
+        ja: "山地と鉱物資源を特徴とする島。",
+        ko: "산지와 광물 자원이 특징인 섬."
+      }
+    },
+
+    {
+      id: "beach",
+      name: {
+        "zh-TW": "沙灘島",
+        "zh-CN": "沙滩岛",
+        en: "Beach Island",
+        ja: "砂浜島",
+        ko: "해변섬"
+      },
+      temperature: "25–30°C",
+      description: {
+        "zh-TW": "溫暖的沿岸環境，沙椰等特色資源集中於此。",
+        "zh-CN": "温暖的沿岸环境，沙椰等特色资源集中于此。",
+        en: "A warm coastal island with distinctive resources such as 沙椰.",
+        ja: "温暖な沿岸環境と特色ある資源を持つ島。",
+        ko: "따뜻한 해안 환경과 독특한 자원을 가진 섬."
+      }
+    }
+  ]
+};
+
+
+/* =========================================================
+   INGREDIENT DATA
+   ========================================================= */
+
+const INGREDIENTS = [
+  {
+    name: "穗風麥",
+    category: "穀物",
+    use: "製作穗風麥粉、tagunu"
+  },
+  {
+    name: "穗風米",
+    category: "穀物",
+    use: "製作 yamalas 等料理"
+  },
+  {
+    name: "黑穀米",
+    category: "穀物",
+    use: "主食材料"
+  },
+
+  {
+    name: "香毛牛",
+    category: "牛類",
+    use: "平原島家畜，可取得香毛牛奶"
+  },
+  {
+    name: "松香豬",
+    category: "豬類",
+    use: "常用肉類；可作絞肉等料理材料"
+  },
+  {
+    name: "草咩羊",
+    category: "羊類",
+    use: "提供草咩羊奶"
+  },
+  {
+    name: "礦鹽羊",
+    category: "羊類",
+    use: "肉類食材"
+  },
+  {
+    name: "瑪雅鳥",
+    category: "鳥類",
+    use: "肉類食材"
+  },
+  {
+    name: "穆瑪鳥",
+    category: "鳥類",
+    use: "肉類食材"
+  },
+  {
+    name: "黑羽鳥",
+    category: "鳥類",
+    use: "肉類食材"
+  },
+  {
+    name: "風灰兔",
+    category: "兔類",
+    use: "肉類食材"
+  },
+  {
+    name: "紅角鹿",
+    category: "鹿類",
+    use: "肉類食材"
+  },
+
+  {
+    name: "三點鮭",
+    category: "魚類",
+    use: "魚類食材"
+  },
+  {
+    name: "蒼蘭鮪",
+    category: "魚類",
+    use: "魚類食材"
+  },
+  {
+    name: "紅霞鯛",
+    category: "魚類",
+    use: "魚類食材"
+  },
+  {
+    name: "黑紋鰻",
+    category: "魚類",
+    use: "魚類食材"
+  },
+  {
+    name: "波光魚",
+    category: "淡水魚",
+    use: "魚類料理材料"
+  },
+  {
+    name: "藍鑽蝦",
+    category: "蝦類",
+    use: "蝦類食材"
+  },
+  {
+    name: "蒼甲蝦",
+    category: "蝦類",
+    use: "蝦類食材"
+  },
+  {
+    name: "紅楓蟹",
+    category: "蟹類",
+    use: "蟹類食材"
+  },
+  {
+    name: "紅巨蟹",
+    category: "蟹類",
+    use: "沙灘島特色海產"
+  },
+  {
+    name: "白珠貝",
+    category: "貝類",
+    use: "貝類食材"
+  },
+  {
+    name: "灰背貝",
+    category: "貝類",
+    use: "貝類食材"
+  },
+
+  {
+    name: "黃葉菜",
+    category: "蔬菜",
+    use: "料理材料"
+  },
+  {
+    name: "紫藤菜",
+    category: "蔬菜",
+    use: "料理材料"
+  },
+  {
+    name: "豐金薯",
+    category: "根莖類",
+    use: "iwasgura 內餡"
+  },
+  {
+    name: "松香菇",
+    category: "菇類",
+    use: "料理材料"
+  },
+  {
+    name: "香滑菇",
+    category: "菇類",
+    use: "料理材料"
+  },
+
+  {
+    name: "芒蕉",
+    category: "水果",
+    use: "yamalas、wadasi 使用"
+  },
+  {
+    name: "百蜜果",
+    category: "水果",
+    use: "wadasi 原料"
+  },
+  {
+    name: "香蜜瓜",
+    category: "水果",
+    use: "wadasi 原料"
+  },
+  {
+    name: "沙椰",
+    category: "水果",
+    use: "wadasi 原料"
+  },
+  {
+    name: "沙椰棗",
+    category: "水果",
+    use: "wadasi 原料"
+  },
+
+  {
+    name: "卡塔爾葉",
+    category: "植物／葉類",
+    use: "製作 katarzan，也加入 pisnawa"
+  },
+  {
+    name: "nawabai葉",
+    category: "植物／葉類",
+    use: "製作 nawabaihgan"
+  },
+  {
+    name: "風蝶蜜",
+    category: "植物／葉類",
+    use: "甜味材料"
+  },
+
+  {
+    name: "波光鹽",
+    category: "調味料",
+    use: "調味"
+  },
+  {
+    name: "森椒",
+    category: "香辛料",
+    use: "香辛調味"
+  },
+  {
+    name: "礦物質鹽粉",
+    category: "特殊材料",
+    use: "ginyakah 使用"
+  },
+  {
+    name: "可食用火山泥",
+    category: "特殊材料",
+    use: "ginyakah 使用"
+  },
+  {
+    name: "岩礦粉",
+    category: "香辛料",
+    use: "類似黑胡椒的香辛料"
+  },
+  {
+    name: "火椒粉",
+    category: "香辛料",
+    use: "提供辣味與暖味"
+  },
+  {
+    name: "沙椰糖",
+    category: "甜味材料",
+    use: "甜點與飲品"
+  },
+
+  {
+    name: "香毛牛奶",
+    category: "乳製品",
+    use: "由香毛牛取得"
+  },
+  {
+    name: "草咩羊奶",
+    category: "乳製品",
+    use: "由草咩羊取得"
+  },
+  {
+    name: "香毛牛酪",
+    category: "乳製品",
+    use: "由香毛牛奶製成"
+  },
+
+  {
+    name: "沙椰塊根",
+    category: "根莖類",
+    use: "沙椰植物地下部位，可作料理材料"
+  },
+  {
+    name: "亞達麻果",
+    category: "特殊果實",
+    use: "可作食材或加工材料"
+  },
+  {
+    name: "黃酸果",
+    category: "酸味果實",
+    use: "提供酸味，用於料理調味"
+  },
+
+  {
+    name: "沙椰油",
+    category: "植物油脂",
+    use: "炸物、炒料理與甜點製作"
+  },
+  {
+    name: "瑪雅鳥油",
+    category: "動物油脂",
+    use: "煎煮、烘焙與肉類料理"
+  },
+  {
+    name: "穆瑪鳥油",
+    category: "動物油脂",
+    use: "濃郁料理與高溫烹調"
+  },
+
+  {
+    name: "風釀醬",
+    category: "發酵調味料",
+    use: "由邦卡果加工製成，可用於醃製、炒料理、海鮮調味與湯底"
+  },
+  {
+    name: "燻焰粉",
+    category: "特殊調味料",
+    use: "增加煙燻香氣，用於烤肉、烤魚與礦山島料理"
+  },
+
+  {
+    name: "黃芽豆",
+    category: "豆類",
+    use: "植物性蛋白質、增加飽足感；可煮食、磨粉、製作豆泥與發酵"
+  },
+  {
+    name: "瑪雅鳥蛋",
+    category: "蛋類",
+    use: "日常料理、烘焙、麵糊、蒸煮"
+  },
+  {
+    name: "木香果",
+    category: "堅果／種子類",
+    use: "種子可食；具有木頭味、油脂味與香料味"
+  },
+
+  {
+    name: "邦卡果",
+    category: "特殊果實",
+    use: "可作料理食材與加工材料；可加工製成風釀醬"
+  }
 ];
 
 
 /* =========================================================
-   PAGE ROUTING
+   CUISINE DATA
    ========================================================= */
 
-const pages = document.querySelectorAll(".page");
-const navLinks = document.querySelectorAll("[data-page]");
+const DISHES = [
+  {
+    name: "katiyasu",
+    island: "森林島",
+    description:
+      "使用較厚的烤餅 tagunu，以香滑菇、苔黃菇、香毛牛酪製作的醬汁燉煮，口感 Q 彈。",
+    ingredients: [
+      "tagunu",
+      "香滑菇",
+      "苔黃菇",
+      "香毛牛酪"
+    ]
+  },
 
-function showPage(name){
-  const target = document.getElementById("page-" + name);
+  {
+    name: "tagunu",
+    island: "平原島",
+    description:
+      "烤餅類料理，通常會搭配類似巴西烤肉風格的肉片一起食用。",
+    ingredients: [
+      "穗風麥"
+    ]
+  },
 
-  if(!target) return;
+  {
+    name: "yamalas",
+    island: "沙灘島",
+    description:
+      "使用芒蕉與穗風米製成，上面淋上沙椰醬。",
+    ingredients: [
+      "芒蕉",
+      "穗風米",
+      "沙椰"
+    ]
+  },
 
-  pages.forEach(page => page.classList.remove("active"));
+  {
+    name: "iwasgura",
+    island: "礦山島",
+    description:
+      "使用厚而韌性極強的烤餅，內部填入豐金薯，是具有高度飽足感的料理。",
+    ingredients: [
+      "穗風麥",
+      "豐金薯"
+    ]
+  }
+];
 
-  target.classList.add("active");
 
-  document.querySelectorAll(".nav-link").forEach(link=>{
-    link.classList.toggle(
-      "active",
-      link.dataset.page === name
-    );
-  });
+/* =========================================================
+   LANGUAGE DATA
+   ========================================================= */
 
-  window.scrollTo({
-    top:0,
-    behavior:"instant"
-  });
+const KUUGO = {
+  overview: {
+    "zh-TW":
+      "空語（Kuugo）是空の曆世界使用的人工語言。",
+    "zh-CN":
+      "空语（Kuugo）是空之历世界使用的人工语言。",
+    en:
+      "Kuugo is the constructed language used in the world of 空の曆.",
+    ja:
+      "空語（Kuugo）は空の曆世界で使われる人工言語です。",
+    ko:
+      "공어(Kuugo)는 空の曆 세계에서 사용되는 인공 언어입니다."
+  },
 
-  history.replaceState(null,"","#"+name);
+  rules: [
+    ["Nai", "我", "代詞"],
+    ["Vatu", "你", "代詞"],
+    ["hgtu", "他／她", "代詞"],
+    ["hgdaras", "我們", "代詞"],
+    ["vaturas", "他們", "代詞"],
 
-  requestAnimationFrame(()=>{
-    createRevealAnimations();
-    ScrollTrigger.refresh();
-  });
+    ["puihga", "人", "社會身份"],
+    ["puihgnu", "族群", "社會身份"],
+    ["puihgana", "居民／人們", "社會身份"],
+    ["puihganu", "家族", "社會身份"],
+    ["tuyapuihga", "島民", "社會身份"],
+
+    ["yarapu", "農夫", "職業"],
+    ["piyada", "工匠", "職業"],
+    ["gidama", "商人", "職業"],
+    ["semuga", "學生", "職業"],
+    ["semuya", "老師", "職業"],
+
+    ["haras", "你好", "招呼"],
+    ["ogomo", "早安", "招呼"],
+    ["naigomo", "晚安", "招呼"],
+    ["hgjas", "再見", "招呼"],
+    ["fugatus", "謝謝", "禮貌"],
+    ["mahatus", "不客氣", "禮貌"],
+    ["masera", "對不起", "禮貌"],
+    ["maputa", "沒關係", "禮貌"],
+
+    ["potoni", "0", "數詞"],
+    ["yiyasu", "1", "數詞"],
+    ["jakamu", "2", "數詞"],
+    ["trapi", "3", "數詞"],
+    ["sitaya", "4", "數詞"],
+    ["guyava", "5", "數詞"],
+    ["muyaga", "6", "數詞"],
+    ["serati", "7", "數詞"],
+    ["pahgna", "8", "數詞"],
+    ["buiva", "9", "數詞"],
+    ["toyauo", "10", "數詞"],
+    ["dunaq", "100", "數詞"],
+    ["guahayasu", "10000", "數詞"],
+
+    ["denasa", "天", "時間"],
+    ["dokasa", "年", "時間"],
+    ["domuosa", "月", "時間"],
+    ["denuisa", "日", "時間"],
+    ["weuoka", "星期", "時間"],
+
+    ["tojala", "今天", "時間副詞"],
+    ["yahgla", "昨天", "時間副詞"],
+    ["muisaba", "明天", "時間副詞"],
+    ["tuoisina", "早上", "時間副詞"],
+    ["iwahga", "現在", "時間副詞"],
+    ["jasuhga", "現在之後", "時間副詞"],
+
+    ["mikahg", "水", "自然"],
+    ["fasita", "火", "自然"],
+    ["mihgfa", "天空", "自然"],
+    ["lahgfa", "風", "自然"],
+    ["swahgfa", "雨", "自然"],
+    ["hasita", "太陽", "自然"],
+    ["pusita", "月亮", "自然"],
+    ["hehgsita", "星星", "自然"],
+    ["tunahgi", "樹", "自然"],
+    ["tuhgfa", "花", "自然"],
+    ["tuhgomu", "石頭", "自然"],
+    ["tunasi", "木頭", "自然"],
+    ["puita", "土地", "自然"],
+    ["puiko", "動物", "自然"],
+    ["tuyamu", "島", "自然"],
+
+    ["ruifa", "食物", "食物"],
+    ["putan", "飯", "食物"],
+    ["puyahg", "肉", "食物"],
+    ["tunahgfa", "蔬菜", "食物"],
+    ["fayaga", "水果", "食物"],
+    ["burahg", "麵包", "食物"],
+    ["safahg", "湯", "食物"],
+    ["mihjara", "茶", "飲品"],
+    ["salamu", "鹽", "調味"],
+    ["sukamu", "糖", "調味"],
+
+    ["capaya", "家", "居家"],
+    ["cajaya", "房間", "居家"],
+    ["mirauo", "門", "居家"],
+    ["karauo", "窗戶", "居家"],
+    ["bitaz", "床", "居家"],
+    ["mihgz", "桌子", "居家"],
+    ["pihgz", "椅子", "居家"],
+    ["lamuo", "燈", "居家"],
+    ["laguoz", "火爐", "居家"],
+    ["poidaz", "鍋子", "居家"],
+    ["koidaz", "刀", "居家"],
+
+    ["bihgya", "大", "形容詞"],
+    ["ponya", "小", "形容詞"],
+    ["hgsulo", "長", "形容詞"],
+    ["posulo", "短", "形容詞"],
+    ["tipon", "高", "形容詞"],
+    ["potibon", "低", "形容詞"],
+    ["nuinya", "想睡的", "形容詞"],
+    ["ponui", "清醒的", "形容詞"],
+    ["buihg", "好", "形容詞"],
+    ["pobuj", "壞", "形容詞"],
+    ["hgsuwan", "美麗", "形容詞"],
+    ["pohgsu", "醜", "形容詞"],
+    ["poyawon", "老的", "形容詞"],
+
+    ["hoyag", "開心", "情緒"],
+    ["pohoyag", "難過", "情緒"],
+    ["tagahg", "生氣", "情緒"],
+    ["sawing", "害怕", "情緒"],
+    ["yagahg", "驚訝", "情緒"],
+    ["nufahg", "疲累", "情緒"],
+
+    ["haja", "喝", "動詞"],
+    ["kasufa", "吃", "動詞"],
+    ["nuifa", "睡", "動詞"],
+    ["nuika", "醒來", "動詞"],
+    ["sitam", "坐", "動詞"],
+    ["guitam", "站", "動詞"],
+    ["lojah", "走", "動詞"],
+    ["fajah", "跑", "動詞"],
+    ["habajah", "說", "動詞"],
+    ["ruigafa", "聽", "動詞"],
+    ["ulahga", "寫", "動詞"],
+    ["relahga", "讀", "動詞"],
+    ["sinaka", "看見", "動詞"],
+    ["sinamu", "想", "動詞"],
+    ["sinaya", "喜歡", "動詞"],
+    ["posinaya", "討厭", "動詞"],
+
+    ["rugahg", "去", "移動"],
+    ["runahg", "來", "移動"],
+    ["puitah", "進入", "移動"],
+    ["nuitah", "出去", "移動"],
+    ["poiku", "拿", "操作"],
+    ["paiku", "放", "操作"],
+    ["opika", "打開", "操作"],
+    ["opaika", "關閉", "操作"],
+
+    ["dahg", "做", "工作"],
+    ["gavah", "給", "工作"],
+    ["tokahg", "得到", "工作"],
+    ["finahg", "找", "工作"],
+    ["senahg", "等待", "工作"],
+    ["hafahg", "幫助", "工作"],
+    ["pikahg", "玩", "工作"],
+    ["semuhg", "學習", "工作"],
+    ["worahg", "工作", "工作"],
+    ["biyahg", "製作", "工作"],
+
+    ["guaho", "運輸", "交通"],
+    ["waguaro", "車", "交通"],
+    ["Tawa Muru", "空鷹", "交通"],
+    ["giyaj", "物品／東西", "概念"],
+    ["mato damu", "貨幣", "概念"],
+
+    ["kuugoi", "語言", "文化詞彙"],
+    ["kuugonu", "方言", "文化詞彙"],
+    ["noigaya", "文化", "文化詞彙"],
+    ["yasuha", "傳統", "文化詞彙"],
+
+    ["mihgora", "海", "世界概念"],
+    ["swahgora", "雲", "世界概念"],
+    ["tawara", "飛行", "世界概念"],
+    ["ruyafa", "旅程", "世界概念"],
+    ["poyafa", "冒險", "世界概念"],
+    ["fugaya", "祝福", "世界概念"],
+    ["magahg", "魔法", "世界概念"],
+    ["namuhg", "傳說", "世界概念"],
+    ["dokahg", "古代", "世界概念"]
+  ]
+};
+
+
+/* =========================================================
+   I18N
+   ========================================================= */
+
+const I18N = {
+  "zh-TW": {
+    nav: {
+      home: "首頁",
+      climate: "氣候",
+      ingredients: "食材",
+      cuisine: "料理",
+      language: "空語"
+    },
+
+    home: {
+      eyebrow: "OFFICIAL WORLD DATABASE",
+      title: "空の曆",
+      description:
+        "一個漂浮於天空之中的世界。這裡整理目前已確認的世界資料、氣候、食材、料理與空語。",
+      explore: "開始探索",
+      climate: "查看氣候"
+    },
+
+    stats: {
+      population: "世界人口",
+      islands: "主要島嶼",
+      ingredients: "已收錄食材",
+      languages: "網站語言"
+    },
+
+    climate: {
+      eyebrow: "CLIMATE",
+      title: "島嶼氣候",
+      description:
+        "目前以四大島的氣候資料為核心。地理系統尚未完成，因此這裡不預設尚未確認的地理資訊。"
+    },
+
+    ingredients: {
+      eyebrow: "INGREDIENTS",
+      title: "食材百科",
+      description:
+        "空の曆目前已確認的食材與加工材料。",
+      search: "搜尋食材……",
+      all: "全部"
+    },
+
+    cuisine: {
+      eyebrow: "CUISINE",
+      title: "料理",
+      description:
+        "目前已確認的空の曆島嶼料理。",
+    },
+
+    language: {
+      eyebrow: "KUUGO",
+      title: "空語",
+      description:
+        "空の曆世界使用的人工語言。拉丁字母為主要轉寫系統。",
+      word: "空語",
+      meaning: "中文",
+      type: "詞性"
+    },
+
+    footer: "空の曆官方世界觀資料庫"
+  },
+
+  "zh-CN": {
+    nav: {
+      home: "首页",
+      climate: "气候",
+      ingredients: "食材",
+      cuisine: "料理",
+      language: "空语"
+    },
+
+    home: {
+      eyebrow: "OFFICIAL WORLD DATABASE",
+      title: "空之历",
+      description:
+        "一个漂浮于天空之中的世界。这里整理目前已确认的世界资料、气候、食材、料理与空语。",
+      explore: "开始探索",
+      climate: "查看气候"
+    },
+
+    stats: {
+      population: "世界人口",
+      islands: "主要岛屿",
+      ingredients: "已收录食材",
+      languages: "网站语言"
+    },
+
+    climate: {
+      eyebrow: "CLIMATE",
+      title: "岛屿气候",
+      description:
+        "目前以四大岛的气候资料为核心。地理系统尚未完成，因此这里不预设尚未确认的地理资讯。"
+    },
+
+    ingredients: {
+      eyebrow: "INGREDIENTS",
+      title: "食材百科",
+      description: "空之历目前已确认的食材与加工材料。",
+      search: "搜索食材……",
+      all: "全部"
+    },
+
+    cuisine: {
+      eyebrow: "CUISINE",
+      title: "料理",
+      description: "目前已确认的空之历岛屿料理。"
+    },
+
+    language: {
+      eyebrow: "KUUGO",
+      title: "空语",
+      description: "空之历世界使用的人工语言。拉丁字母为主要转写系统。",
+      word: "空语",
+      meaning: "中文",
+      type: "词性"
+    },
+
+    footer: "空之历官方世界观资料库"
+  },
+
+  en: {
+    nav: {
+      home: "Home",
+      climate: "Climate",
+      ingredients: "Ingredients",
+      cuisine: "Cuisine",
+      language: "Kuugo"
+    },
+
+    home: {
+      eyebrow: "OFFICIAL WORLD DATABASE",
+      title: "Sora no Koyomi",
+      description:
+        "A world suspended in the sky. Explore confirmed information about its islands, climate, ingredients, cuisine and Kuugo.",
+      explore: "Explore",
+      climate: "View climate"
+    },
+
+    stats: {
+      population: "World population",
+      islands: "Major islands",
+      ingredients: "Ingredients",
+      languages: "Site languages"
+    },
+
+    climate: {
+      eyebrow: "CLIMATE",
+      title: "Island climate",
+      description:
+        "The current climate database focuses on the four major islands. Geography remains under development."
+    },
+
+    ingredients: {
+      eyebrow: "INGREDIENTS",
+      title: "Ingredient encyclopedia",
+      description:
+        "Confirmed ingredients and processed materials currently recorded for the world.",
+      search: "Search ingredients...",
+      all: "All"
+    },
+
+    cuisine: {
+      eyebrow: "CUISINE",
+      title: "Cuisine",
+      description:
+        "Currently confirmed island dishes of the world."
+    },
+
+    language: {
+      eyebrow: "KUUGO",
+      title: "Kuugo",
+      description:
+        "The constructed language used in the world of Sora no Koyomi. Latin letters are the primary transcription system.",
+      word: "Kuugo",
+      meaning: "Meaning",
+      type: "Part of speech"
+    },
+
+    footer: "Official Sora no Koyomi World Database"
+  },
+
+  ja: {
+    nav: {
+      home: "ホーム",
+      climate: "気候",
+      ingredients: "食材",
+      cuisine: "料理",
+      language: "空語"
+    },
+
+    home: {
+      eyebrow: "OFFICIAL WORLD DATABASE",
+      title: "空の曆",
+      description:
+        "空に浮かぶ世界。確認済みの島、気候、食材、料理、空語の情報をまとめています。",
+      explore: "探索する",
+      climate: "気候を見る"
+    },
+
+    stats: {
+      population: "世界人口",
+      islands: "主要な島",
+      ingredients: "登録食材",
+      languages: "対応言語"
+    },
+
+    climate: {
+      eyebrow: "CLIMATE",
+      title: "島の気候",
+      description:
+        "現在は四つの主要な島の気候情報を中心に整理しています。地理設定はまだ開発中です。"
+    },
+
+    ingredients: {
+      eyebrow: "INGREDIENTS",
+      title: "食材百科",
+      description:
+        "現在確認されている空の曆の食材と加工材料。",
+      search: "食材を検索…",
+      all: "すべて"
+    },
+
+    cuisine: {
+      eyebrow: "CUISINE",
+      title: "料理",
+      description:
+        "現在確認されている島の料理。"
+    },
+
+    language: {
+      eyebrow: "KUUGO",
+      title: "空語",
+      description:
+        "空の曆世界で使われる人工言語。ラテン文字を主な転写方式とします。",
+      word: "空語",
+      meaning: "意味",
+      type: "品詞"
+    },
+
+    footer: "空の曆公式世界観データベース"
+  },
+
+  ko: {
+    nav: {
+      home: "홈",
+      climate: "기후",
+      ingredients: "식재료",
+      cuisine: "요리",
+      language: "공어"
+    },
+
+    home: {
+      eyebrow: "OFFICIAL WORLD DATABASE",
+      title: "空の曆",
+      description:
+        "하늘에 떠 있는 세계. 확인된 섬, 기후, 식재료, 요리와 공어의 정보를 정리합니다.",
+      explore: "탐험하기",
+      climate: "기후 보기"
+    },
+
+    stats: {
+      population: "세계 인구",
+      islands: "주요 섬",
+      ingredients: "등록 식재료",
+      languages: "지원 언어"
+    },
+
+    climate: {
+      eyebrow: "CLIMATE",
+      title: "섬의 기후",
+      description:
+        "현재는 네 개의 주요 섬의 기후 정보를 중심으로 정리합니다. 지리 설정은 아직 개발 중입니다."
+    },
+
+    ingredients: {
+      eyebrow: "INGREDIENTS",
+      title: "식재료 백과",
+      description:
+        "현재 확인된 空の曆의 식재료와 가공 재료입니다.",
+      search: "식재료 검색…",
+      all: "전체"
+    },
+
+    cuisine: {
+      eyebrow: "CUISINE",
+      title: "요리",
+      description:
+        "현재 확인된 섬의 요리입니다."
+    },
+
+    language: {
+      eyebrow: "KUUGO",
+      title: "공어",
+      description:
+        "空の曆 세계에서 사용하는 인공 언어입니다. 라틴 문자를 주요 표기 체계로 사용합니다.",
+      word: "공어",
+      meaning: "의미",
+      type: "품사"
+    },
+
+    footer: "空の曆 공식 세계관 데이터베이스"
+  }
+};
+
+
+/* =========================================================
+   UTILITIES
+   ========================================================= */
+
+let currentLocale =
+  localStorage.getItem("sora-locale") ||
+  CONFIG.defaultLocale;
+
+function translate(path) {
+  const source = I18N[currentLocale];
+
+  return path
+    .split(".")
+    .reduce(
+      (value, key) => value?.[key],
+      source
+    ) ?? path;
 }
 
-function handleRoute(){
-  const route = location.hash.replace("#","") || "home";
-  showPage(
-    document.getElementById("page-"+route)
-      ? route
-      : "home"
+function localized(value) {
+  if (
+    value &&
+    typeof value === "object" &&
+    !Array.isArray(value)
+  ) {
+    return (
+      value[currentLocale] ||
+      value[CONFIG.defaultLocale] ||
+      Object.values(value)[0]
+    );
+  }
+
+  return value;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function navigate(page) {
+  window.location.hash = page;
+}
+
+function getCurrentPage() {
+  return (
+    window.location.hash.replace("#", "") ||
+    "home"
   );
 }
 
-window.addEventListener("hashchange",handleRoute);
 
-navLinks.forEach(link=>{
-  link.addEventListener("click",event=>{
-    const page = link.dataset.page;
-    if(!page) return;
+/* =========================================================
+   COMPONENTS
+   ========================================================= */
 
-    event.preventDefault();
-    showPage(page);
-  });
-});
+function renderHeader() {
+  const pages = [
+    ["home", "nav.home"],
+    ["climate", "nav.climate"],
+    ["ingredients", "nav.ingredients"],
+    ["cuisine", "nav.cuisine"],
+    ["language", "nav.language"]
+  ];
+
+  return `
+    <header class="site-header">
+      <div class="header-inner">
+
+        <a
+          class="brand"
+          href="#home"
+          aria-label="${CONFIG.siteName}"
+        >
+          <span class="brand-mark">
+            <i data-lucide="cloud"></i>
+          </span>
+
+          <span class="brand-name">
+            ${CONFIG.siteName}
+          </span>
+        </a>
+
+        <nav
+          class="main-nav"
+          id="main-nav"
+          aria-label="Main navigation"
+        >
+          ${pages.map(([page, label]) => `
+            <button
+              class="nav-link"
+              data-page="${page}"
+              onclick="navigate('${page}')"
+            >
+              ${translate(label)}
+            </button>
+          `).join("")}
+        </nav>
+
+        <div class="header-actions">
+
+          <select
+            class="language-select"
+            id="language-select"
+            aria-label="Language"
+            onchange="changeLocale(this.value)"
+          >
+            <option value="zh-TW">繁中</option>
+            <option value="zh-CN">简中</option>
+            <option value="en">EN</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+          </select>
+
+          <button
+            class="mobile-menu-button"
+            aria-label="Menu"
+            onclick="toggleMobileNav()"
+          >
+            <i data-lucide="menu"></i>
+          </button>
+
+        </div>
+      </div>
+    </header>
+  `;
+}
+
+function renderFooter() {
+  return `
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p class="footer-text">
+          ${translate("footer")}
+        </p>
+
+        <p class="footer-text">
+          ${WORLD.population.toLocaleString()}
+        </p>
+      </div>
+    </footer>
+  `;
+}
+
+function renderPageHeader(
+  eyebrow,
+  title,
+  description
+) {
+  return `
+    <header class="page-header">
+      <p class="eyebrow">${eyebrow}</p>
+      <h1 class="page-title">${title}</h1>
+      <p class="page-description">${description}</p>
+    </header>
+  `;
+}
 
 
 /* =========================================================
-   FOOD DATABASE
+   PAGE: HOME
    ========================================================= */
 
-const foodTable = document.getElementById("foodTable");
-const foodSearch = document.getElementById("foodSearch");
-let activeFoodFilter = "all";
+function renderHomePage() {
+  return `
+    <section class="hero page">
 
-function renderFood(){
-  const query = foodSearch.value.trim().toLowerCase();
+      <div class="hero-content">
 
-  foodTable.innerHTML = "";
+        <div class="hero-mark">
+          <i data-lucide="cloud"></i>
+        </div>
 
-  foodData
-    .filter(item=>{
-      const matchFilter =
-        activeFoodFilter === "all" ||
-        item[1] === activeFoodFilter;
+        <p class="eyebrow">
+          ${translate("home.eyebrow")}
+        </p>
 
-      const matchSearch =
-        !query ||
-        item[0].toLowerCase().includes(query) ||
-        item[1].toLowerCase().includes(query) ||
-        item[2].toLowerCase().includes(query);
+        <h1 class="hero-title">
+          ${translate("home.title")}
+        </h1>
 
-      return matchFilter && matchSearch;
-    })
-    .forEach(item=>{
-      const tr = document.createElement("tr");
+        <p class="hero-subtitle">
+          ${translate("home.description")}
+        </p>
 
-      tr.innerHTML = `
-        <td>${item[0]}</td>
-        <td>${item[1].toUpperCase()}</td>
-        <td>${item[2]}</td>
-        <td>CANON</td>
-      `;
+        <div class="hero-actions">
 
-      foodTable.appendChild(tr);
+          <button
+            class="button button-primary"
+            onclick="navigate('climate')"
+          >
+            <i data-lucide="compass"></i>
+            ${translate("home.explore")}
+          </button>
+
+          <button
+            class="button"
+            onclick="navigate('ingredients')"
+          >
+            <i data-lucide="leaf"></i>
+            ${translate("home.climate")}
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="page">
+
+      <div class="stat-grid">
+
+        <article class="stat">
+          <span class="stat-value">
+            ${WORLD.population.toLocaleString()}
+          </span>
+          <span class="stat-label">
+            ${translate("stats.population")}
+          </span>
+        </article>
+
+        <article class="stat">
+          <span class="stat-value">
+            ${WORLD.islands.length}
+          </span>
+          <span class="stat-label">
+            ${translate("stats.islands")}
+          </span>
+        </article>
+
+        <article class="stat">
+          <span class="stat-value">
+            ${INGREDIENTS.length}
+          </span>
+          <span class="stat-label">
+            ${translate("stats.ingredients")}
+          </span>
+        </article>
+
+        <article class="stat">
+          <span class="stat-value">
+            ${CONFIG.supportedLocales.length}
+          </span>
+          <span class="stat-label">
+            ${translate("stats.languages")}
+          </span>
+        </article>
+
+      </div>
+
+      <div class="card-grid">
+
+        ${WORLD.islands.map(island => `
+          <article class="card island-card">
+
+            <div class="card-icon">
+              <i data-lucide="mountain"></i>
+            </div>
+
+            <h2 class="card-title">
+              ${localized(island.name)}
+            </h2>
+
+            <p class="card-text">
+              ${localized(island.description)}
+            </p>
+
+            <span class="island-temperature">
+              <i data-lucide="thermometer"></i>
+              ${island.temperature}
+            </span>
+
+          </article>
+        `).join("")}
+
+      </div>
+
+    </section>
+  `;
+}
+
+
+/* =========================================================
+   PAGE: CLIMATE
+   ========================================================= */
+
+function renderClimatePage() {
+  return `
+    <section class="page">
+
+      ${renderPageHeader(
+        translate("climate.eyebrow"),
+        translate("climate.title"),
+        translate("climate.description")
+      )}
+
+      <div class="card-grid">
+
+        ${WORLD.islands.map(island => `
+          <article class="card island-card">
+
+            <div class="card-icon">
+              <i data-lucide="cloud-sun"></i>
+            </div>
+
+            <h2 class="card-title">
+              ${localized(island.name)}
+            </h2>
+
+            <p class="card-text">
+              ${localized(island.description)}
+            </p>
+
+            <div class="island-temperature">
+              <i data-lucide="thermometer"></i>
+              ${island.temperature}
+            </div>
+
+          </article>
+        `).join("")}
+
+      </div>
+
+    </section>
+  `;
+}
+
+
+/* =========================================================
+   PAGE: INGREDIENTS
+   ========================================================= */
+
+function renderIngredientsPage() {
+  const categories = [
+    "全部",
+    ...new Set(
+      INGREDIENTS.map(
+        ingredient => ingredient.category
+      )
+    )
+  ];
+
+  return `
+    <section class="page">
+
+      ${renderPageHeader(
+        translate("ingredients.eyebrow"),
+        translate("ingredients.title"),
+        translate("ingredients.description")
+      )}
+
+      <div class="search-bar">
+
+        <i data-lucide="search"></i>
+
+        <input
+          id="ingredient-search"
+          class="search-input"
+          type="search"
+          placeholder="${translate("ingredients.search")}"
+          oninput="filterIngredients()"
+        >
+
+      </div>
+
+      <div class="filter-row">
+
+        ${categories.map(
+          category => `
+            <button
+              class="filter-button ${
+                category === "全部"
+                  ? "active"
+                  : ""
+              }"
+              data-category="${escapeHtml(category)}"
+              onclick="selectIngredientCategory(this)"
+            >
+              ${
+                category === "全部"
+                  ? translate("ingredients.all")
+                  : escapeHtml(category)
+              }
+            </button>
+          `
+        ).join("")}
+
+      </div>
+
+      <div
+        class="ingredient-grid"
+        id="ingredient-grid"
+      >
+        ${renderIngredientCards(INGREDIENTS)}
+      </div>
+
+    </section>
+  `;
+}
+
+function renderIngredientCards(items) {
+  if (!items.length) {
+    return `
+      <div class="card">
+        <h2 class="card-title">
+          No results
+        </h2>
+      </div>
+    `;
+  }
+
+  return items.map(ingredient => `
+    <article
+      class="ingredient-card"
+      data-ingredient-card
+      data-category="${escapeHtml(ingredient.category)}"
+    >
+      <span class="ingredient-category">
+        ${escapeHtml(ingredient.category)}
+      </span>
+
+      <h2 class="ingredient-name">
+        ${escapeHtml(ingredient.name)}
+      </h2>
+
+      <p class="ingredient-description">
+        ${escapeHtml(ingredient.use)}
+      </p>
+    </article>
+  `).join("");
+}
+
+let selectedIngredientCategory = "全部";
+
+function filterIngredients() {
+  const search =
+    document
+      .getElementById("ingredient-search")
+      ?.value
+      .trim()
+      .toLowerCase() || "";
+
+  const cards =
+    document.querySelectorAll(
+      "[data-ingredient-card]"
+    );
+
+  cards.forEach(card => {
+    const name =
+      card
+        .querySelector(".ingredient-name")
+        ?.textContent
+        .toLowerCase() || "";
+
+    const category =
+      card.dataset.category || "";
+
+    const matchesSearch =
+      !search ||
+      name.includes(search);
+
+    const matchesCategory =
+      selectedIngredientCategory === "全部" ||
+      category === selectedIngredientCategory;
+
+    card.hidden =
+      !(matchesSearch && matchesCategory);
+  });
+}
+
+function selectIngredientCategory(button) {
+  document
+    .querySelectorAll(".filter-button")
+    .forEach(item =>
+      item.classList.remove("active")
+    );
+
+  button.classList.add("active");
+
+  selectedIngredientCategory =
+    button.dataset.category;
+
+  filterIngredients();
+}
+
+
+/* =========================================================
+   PAGE: CUISINE
+   ========================================================= */
+
+function renderCuisinePage() {
+  return `
+    <section class="page">
+
+      ${renderPageHeader(
+        translate("cuisine.eyebrow"),
+        translate("cuisine.title"),
+        translate("cuisine.description")
+      )}
+
+      <div class="card-grid">
+
+        ${DISHES.map(dish => `
+          <article class="card dish-card">
+
+            <div>
+
+              <span class="dish-island">
+                ${escapeHtml(dish.island)}
+              </span>
+
+              <h2 class="dish-name">
+                ${escapeHtml(dish.name)}
+              </h2>
+
+              <p class="dish-description">
+                ${escapeHtml(dish.description)}
+              </p>
+
+            </div>
+
+            <div class="dish-ingredients">
+
+              ${dish.ingredients.map(
+                ingredient => `
+                  <span class="ingredient-tag">
+                    ${escapeHtml(ingredient)}
+                  </span>
+                `
+              ).join("")}
+
+            </div>
+
+          </article>
+        `).join("")}
+
+      </div>
+
+    </section>
+  `;
+}
+
+
+/* =========================================================
+   PAGE: KUUGO
+   ========================================================= */
+
+function renderLanguagePage() {
+  return `
+    <section class="page">
+
+      ${renderPageHeader(
+        translate("language.eyebrow"),
+        translate("language.title"),
+        translate("language.description")
+      )}
+
+      <section class="language-section">
+
+        <h2 class="section-title">
+          ${translate("language.title")}
+        </h2>
+
+        <div class="card">
+          <p class="card-text">
+            ${escapeHtml(
+              localized(KUUGO.overview)
+            )}
+          </p>
+        </div>
+
+      </section>
+
+      <section class="language-section">
+
+        <div class="language-table-wrap">
+
+          <table class="language-table">
+
+            <thead>
+              <tr>
+                <th>
+                  ${translate("language.word")}
+                </th>
+
+                <th>
+                  ${translate("language.meaning")}
+                </th>
+
+                <th>
+                  ${translate("language.type")}
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              ${KUUGO.rules.map(
+                ([word, meaning, type]) => `
+                  <tr>
+                    <td>
+                      <strong>
+                        ${escapeHtml(word)}
+                      </strong>
+                    </td>
+
+                    <td>
+                      ${escapeHtml(meaning)}
+                    </td>
+
+                    <td>
+                      ${escapeHtml(type)}
+                    </td>
+                  </tr>
+                `
+              ).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+    </section>
+  `;
+}
+
+
+/* =========================================================
+   ROUTER
+   ========================================================= */
+
+const PAGES = {
+  home: renderHomePage,
+  climate: renderClimatePage,
+  ingredients: renderIngredientsPage,
+  cuisine: renderCuisinePage,
+  language: renderLanguagePage
+};
+
+function renderApp() {
+  const pageName = getCurrentPage();
+  const renderPage =
+    PAGES[pageName] ||
+    PAGES.home;
+
+  document.getElementById("app").innerHTML = `
+    ${renderHeader()}
+
+    <main>
+      ${renderPage()}
+    </main>
+
+    ${renderFooter()}
+  `;
+
+  updateActiveNavigation(pageName);
+  syncLanguageSelector();
+  refreshIcons();
+  animatePage();
+}
+
+function updateActiveNavigation(pageName) {
+  document
+    .querySelectorAll(".nav-link")
+    .forEach(link => {
+      link.classList.toggle(
+        "active",
+        link.dataset.page === pageName
+      );
     });
 }
 
-document.querySelectorAll(".filter").forEach(button=>{
-  button.addEventListener("click",()=>{
-    document.querySelectorAll(".filter")
-      .forEach(b=>b.classList.remove("active"));
-
-    button.classList.add("active");
-
-    activeFoodFilter = button.dataset.filter;
-
-    renderFood();
-    uiSound();
-  });
-});
-
-foodSearch.addEventListener("input",renderFood);
-
-renderFood();
+function refreshIcons() {
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+}
 
 
 /* =========================================================
-   ALPHABET
+   LANGUAGE
    ========================================================= */
 
-const alphabetGrid = document.getElementById("alphabetGrid");
+function changeLocale(locale) {
+  if (
+    !CONFIG.supportedLocales.includes(locale)
+  ) {
+    return;
+  }
 
-alphabetData.forEach(([letter,reading])=>{
-  const item = document.createElement("div");
+  currentLocale = locale;
 
-  item.className =
-    "letter " +
-    (letter === "gya" ||
-     letter === "nya" ||
-     letter === "hg"
-      ? "special-letter"
-      : "");
+  localStorage.setItem(
+    "sora-locale",
+    locale
+  );
 
-  item.innerHTML = `
-    <div class="letter-symbol">${letter}</div>
-    <div class="letter-reading">${reading}</div>
-  `;
+  renderApp();
+}
 
-  alphabetGrid.appendChild(item);
-});
+function syncLanguageSelector() {
+  const selector =
+    document.getElementById(
+      "language-select"
+    );
+
+  if (selector) {
+    selector.value = currentLocale;
+  }
+}
+
+
+/* =========================================================
+   MOBILE NAV
+   ========================================================= */
+
+function toggleMobileNav() {
+  document
+    .getElementById("main-nav")
+    ?.classList.toggle("open");
+}
 
 
 /* =========================================================
    GSAP
    ========================================================= */
 
-gsap.registerPlugin(ScrollTrigger);
-
-function createRevealAnimations(){
-
-  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){
-    document.querySelectorAll(".reveal")
-      .forEach(el=>el.classList.add("is-visible"));
+function animatePage() {
+  if (!window.gsap) {
     return;
   }
 
-  ScrollTrigger.getAll().forEach(trigger=>{
-    if(trigger.vars && trigger.vars.id === "sky-reveal"){
-      trigger.kill();
+  gsap.from(
+    ".page > *, .hero-content > *",
+    {
+      opacity: 0,
+      y: 18,
+      duration: 0.55,
+      stagger: 0.045,
+      ease: "power2.out",
+      clearProps: "transform"
     }
-  });
-
-  document.querySelectorAll(
-    ".page.active .reveal"
-  ).forEach((element,index)=>{
-
-    gsap.fromTo(
-      element,
-      {
-        opacity:0,
-        y:24
-      },
-      {
-        opacity:1,
-        y:0,
-        duration:.75,
-        ease:"power2.out",
-        delay:index * .035,
-        scrollTrigger:{
-          trigger:element,
-          start:"top 88%",
-          toggleActions:"play none none reverse",
-          id:"sky-reveal"
-        }
-      }
-    );
-
-  });
+  );
 }
 
 
 /* =========================================================
-   HERO MOTION
+   APPLICATION
    ========================================================= */
 
-function createHeroMotion(){
-
-  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
-    return;
-
-  const tl = gsap.timeline();
-
-  tl.from(".hero-kicker",{
-    opacity:0,
-    y:14,
-    duration:.55,
-    ease:"power2.out"
-  })
-  .from(".hero-title",{
-    opacity:0,
-    y:35,
-    duration:.9,
-    ease:"power3.out"
-  },"-=.25")
-  .from(".hero-description",{
-    opacity:0,
-    y:18,
-    duration:.65,
-    ease:"power2.out"
-  },"-=.35")
-  .from(".hero-actions",{
-    opacity:0,
-    y:14,
-    duration:.55
-  },"-=.3")
-  .from(".hero-meta",{
-    opacity:0,
-    y:8,
-    duration:.45
-  },"-=.2");
-
-  gsap.to(".hero-orbit",{
-    rotation:18,
-    duration:30,
-    repeat:-1,
-    ease:"none"
-  });
-
-  gsap.to(".hero-grid",{
-    backgroundPosition:"0 64px",
-    duration:12,
-    repeat:-1,
-    ease:"none"
-  });
-}
-
-
-/* =========================================================
-   COUNTERS
-   ========================================================= */
-
-function createCounters(){
-
-  document.querySelectorAll(".counter").forEach(counter=>{
-
-    const value = Number(counter.dataset.value);
-
-    ScrollTrigger.create({
-      trigger:counter,
-      start:"top 90%",
-      once:true,
-      onEnter:()=>{
-
-        const obj = {value:0};
-
-        gsap.to(obj,{
-          value,
-          duration:1.25,
-          ease:"power2.out",
-          onUpdate:()=>{
-            counter.textContent =
-              Math.round(obj.value).toLocaleString();
-          }
-        });
-
-      }
-    });
-
-  });
-
-}
-
-
-/* =========================================================
-   UI SOUND
-   ========================================================= */
-
-let soundEnabled = false;
-let audioContext = null;
-
-function ensureAudio(){
-  if(!audioContext){
-    audioContext =
-      new (window.AudioContext ||
-      window.webkitAudioContext)();
-  }
-}
-
-function uiSound(){
-
-  if(!soundEnabled) return;
-
-  ensureAudio();
-
-  const osc = audioContext.createOscillator();
-  const gain = audioContext.createGain();
-
-  osc.frequency.value = 540;
-  osc.type = "sine";
-
-  gain.gain.setValueAtTime(
-    .0001,
-    audioContext.currentTime
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    .025,
-    audioContext.currentTime + .008
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    .0001,
-    audioContext.currentTime + .055
-  );
-
-  osc.connect(gain);
-  gain.connect(audioContext.destination);
-
-  osc.start();
-  osc.stop(audioContext.currentTime + .06);
-}
-
-document.getElementById("soundToggle")
-  .addEventListener("click",()=>{
-    soundEnabled = !soundEnabled;
-
-    if(soundEnabled){
-      ensureAudio();
-      audioContext.resume();
+function initializeApplication() {
+  window.addEventListener(
+    "hashchange",
+    () => {
+      selectedIngredientCategory = "全部";
+      renderApp();
     }
+  );
 
-    uiSound();
-  });
+  renderApp();
+}
 
-
-/* =========================================================
-   MOBILE MENU
-   ========================================================= */
-
-document.getElementById("mobileMenu")
-  .addEventListener("click",()=>{
-    document.querySelector(".main-nav")
-      .classList.toggle("mobile-visible");
-  });
-
-
-/* =========================================================
-   MICRO INTERACTION
-   ========================================================= */
-
-document.querySelectorAll(
-  ".primary-button,.secondary-button,.nav-link,.filter,.sound-toggle"
-).forEach(element=>{
-  element.addEventListener("mouseenter",uiSound);
-});
-
-
-/* =========================================================
-   INITIALIZE
-   ========================================================= */
-
-createHeroMotion();
-createCounters();
-handleRoute();
-
-window.addEventListener("load",()=>{
-  ScrollTrigger.refresh();
-});
-
-window.addEventListener("resize",()=>{
-  ScrollTrigger.refresh();
-});
+initializeApplication();
 </script>
 
 </body>
